@@ -5,14 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.spellingo.client_app.databinding.FragmentSecondBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : Fragment() {
+class GameSessionFragment : Fragment() {
 
+    private val viewModel: GameSessionViewModel by activityViewModels()
     private var _binding: FragmentSecondBinding? = null
 
     // This property is only valid between onCreateView and
@@ -35,6 +37,9 @@ class SecondFragment : Fragment() {
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
+
+        viewModel.Hello()
+
     }
 
     override fun onDestroyView() {

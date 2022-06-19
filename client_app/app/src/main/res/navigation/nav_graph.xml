@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.spellingo.client_app.FirstFragment"
+        android:name="com.spellingo.client_app.MainMenuFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.spellingo.client_app.SecondFragment"
+        android:name="com.spellingo.client_app.GameSessionFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
