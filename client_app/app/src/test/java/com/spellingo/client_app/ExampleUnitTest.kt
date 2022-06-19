@@ -1,4 +1,4 @@
-package com.spellingo.spellingo
+package com.spellingo.client_app
 
 import org.junit.Test
 
