@@ -9,4 +9,15 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Game Session Fragment -->
+    <string name="pronunciation">Pronunciation</string>
+    <string name="example_sentence">Example Sentence</string>
+    <string name="origin">Origin</string>
+    <string name="definition">Definition</string>
+    <string name="part_of_speech">Part of Speech</string>
+    <string name="word">Word</string>
+    <string name="submit">Submit</string>
+    <string name="hint">Hint</string>
+
 </resources>

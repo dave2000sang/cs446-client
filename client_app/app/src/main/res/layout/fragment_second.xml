@@ -6,6 +6,79 @@
     android:layout_height="match_parent"
     tools:context=".GameSessionFragment">
 
+    <Button
+        android:id="@+id/button_pronunciation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pronunciation"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_example_sentence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/example_sentence"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_pronunciation" />
+
+    <TextView
+        android:id="@+id/textview_origin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/origin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_example_sentence" />
+
+    <TextView
+        android:id="@+id/textview_definition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/definition"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_origin" />
+
+    <TextView
+        android:id="@+id/textview_part_of_speech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/part_of_speech"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_definition" />
+
+    <EditText
+        android:id="@+id/edittext_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/word"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_part_of_speech" />
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edittext_word" />
+
+    <Button
+        android:id="@+id/button_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_submit" />
+
     <TextView
         android:id="@+id/textview_second"
         android:layout_width="wrap_content"
