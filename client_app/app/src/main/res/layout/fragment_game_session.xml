@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@id/textview_definition" />
 
     <EditText
-        android:id="@+id/edittext_word"
+        android:id="@+id/mainWordField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/word"
@@ -62,13 +62,13 @@
         app:layout_constraintTop_toBottomOf="@id/textview_part_of_speech" />
 
     <Button
-        android:id="@+id/button_submit"
+        android:id="@+id/buttonSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edittext_word" />
+        app:layout_constraintTop_toBottomOf="@id/mainWordField" />
 
     <Button
         android:id="@+id/button_hint"
@@ -77,7 +77,7 @@
         android:text="@string/hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_submit" />
+        app:layout_constraintTop_toBottomOf="@id/buttonSubmit" />
 
     <TextView
         android:id="@+id/textview_second"
