@@ -3,8 +3,13 @@ import androidx.lifecycle.*
 
 class GameSessionViewModel() : ViewModel() {
     val model = Model()
-    fun Hello () {
-        println("Hello")
-        model.addWords()
+
+
+    fun startGame () {
+        model.startGame()
+    }
+
+    fun getWord () : String{
+        return model.getRandomWord()
     }
 }
