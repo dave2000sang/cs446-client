@@ -16,32 +16,20 @@ import kotlin.random.Random
 
 
 class Model {
-//    init {
-//        try {
-//            val fileName = "WordList.txt"
-//            val lines: List<String> = File(fileName).readLines()
-//            lines.forEach {
-//                line -> println(line)
-//            }
-//        } catch(e:Exception) {
-//            e.printStackTrace()
-//        } finally {
-//            println ("File read successfully")
-//        }
-//    }
-
+    init {
+    }
     private var listOfWords = mutableListOf<String>()
-
-
 
     fun startGame () {
         addWords()
     }
 
+    // getRandomWord(): String -> Generates a random word from listOfWords and returns it
     fun getRandomWord () :String {
         return listOfWords.random()
     }
 
+    // Temporary function for initial demo to add words
     private fun addWords () {
         listOfWords.add("Elephant")
         listOfWords.add("Recession")

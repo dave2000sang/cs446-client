@@ -26,7 +26,8 @@ class GameSessionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Starts the game and loads data
+        // Starts the game and loads data. Do NOT change the position of this, it needs to go
+        // before variable declarations below.
         viewModel.startGame()
 
         // Links Widgets to Variables
@@ -34,23 +35,28 @@ class GameSessionFragment : Fragment() {
         val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenuButton)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
         val submitButton = root.findViewById<Button>(R.id.buttonSubmit)
-        val getCorrectWord = viewModel.getWord()
-        println (getCorrectWord)
+        val getCorrectWord = viewModel.getWord() // gets a word to be tested on.
+        println (getCorrectWord) // prints to word for testing (look in the run tab)
 
         // Listeners
+
+        // Submit Button to check if entered word is correct. Look in text field
         submitButton.setOnClickListener {
             if (mainWordField.text.toString() == getCorrectWord) {
                 println ("Correct!")
+                // put your widget stuff here
             } else {
                 println ("Incorrect!")
+                // put your widget stuff here
             }
         }
 
+        // Button to go back to main menu.
         returnToMainMenuButton.setOnClickListener {
             findNavController().navigate(R.id.mainMenuFragment_to_gameSessionFragment)
         }
 
-        // The commented out code is for textchange listeners for a Textfield may be useful later
+        // The commented out code is for Textchange listeners for a Textfield may be useful later
 //        mainWordField.addTextChangedListener(object : TextWatcher {
 //
 //            override fun afterTextChanged(s: Editable) {}
@@ -64,9 +70,6 @@ class GameSessionFragment : Fragment() {
 //
 //            }
 //        })
-
-
-
         return root
     }
 }
