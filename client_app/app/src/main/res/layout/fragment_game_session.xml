@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameSessionFragment">
+    tools:context=".GameSessionFragment"
+    android:background="@drawable/light_background">
 
     <Button
         android:id="@+id/button_pronunciation"
