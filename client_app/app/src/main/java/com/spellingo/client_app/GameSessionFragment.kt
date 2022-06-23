@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 
 /**
@@ -26,17 +27,25 @@ class GameSessionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Starts the game and loads data. Do NOT change the position of this, it needs to go
-        // before variable declarations below.
-        viewModel.startGame()
-
         // Links Widgets to Variables
         val root = inflater.inflate(R.layout.fragment_game_session, container, false)
         val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenuButton)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
         val submitButton = root.findViewById<Button>(R.id.buttonSubmit)
-        val getCorrectWord = viewModel.getWord() // gets a word to be tested on.
-        println (getCorrectWord) // prints to word for testing (look in the run tab)
+
+        //FIXME for now print to console (Run tab in Android Studio)
+        //TODO incorporate observer more smoothly into UI
+        var getCorrectWord = ""
+        viewModel.getNewSessionWord().observe(viewLifecycleOwner, Observer(fun(word) {
+            getCorrectWord = word.id
+            println(getCorrectWord)
+            println(word.definition)
+            println(word.usage)
+            println(word.origin)
+            println(word.part)
+        }))
+
+        //TODO lock input before word is fetched?
 
         // Listeners
 

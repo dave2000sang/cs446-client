@@ -23,6 +23,8 @@ class MainMenuFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
 
+        viewModel.startApp()
+
         val playButton =  root.findViewById<Button>(R.id.playGameButton)
         playButton.setOnClickListener {
             findNavController().navigate(R.id.gameSessionFragment_to_mainMenuFragment)
