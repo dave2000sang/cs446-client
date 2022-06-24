@@ -25,7 +25,6 @@ abstract class WordDatabase : RoomDatabase() {
         1. Do a fast NULL check. If INSTANCE not NULL, return
         2. If NULL, acquire lock. INSTANCE may not be NULL due to race cond
         3. If not NULL, return. Otherwise create DB and assign INSTANCE to it
-        TODO investigate whether this is actually safe in Kotlin
          */
         fun getInstance(context: Context): WordDatabase =
             INSTANCE ?: synchronized(this) {

@@ -1,5 +1,6 @@
 package com.spellingo.client_app
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import java.lang.NullPointerException
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -32,31 +34,57 @@ class GameSessionFragment : Fragment() {
         val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenuButton)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
         val submitButton = root.findViewById<Button>(R.id.buttonSubmit)
+        val pronunciationButton = root.findViewById<Button>(R.id.button_pronunciation)
+        val usageText = root.findViewById<TextView>(R.id.textview_example_sentence)
+        val originText = root.findViewById<TextView>(R.id.textview_origin)
+        val definitionText = root.findViewById<TextView>(R.id.textview_definition)
+        val partSpeechText = root.findViewById<TextView>(R.id.textview_part_of_speech)
 
-        //FIXME for now print to console (Run tab in Android Studio)
-        //TODO incorporate observer more smoothly into UI
+        // Mutable fields and observers
         var getCorrectWord = ""
-        viewModel.getNewSessionWord().observe(viewLifecycleOwner, Observer(fun(word) {
+        var mediaPlayer: MediaPlayer? = null
+
+        // Word information
+        viewModel.getWord().observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
-            println(getCorrectWord)
-            println(word.definition)
-            println(word.usage)
-            println(word.origin)
-            println(word.part)
+            usageText.text = word.usage
+            originText.text = word.origin
+            definitionText.text = word.definition
+            partSpeechText.text = word.part
         }))
 
-        //TODO lock input before word is fetched?
+        // Pronunciation audio
+        viewModel.getPronunciation().observe(viewLifecycleOwner, Observer(fun(mp) {
+            if(mediaPlayer == null) {
+                mediaPlayer = mp
+            }
+            mp.start()
+        }))
 
         // Listeners
 
+        // Pronunciation button to replay audio
+        pronunciationButton.setOnClickListener {
+            try {
+                mediaPlayer!!.start()
+            }
+            catch (e: NullPointerException) {} // mediaPlayer not observed
+            catch (e: IllegalStateException) {} // mediaPlayer not ready
+        }
+
         // Submit Button to check if entered word is correct. Look in text field
         submitButton.setOnClickListener {
-            if (mainWordField.text.toString() == getCorrectWord) {
-                println ("Correct!")
-                // put your widget stuff here
-            } else {
-                println ("Incorrect!")
-                // put your widget stuff here
+            if (mainWordField.text.isNotEmpty()) { // only process if text box is not empty
+                if (mainWordField.text.toString() == getCorrectWord) {
+                    println ("Correct!")
+                    val remainingWords = viewModel.nextWord()
+                    //TODO if remainingWords == 0, change submitButton into transition to stats page
+                } else {
+                    println ("Incorrect!")
+                    // put your widget stuff here
+                }
+                // Reset word field
+                mainWordField.text.clear()
             }
         }
 
