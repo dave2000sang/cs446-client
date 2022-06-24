@@ -29,7 +29,7 @@ class WordModel(application: Application) {
      * @return Word information
      */
     fun getWord(): Word? {
-        if(listOfWords.size > 0) {
+        if(listOfWords.size == 0) {
             return null
         }
         return listOfWords.removeAt(0)

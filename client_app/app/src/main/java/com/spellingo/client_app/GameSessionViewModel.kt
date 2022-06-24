@@ -17,7 +17,6 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      * Load the first word of a new session
      */
     fun getWord(): LiveData<Word> {
-        wordLiveData = MutableLiveData<Word>()
         viewModelScope.launch {
             val curWord = wordModel.getNewSessionWords()
             wordLiveData.postValue(curWord)
