@@ -1,10 +1,8 @@
 package com.spellingo.client_app
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import android.media.MediaPlayer
+import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 
 /**
@@ -12,23 +10,45 @@ import kotlinx.coroutines.launch
  */
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
     private val wordModel = WordModel(application)
+    private val pronunciationModel = PronunciationModel()
+    private var wordLiveData = MutableLiveData<Word>()
 
     /**
      * Load the first word of a new session
      */
-    fun getNewSessionWord(): LiveData<Word> {
-        val result = MutableLiveData<Word>()
+    fun getWord(): LiveData<Word> {
+        wordLiveData = MutableLiveData<Word>()
         viewModelScope.launch {
-            val curWord = wordModel.getNewSessionWord()
-            result.postValue(curWord)
+            val curWord = wordModel.getNewSessionWords()
+            wordLiveData.postValue(curWord)
         }
-        return result
+        return wordLiveData
     }
 
     /**
-     * Load the next word
+     * Get pronunciation of word
      */
-    fun getWord(): Word {
-        return wordModel.getWord()
+    fun getPronunciation(): LiveData<MediaPlayer> {
+        return wordLiveData.switchMap { word ->
+            val filename = word.audio
+            val subdir: String = when {
+                filename.length >= 3 && filename.substring(0..3) == "bix" -> "bix"
+                filename.length >= 2 && filename.substring(0..2) == "gg" -> "gg"
+                filename.first().isDigit() || filename.first() == '_' -> "number"
+                else -> filename.first().toString()
+            }
+            val url = "https://media.merriam-webster.com/audio/prons/en/us/mp3/$subdir/$filename.mp3"
+            pronunciationModel.getPlayer(url)
+        }
+    }
+
+    /**
+     * Get next word, refresh state, and get number of remaining words in session
+     * @return number of words left in session
+     */
+    fun nextWord(): Int {
+        val curWord = wordModel.getWord() ?: return 0
+        wordLiveData.postValue(curWord)
+        return wordModel.numSessionWords()
     }
 }

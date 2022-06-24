@@ -36,13 +36,18 @@ class GameSessionFragment : Fragment() {
         //FIXME for now print to console (Run tab in Android Studio)
         //TODO incorporate observer more smoothly into UI
         var getCorrectWord = ""
-        viewModel.getNewSessionWord().observe(viewLifecycleOwner, Observer(fun(word) {
+        viewModel.getWord().observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
             println(getCorrectWord)
             println(word.definition)
             println(word.usage)
             println(word.origin)
             println(word.part)
+        }))
+
+        //TODO hook this up to pronunciation button press
+        viewModel.getPronunciation().observe(viewLifecycleOwner, Observer(fun(mp) {
+            mp.start()
         }))
 
         //TODO lock input before word is fetched?
@@ -53,7 +58,8 @@ class GameSessionFragment : Fragment() {
         submitButton.setOnClickListener {
             if (mainWordField.text.toString() == getCorrectWord) {
                 println ("Correct!")
-                // put your widget stuff here
+                val remainingWords = viewModel.nextWord()
+                //TODO if remainingWords == 0, change submitButton into transition to stats
             } else {
                 println ("Incorrect!")
                 // put your widget stuff here

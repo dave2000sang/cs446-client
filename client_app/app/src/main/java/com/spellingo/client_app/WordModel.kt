@@ -8,29 +8,38 @@ import android.app.Application
  */
 class WordModel(application: Application) {
     private val wordDb = WordDatabase.getInstance(application)
-    private val totalSessionWords = 5 //FIXME change to a user setting later
+    //TODO change to a user setting. MUST be greater than 0!
+    private val totalSessionWords = 5
     private var listOfWords = mutableListOf<Word>()
-    private var sessionWordIdx = 0
+
+    //TODO error handling for empty fields (e.g. audio)
 
     /**
      * Fetch some words from the database to use in a session and return a word
-     * @return a Word from the newly loaded list
      */
-    suspend fun getNewSessionWord(): Word {
-        //FIXME Is dropping the old list (i.e. garbage collection) better than O(n) insertion?
+    suspend fun getNewSessionWords(): Word {
         val listRes = wordDb.wordDao().getRandomN(totalSessionWords)
         listOfWords.clear()
         listOfWords.addAll(listRes)
-        return getWord()
+        return listOfWords.removeAt(0)
     }
 
     /**
      * Selects a word from session's word list
      * @return Word information
      */
-    fun getWord(): Word {
-        val curIdx = sessionWordIdx
-        sessionWordIdx = (sessionWordIdx + 1) % totalSessionWords
-        return listOfWords[curIdx]
+    fun getWord(): Word? {
+        if(listOfWords.size > 0) {
+            return null
+        }
+        return listOfWords.removeAt(0)
+    }
+
+    /**
+     * Get number of words left in current session
+     * @return number of remaining words
+     */
+    fun numSessionWords(): Int {
+        return listOfWords.size
     }
 }
