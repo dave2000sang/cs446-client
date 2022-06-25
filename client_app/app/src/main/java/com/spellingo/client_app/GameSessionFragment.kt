@@ -45,7 +45,7 @@ class GameSessionFragment : Fragment() {
         var mediaPlayer: MediaPlayer? = null
 
         // Word information
-        viewModel.getWord().observe(viewLifecycleOwner, Observer(fun(word) {
+        viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
             usageText.text = word.usage
             originText.text = word.origin
@@ -54,11 +54,10 @@ class GameSessionFragment : Fragment() {
         }))
 
         // Pronunciation audio
-        viewModel.getPronunciation().observe(viewLifecycleOwner, Observer(fun(mp) {
+        viewModel.pronunciationLiveData.observe(viewLifecycleOwner, Observer(fun(mp) {
             if(mediaPlayer == null) {
                 mediaPlayer = mp
             }
-            mp.start()
         }))
 
         // Listeners

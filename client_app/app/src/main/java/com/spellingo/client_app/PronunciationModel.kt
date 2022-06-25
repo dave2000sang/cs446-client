@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 class PronunciationModel {
     private val url = "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
     private val mediaPlayer = MediaPlayer()
+    private val mediaData = MutableLiveData<MediaPlayer>()
 
     /**
      * Get media player for audio
@@ -15,7 +16,6 @@ class PronunciationModel {
      * @return LiveData of media player when it's prepared
      */
     fun getPlayer(url: String): LiveData<MediaPlayer> {
-        val mediaData = MutableLiveData<MediaPlayer>()
         mediaPlayer.apply {
             reset()
             setAudioAttributes(
@@ -26,6 +26,7 @@ class PronunciationModel {
             )
             setDataSource(url)
             setOnPreparedListener {
+                it.start()
                 mediaData.postValue(it)
             }
             prepareAsync()

@@ -11,33 +11,28 @@ import kotlinx.coroutines.launch
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
     private val wordModel = WordModel(application)
     private val pronunciationModel = PronunciationModel()
-    private var wordLiveData = MutableLiveData<Word>()
+    private val _wordLiveData = MutableLiveData<Word>()
+    val wordLiveData: LiveData<Word>
+        get() = _wordLiveData
+    val pronunciationLiveData = _wordLiveData.switchMap { word ->
+        val filename = word.audio
+        val subdir: String = when {
+            filename.length >= 3 && filename.substring(0..3) == "bix" -> "bix"
+            filename.length >= 2 && filename.substring(0..2) == "gg" -> "gg"
+            filename.first().isDigit() || filename.first() == '_' -> "number"
+            else -> filename.first().toString()
+        }
+        val url = "https://media.merriam-webster.com/audio/prons/en/us/mp3/$subdir/$filename.mp3"
+        pronunciationModel.getPlayer(url)
+    }
 
     /**
      * Load the first word of a new session
      */
-    fun getWord(): LiveData<Word> {
+    init {
         viewModelScope.launch {
             val curWord = wordModel.getNewSessionWords()
-            wordLiveData.postValue(curWord)
-        }
-        return wordLiveData
-    }
-
-    /**
-     * Get pronunciation of word
-     */
-    fun getPronunciation(): LiveData<MediaPlayer> {
-        return wordLiveData.switchMap { word ->
-            val filename = word.audio
-            val subdir: String = when {
-                filename.length >= 3 && filename.substring(0..3) == "bix" -> "bix"
-                filename.length >= 2 && filename.substring(0..2) == "gg" -> "gg"
-                filename.first().isDigit() || filename.first() == '_' -> "number"
-                else -> filename.first().toString()
-            }
-            val url = "https://media.merriam-webster.com/audio/prons/en/us/mp3/$subdir/$filename.mp3"
-            pronunciationModel.getPlayer(url)
+            _wordLiveData.postValue(curWord)
         }
     }
 
@@ -47,7 +42,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      */
     fun nextWord(): Int {
         val curWord = wordModel.getWord() ?: return 0
-        wordLiveData.postValue(curWord)
+        _wordLiveData.value = curWord
         return wordModel.numSessionWords()
     }
 }
