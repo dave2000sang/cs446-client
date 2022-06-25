@@ -1,21 +1,16 @@
 package com.spellingo.client_app
 
 import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 
 /**
- * Room database for Words
+ * Room database for Sessions
  */
-@Database(
-    entities = [Word::class],
-    version = 1,
-    //TODO either figure out migrations or remove the below commented code
-//    autoMigrations = [
-//        AutoMigration(from = 1, to = 2)
-//    ]
-)
-abstract class WordDatabase : RoomDatabase() {
-    abstract fun wordDao(): WordDao
+@Database(entities = [Session::class], version = 2)
+abstract class SessionDatabase : RoomDatabase() {
+    abstract fun sessionDao(): SessionDao
 
     /*
     Singleton design pattern for WordDatabase instance
@@ -23,7 +18,7 @@ abstract class WordDatabase : RoomDatabase() {
     https://github.com/android/architecture-components-samples.git
      */
     companion object {
-        @Volatile private var INSTANCE: WordDatabase? = null
+        @Volatile private var INSTANCE: SessionDatabase? = null
 
         /*
         Double check locking
@@ -31,14 +26,14 @@ abstract class WordDatabase : RoomDatabase() {
         2. If NULL, acquire lock. INSTANCE may not be NULL due to race cond
         3. If not NULL, return. Otherwise create DB and assign INSTANCE to it
          */
-        fun getInstance(context: Context): WordDatabase =
+        fun getInstance(context: Context): SessionDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
             }
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context.applicationContext,
-                WordDatabase::class.java, "Words.db")
+                SessionDatabase::class.java, "Sessions.db")
                 .build()
     }
 }
