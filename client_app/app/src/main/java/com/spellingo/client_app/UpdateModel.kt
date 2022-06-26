@@ -12,12 +12,14 @@ class UpdateModel(application: Application) {
     private val wordDb = WordDatabase.getInstance(application)
 
     /**
-     * Cursed database population for the demo
-     * FIXME replace with server HTTP requests
+     * Fetch words from the server
      */
     suspend fun generateWords() {
-//        val response = "{\"results\":[{\"audio\":\"verb\",\"definition\":\"adjust\",\"origin\":\"Iadjustmapants\",\"part\":\"English\",\"score\":\"adjust01\",\"total\":\"0\",\"usage\":\"to change\"},{\"audio\":\"adjective\",\"definition\":\"alive\",\"origin\":\"I wish tobealive\",\"part\":\"Philosophy\",\"score\":\"alive001\",\"total\":\"0\",\"usage\":\"notdedge\"},{\"audio\":\"verb\",\"definition\":\"undertake\",\"origin\":\"Theundertaker!\",\"part\":\"WWE\",\"score\":\"undert01\",\"total\":\"0\",\"usage\":\"togodo\"},{\"audio\":\"Earthsciences\",\"definition\":\"magnitude\",\"origin\":\"extremity\",\"part\":\"Magnitude5quake\",\"score\":\"noun\",\"total\":\"magnit01\",\"usage\":\"scale\"},{\"audio\":\"noun\",\"definition\":\"end\",\"origin\":\"it.end()\",\"part\":\"C++\",\"score\":\"end00001\",\"total\":\"0\",\"usage\":\"Iterator'slastposition\"},{\"audio\":\"verb\",\"definition\":\"gossip\",\"origin\":\"OMGarey'allgossipping?\",\"part\":\"Highschool\",\"score\":\"gossip01\",\"total\":\"0\",\"usage\":\"talkdrama\"},{\"audio\":\"noun\",\"definition\":\"seal\",\"origin\":\"ARFARFARF\",\"part\":\"Northpole\",\"score\":\"seal0001\",\"total\":\"0\",\"usage\":\"adorablehydrodynamicfatboi\"},{\"audio\":\"verb\",\"definition\":\"ferry\",\"origin\":\"CharonferriedmeacrossRiverStyx\",\"part\":\"Greekmythology\",\"score\":\"ferry001\",\"total\":\"0\",\"usage\":\"totransport\"},{\"audio\":\"GenshinImpact\",\"definition\":\"penetrate\",\"origin\":\"bypass\",\"part\":\"YoucannotpenetratemyZhonglishield\",\"score\":\"verb\",\"total\":\"penetr06\",\"usage\":\"topierce\"}]}"
         val wordList = mutableListOf<Word>()
+
+        // HTTP request
+        val wordHttp = WordHttp()
+        val response = wordHttp.getWords()
 
         //dao
         val dao = wordDb.wordDao()
@@ -26,14 +28,21 @@ class UpdateModel(application: Application) {
         try {
             val responseJson = JSONObject(response)
             val listWords = responseJson.getJSONArray("results")
-            for(wordIdx in 0..listWords.length()) {
+            for(wordIdx in 0 until listWords.length()) {
                 val wordObj = listWords.getJSONObject(wordIdx)
-                val id = wordObj.getString("audio")
-                println(id)
+                val id = wordObj.getString("id")
+                val definition = wordObj.getString("definition")
+                val origin = wordObj.getString("origin")
+                val part = wordObj.getString("part")
+                val audio = wordObj.getString("audio")
+                val usage = wordObj.getString("usage")
+                wordList.add(Word(id, definition, usage, origin, part, audio, 0, 0))
             }
         }
         catch(e: JSONException) {
-            println(e.stackTrace)
+            for(trace in e.stackTrace) {
+                System.err.println(trace)
+            }
         }
 
         dao.insert(*wordList.toTypedArray())
