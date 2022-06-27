@@ -32,10 +32,7 @@ class GameSessionFragment : Fragment() {
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
         val submitButton = root.findViewById<Button>(R.id.buttonSubmit)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
-//        val usageText = root.findViewById<TextView>(R.id.textview_example_sentence)
-//        val originText = root.findViewById<TextView>(R.id.textview_origin)
-//        val definitionText = root.findViewById<TextView>(R.id.textview_definition)
-//        val partSpeechText = root.findViewById<TextView>(R.id.textview_part_of_speech)
+        val infoBox = root.findViewById<TextView>(R.id.info_box)
 
         // Mutable fields and observers
         var getCorrectWord = ""
@@ -44,10 +41,12 @@ class GameSessionFragment : Fragment() {
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
-//            usageText.text = word.usage
-//            originText.text = word.origin
-//            definitionText.text = word.definition
-//            partSpeechText.text = word.part
+            // TODO(andrew): better formatting
+            val infoBoxString = word.definition + "\n" +
+                    word.usage + "\n" +
+                    word.origin + "\n" +
+                    word.part + "\n"
+            infoBox.text = infoBoxString
         }))
 
         // Pronunciation audio

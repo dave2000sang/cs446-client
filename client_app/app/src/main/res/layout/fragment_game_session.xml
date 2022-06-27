@@ -64,10 +64,10 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/info_box"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.8"
-        android:text="Test"
         android:textColor="@color/black"
         android:layout_margin="10dp"
         android:padding="10dp"
