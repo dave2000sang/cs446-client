@@ -10,6 +10,7 @@ import org.json.JSONObject
  */
 class UpdateModel(application: Application) {
     private val wordDb = WordDatabase.getInstance(application)
+    private val httpRequest = HttpRequest.getInstance()
 
     /**
      * Fetch words from the server
@@ -18,8 +19,7 @@ class UpdateModel(application: Application) {
         val wordList = mutableListOf<Word>()
 
         // HTTP request
-        val wordHttp = WordHttp()
-        val response = wordHttp.getWords()
+        val response = httpRequest.getWords()
 
         //dao
         val dao = wordDb.wordDao()
@@ -40,9 +40,7 @@ class UpdateModel(application: Application) {
             }
         }
         catch(e: JSONException) {
-            for(trace in e.stackTrace) {
-                System.err.println(trace)
-            }
+            System.err.println(e.toString())
         }
 
         dao.insert(*wordList.toTypedArray())
