@@ -17,5 +17,6 @@
     <string name="definition">Definition</string>
     <string name="part_of_speech">Part of Speech</string>
     <string name="input">Type here!</string>
+    <string name="submit">Check</string>
 
 </resources>
