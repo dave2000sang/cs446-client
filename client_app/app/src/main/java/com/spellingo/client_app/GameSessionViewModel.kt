@@ -13,7 +13,11 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private val pronunciationModel = PronunciationModel()
     private val _wordLiveData = MutableLiveData<Word>()
     val wordLiveData: LiveData<Word>
-        get() = _wordLiveData
+        get() = _wordLiveData.map { word ->
+            val id = word.id
+            val newUsage = word.usage.replace("[$id]", "_____")
+            word.copy(usage = newUsage)
+        }
     val pronunciationLiveData = _wordLiveData.switchMap { word ->
         val filename = word.audio
         val subdir: String = when {
