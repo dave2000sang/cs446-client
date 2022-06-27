@@ -31,8 +31,13 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      */
     init {
         viewModelScope.launch {
-            val curWord = wordModel.getNewSessionWords()
-            _wordLiveData.postValue(curWord)
+            try {
+                val curWord = wordModel.getNewSessionWords()
+                _wordLiveData.postValue(curWord)
+            }
+            catch(e: Exception) {
+                System.err.println(e.toString())
+            }
         }
     }
 
