@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -31,10 +29,9 @@ class GameSessionFragment : Fragment() {
 
         // Links Widgets to Variables
         val root = inflater.inflate(R.layout.fragment_game_session, container, false)
-        val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenuButton)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
-        val submitButton = root.findViewById<Button>(R.id.buttonSubmit)
-        val pronunciationButton = root.findViewById<Button>(R.id.button_pronunciation)
+        val submitButton = root.findViewById<ImageView>(R.id.buttonSubmit)
+        val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
         val usageText = root.findViewById<TextView>(R.id.textview_example_sentence)
         val originText = root.findViewById<TextView>(R.id.textview_origin)
         val definitionText = root.findViewById<TextView>(R.id.textview_definition)
@@ -85,11 +82,6 @@ class GameSessionFragment : Fragment() {
                 // Reset word field
                 mainWordField.text.clear()
             }
-        }
-
-        // Button to go back to main menu.
-        returnToMainMenuButton.setOnClickListener {
-            findNavController().navigate(R.id.mainMenuFragment_to_gameSessionFragment)
         }
 
         // The commented out code is for Textchange listeners for a Textfield may be useful later
