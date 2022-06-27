@@ -45,4 +45,11 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         _wordLiveData.value = curWord
         return wordModel.numSessionWords()
     }
+
+    /**
+     * Cleanup model objects
+     */
+    override fun onCleared() {
+        pronunciationModel.cleanup()
+    }
 }

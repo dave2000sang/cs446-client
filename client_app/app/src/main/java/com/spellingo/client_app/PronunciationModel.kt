@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class PronunciationModel {
-    private val url = "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
     private val mediaPlayer = MediaPlayer()
     private val mediaData = MutableLiveData<MediaPlayer>()
 
@@ -37,7 +36,7 @@ class PronunciationModel {
     /**
      * Deallocate media player, call in Activity's onDestroy()
      */
-    fun drop() {
+    fun cleanup() {
         mediaPlayer.release()
     }
 }
