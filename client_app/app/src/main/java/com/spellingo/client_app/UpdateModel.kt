@@ -30,7 +30,7 @@ class UpdateModel(application: Application) {
             val listWords = responseJson.getJSONArray("results")
             for(wordIdx in 0 until listWords.length()) {
                 val wordObj = listWords.getJSONObject(wordIdx)
-                val id = wordObj.getString("id")
+                val id = wordObj.getString("word")
                 val definition = wordObj.getString("definition")
                 val origin = wordObj.getString("origin")
                 val part = wordObj.getString("part")

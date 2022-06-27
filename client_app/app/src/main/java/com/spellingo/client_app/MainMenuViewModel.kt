@@ -9,7 +9,12 @@ class MainMenuViewModel(application: Application) : AndroidViewModel(application
     private val model = UpdateModel(application)
     fun startApp() {
         viewModelScope.launch {
-            model.generateWords()
+            try {
+                model.generateWords()
+            }
+            catch(e: Exception) {
+                System.err.println(e.toString())
+            }
         }
     }
 }
