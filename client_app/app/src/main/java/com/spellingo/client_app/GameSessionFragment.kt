@@ -30,12 +30,12 @@ class GameSessionFragment : Fragment() {
         // Links Widgets to Variables
         val root = inflater.inflate(R.layout.fragment_game_session, container, false)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
-        val submitButton = root.findViewById<ImageView>(R.id.buttonSubmit)
+        val submitButton = root.findViewById<Button>(R.id.buttonSubmit)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
-        val usageText = root.findViewById<TextView>(R.id.textview_example_sentence)
-        val originText = root.findViewById<TextView>(R.id.textview_origin)
-        val definitionText = root.findViewById<TextView>(R.id.textview_definition)
-        val partSpeechText = root.findViewById<TextView>(R.id.textview_part_of_speech)
+//        val usageText = root.findViewById<TextView>(R.id.textview_example_sentence)
+//        val originText = root.findViewById<TextView>(R.id.textview_origin)
+//        val definitionText = root.findViewById<TextView>(R.id.textview_definition)
+//        val partSpeechText = root.findViewById<TextView>(R.id.textview_part_of_speech)
 
         // Mutable fields and observers
         var getCorrectWord = ""
@@ -44,10 +44,10 @@ class GameSessionFragment : Fragment() {
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
-            usageText.text = word.usage
-            originText.text = word.origin
-            definitionText.text = word.definition
-            partSpeechText.text = word.part
+//            usageText.text = word.usage
+//            originText.text = word.origin
+//            definitionText.text = word.definition
+//            partSpeechText.text = word.part
         }))
 
         // Pronunciation audio
