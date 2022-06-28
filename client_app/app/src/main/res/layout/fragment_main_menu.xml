@@ -1,127 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenuFragment">
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context=".MainMenuFragment"
+    android:background="@color/white"
+    android:gravity="center">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="411dp"
-        android:layout_height="300dp"
-        android:background="@drawable/main_menu_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ImageView
+        android:id="@+id/button_hint"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/icon_bee"
+        android:layout_margin="5dp"/>
 
-        <TextView
-            android:id="@+id/spellingo_title"
-            android:layout_width="252dp"
-            android:layout_height="71dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="79dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="78dp"
-            android:layout_marginBottom="179dp"
-            android:text="SPELLINGO"
-            android:textColor="#FFFFFF"
-            android:textSize="48sp" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="149dp"
-            android:layout_height="104dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="131dp"
-            android:layout_marginEnd="129dp"
-            android:layout_marginBottom="64dp"
-            android:src="@drawable/bee_main_menu" />
-    </RelativeLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="375dp"
-        android:layout_height="290dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/shadow"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="1">
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/playGameButton"
-        android:layout_width="340dp"
-        android:layout_height="89dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="200dp"
-        android:text="PLAY"
-        android:textAlignment="center"
-        android:textColor="#AC45CA"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="@+id/cardView"
-        app:layout_constraintStart_toStartOf="@+id/cardView"
-        app:layout_constraintTop_toTopOf="@+id/cardView" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play"
+        android:textSize="20sp"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/monokai_yellow"
+        android:layout_margin="5dp"/>
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="124dp"
-        android:layout_height="104dp"
-        android:src="@drawable/play_button"
-        app:layout_constraintEnd_toEndOf="@+id/playGameButton"
-        app:layout_constraintStart_toStartOf="@+id/playGameButton"
-        app:layout_constraintTop_toTopOf="@+id/playGameButton" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/statsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats"
+        android:textSize="20sp"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/monokai_yellow"
+        android:layout_margin="5dp"/>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="340dp"
-        android:layout_height="89dp"
-        android:text="GAME MODES"
-        android:textAlignment="center"
-        android:textColor="#AC45CA"
-        android:textSize="40dp"
-        app:layout_constraintEnd_toEndOf="@+id/playGameButton"
-        app:layout_constraintTop_toBottomOf="@+id/playGameButton" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings"
+        android:textSize="20sp"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/monokai_yellow"
+        android:layout_margin="5dp"/>
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="340dp"
-        android:layout_height="89dp"
-        android:text="MY PROFILE"
-        android:textAlignment="center"
-        android:textColor="#AC45CA"
-        android:textSize="45sp"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="411dp"
-        android:layout_height="138dp"
-        android:background="@drawable/main_menu_background"
-        android:src="@drawable/setting_button"
-        android:textAlignment="viewEnd"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

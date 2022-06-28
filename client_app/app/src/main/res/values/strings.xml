@@ -1,23 +1,21 @@
 <resources>
-    <string name="app_name">client_app</string>
+    <string name="app_name">Spellingo</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
+    <string name="first_fragment_label">Main Menu</string>
     <string name="second_fragment_label">Game Session</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <!-- Game Session Fragment -->
-    <string name="pronunciation">Pronunciation</string>
-    <string name="example_sentence">Example Sentence</string>
-    <string name="origin">Origin</string>
-    <string name="definition">Definition</string>
-    <string name="part_of_speech">Part of Speech</string>
     <string name="input"><i>Word</i></string>
     <string name="submit">Check</string>
     <string name="cont">Continue</string>
+
+    <!-- Main Menu Fragment -->
+    <string name="play">Play</string>
+    <string name="stats">Stats</string>
+    <string name="settings">Settings</string>
 
 </resources>
