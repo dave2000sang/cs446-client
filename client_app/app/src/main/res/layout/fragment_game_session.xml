@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:adjustViewBounds="true"
-            android:src="@drawable/icon_microphone" />
+            android:src="@drawable/icon_audio" />
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.spellingo.client_app
 
+import android.content.Context
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -8,18 +9,17 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.content.Context
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.button.MaterialButton
-import java.lang.NullPointerException
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -115,10 +115,40 @@ class GameSessionFragment : Fragment() {
             catch (e: IllegalStateException) {} // mediaPlayer not ready
         }
 
+        // Correct / incorrect message
+        val snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
         // Submit Button to check if entered word is correct. Look in text field
         submitButton.setOnClickListener {
-            // Continue
-            if (submitButton.text == "Continue") {
+            // Submit button and input in non-empty
+            if (submitButton.text == getString(R.string.submit) && mainWordField.text.isNotEmpty()) {
+                // Hide keyboard
+                val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
+                // Change to continue button
+                submitButton.text = getString(R.string.cont)
+                // Correct / incorrect message
+                if (mainWordField.text.toString() == getCorrectWord) {
+                    snack.setText("Correct")
+                    snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                } else {
+                    var snackText = "The correct spelling is: $getCorrectWord"
+                    val snackSpannable = SpannableString(snackText)
+                    snackSpannable.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        snackText.length - getCorrectWord.length, snackText.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    snack.setText(snackSpannable)
+                    snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                }
+                snack.show()
+            }
+            // Continue button
+            else if (submitButton.text == getString(R.string.cont)) {
+                // Dismiss correct / incorrect message
+                snack.dismiss()
                 // Reset word field
                 mainWordField.text.clear()
                 val remainingWords = viewModel.nextWord()
@@ -126,21 +156,6 @@ class GameSessionFragment : Fragment() {
                 submitButton.text = getString(R.string.submit)
                 submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
                 //TODO if remainingWords == 0, change submitButton into transition to stats page
-            }
-            // Submit
-            if (mainWordField.text.isNotEmpty()) { // only process if text box is not empty
-                if (mainWordField.text.toString() == getCorrectWord) {
-                    println ("Correct!")
-                } else {
-                    println ("Incorrect!")
-                    // put your widget stuff here
-                }
-                // Hide keyboard
-                val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
-                // Change to continue button
-                submitButton.text = getString(R.string.cont)
-                submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.continue_button_color))
             }
         }
 
