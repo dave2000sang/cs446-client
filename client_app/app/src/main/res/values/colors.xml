@@ -13,4 +13,6 @@
     <color name="infobox_highlight1">#0000FF</color>
     <color name="infobox_highlight2">#483D8B</color>
     <color name="light_grey">#E5E4E2</color>
+    <color name="continue_button_color">#77c924</color>
+    <color name="submit_button_color">#FF03DAC5</color>
 </resources>

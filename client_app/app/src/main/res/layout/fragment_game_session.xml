@@ -24,8 +24,9 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:inputType="textNoSuggestions|textVisiblePassword"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="7dp"
+            android:hint="@string/input"
+            android:textColorHint="@color/dark_grey"
+            android:gravity="center"
             android:textColor="@color/black"
             android:background="@drawable/input_box"/>
 
@@ -46,12 +47,14 @@
         android:layout_weight="0.1"
         android:padding="10dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSubmit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.8"
-            android:text="@string/submit" />
+            android:text="@string/submit"
+            app:cornerRadius="8dp"
+            android:backgroundTint="@color/submit_button_color"/>
 
         <ImageView
             android:id="@+id/button_hint"
@@ -73,122 +76,5 @@
         android:padding="10dp"
         android:textSize="24sp"
         android:background="@drawable/info_box"/>
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="0.3"-->
-<!--        android:orientation="vertical"-->
-<!--        android:background="@drawable/rounded_corners_session_top_box">-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/mainWordField"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0.35"-->
-<!--            android:inputType="textNoSuggestions|textVisiblePassword"-->
-<!--            android:hint="@string/input"-->
-<!--            android:textColorHint="@color/dark_grey"-->
-<!--            android:textColor="@color/dark_grey"-->
-<!--            android:background="@drawable/rounded_corners_session_input"-->
-<!--            android:gravity="center"-->
-<!--            android:layout_marginTop="30dp"-->
-<!--            android:layout_marginBottom="15dp"-->
-<!--            android:layout_marginHorizontal="50dp"/>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0.65"-->
-<!--            android:weightSum="3"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_marginTop="15dp"-->
-<!--            android:layout_marginBottom="30dp"-->
-<!--            android:layout_marginHorizontal="30dp">-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/button_pronunciation"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:adjustViewBounds="true"-->
-<!--                android:src="@drawable/icon_microphone" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/buttonSubmit"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:adjustViewBounds="true"-->
-<!--                android:src="@drawable/icon_submit" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/button_hint"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:adjustViewBounds="true"-->
-<!--                android:src="@drawable/icon_hint" />-->
-
-<!--        </LinearLayout>-->
-
-<!--    </LinearLayout>-->
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="0.7"-->
-<!--        android:orientation="vertical"-->
-<!--        android:weightSum="1">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textview_example_sentence"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0.25"-->
-<!--            android:background="@drawable/rounded_corners_session_cards"-->
-<!--            android:text="@string/part_of_speech"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:padding="20dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginBottom="10dp" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textview_origin"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0.25"-->
-<!--            android:background="@drawable/rounded_corners_session_cards"-->
-<!--            android:text="@string/part_of_speech"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:padding="20dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginBottom="10dp" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textview_definition"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0.25"-->
-<!--            android:background="@drawable/rounded_corners_session_cards"-->
-<!--            android:text="@string/part_of_speech"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:padding="20dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginBottom="10dp" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textview_part_of_speech"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0.25"-->
-<!--            android:background="@drawable/rounded_corners_session_cards"-->
-<!--            android:text="@string/part_of_speech"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:padding="20dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginBottom="20dp" />-->
-
-<!--    </LinearLayout>-->
 
 </LinearLayout>
