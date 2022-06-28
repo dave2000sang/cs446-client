@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="monokai_black">#403e41</color>
+    <color name="monokai_red">#ff6188</color>
+    <color name="monokai_green">#a9dc76</color>
+    <color name="monokai_yellow">#ffd866</color>
+    <color name="monokai_blue">#fc9867</color>
+    <color name="monokai_magenta">#ab9df2</color>
+    <color name="monokai_cyan">#78dce8</color>
+    <color name="monokai_white">#fcfcfa</color>
+    <color name="monokai_gray">#727072</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -10,9 +19,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_green">#FFC7F5D3</color>
     <color name="light_orange">#FFFFD656</color>
-    <color name="infobox_highlight1">#0000FF</color>
-    <color name="infobox_highlight2">#483D8B</color>
+    <color name="infobox_highlight1">@color/monokai_magenta</color>
+    <color name="infobox_highlight2">@color/monokai_black</color>
+    <color name="info_box">@color/monokai_gray</color>
+    <color name="input_box">@color/monokai_gray</color>
     <color name="light_grey">#E5E4E2</color>
-    <color name="continue_button_color">#77c924</color>
-    <color name="submit_button_color">#FF03DAC5</color>
+    <color name="continue_button_color">@color/monokai_green</color>
+    <color name="submit_button_color">@color/monokai_yellow</color>
 </resources>
