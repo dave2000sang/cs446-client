@@ -16,7 +16,8 @@
     <string name="origin">Origin</string>
     <string name="definition">Definition</string>
     <string name="part_of_speech">Part of Speech</string>
-    <string name="input">Type here!</string>
+    <string name="input"><i>Word</i></string>
     <string name="submit">Check</string>
+    <string name="cont">Continue</string>
 
 </resources>

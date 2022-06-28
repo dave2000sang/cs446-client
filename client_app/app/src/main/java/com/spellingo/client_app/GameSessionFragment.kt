@@ -1,26 +1,24 @@
 package com.spellingo.client_app
 
-import android.graphics.Color
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.content.Context
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButton
 import java.lang.NullPointerException
 
 /**
@@ -38,7 +36,7 @@ class GameSessionFragment : Fragment() {
         // Links Widgets to Variables
         val root = inflater.inflate(R.layout.fragment_game_session, container, false)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
-        val submitButton = root.findViewById<Button>(R.id.buttonSubmit)
+        val submitButton = root.findViewById<MaterialButton>(R.id.buttonSubmit)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
         val infoBox = root.findViewById<TextView>(R.id.info_box)
 
@@ -58,14 +56,14 @@ class GameSessionFragment : Fragment() {
             var textIdx = 0
             // Span for part
             infoBoxSpannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.infobox_highlight1)),
+                ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.infobox_highlight1)),
                 textIdx, textIdx + part.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             // Span for "Usage"
             textIdx += part.length + 2 + definition.length + 2
             infoBoxSpannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.infobox_highlight2)),
+                ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.infobox_highlight2)),
                 textIdx, textIdx + "Usage".length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
@@ -84,7 +82,7 @@ class GameSessionFragment : Fragment() {
             textIdx += usage.length + 2
             // Span for "Etymology"
             infoBoxSpannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.infobox_highlight2)),
+                ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.infobox_highlight2)),
                 textIdx, textIdx + "Etymology".length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
@@ -119,17 +117,30 @@ class GameSessionFragment : Fragment() {
 
         // Submit Button to check if entered word is correct. Look in text field
         submitButton.setOnClickListener {
+            // Continue
+            if (submitButton.text == "Continue") {
+                // Reset word field
+                mainWordField.text.clear()
+                val remainingWords = viewModel.nextWord()
+                // Change to submit button
+                submitButton.text = getString(R.string.submit)
+                submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
+                //TODO if remainingWords == 0, change submitButton into transition to stats page
+            }
+            // Submit
             if (mainWordField.text.isNotEmpty()) { // only process if text box is not empty
                 if (mainWordField.text.toString() == getCorrectWord) {
                     println ("Correct!")
-                    val remainingWords = viewModel.nextWord()
-                    //TODO if remainingWords == 0, change submitButton into transition to stats page
                 } else {
                     println ("Incorrect!")
                     // put your widget stuff here
                 }
-                // Reset word field
-                mainWordField.text.clear()
+                // Hide keyboard
+                val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
+                // Change to continue button
+                submitButton.text = getString(R.string.cont)
+                submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.continue_button_color))
             }
         }
 
