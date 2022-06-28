@@ -26,6 +26,7 @@
             android:inputType="textNoSuggestions|textVisiblePassword"
             android:hint="@string/input"
             android:textColorHint="@color/dark_grey"
+            android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/black"
             android:background="@drawable/input_box"/>
@@ -53,6 +54,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:text="@string/submit"
+            android:textSize="18sp"
             app:cornerRadius="8dp"
             android:backgroundTint="@color/submit_button_color"/>
 

@@ -9,6 +9,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -117,6 +118,8 @@ class GameSessionFragment : Fragment() {
 
         // Correct / incorrect message
         val snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
+        val snackTextView = snack.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        snackTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,18F)
         // Submit Button to check if entered word is correct. Look in text field
         submitButton.setOnClickListener {
             // Submit button and input in non-empty
@@ -132,7 +135,7 @@ class GameSessionFragment : Fragment() {
                     snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
                 } else {
-                    var snackText = "The correct spelling is: $getCorrectWord"
+                    val snackText = "The correct spelling is: $getCorrectWord"
                     val snackSpannable = SpannableString(snackText)
                     snackSpannable.setSpan(
                         StyleSpan(Typeface.BOLD),
