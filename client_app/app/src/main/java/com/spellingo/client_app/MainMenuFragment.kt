@@ -16,14 +16,11 @@ class MainMenuFragment : Fragment() {
 
     private val viewModel: MainMenuViewModel by activityViewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
-
-        viewModel.startApp()
 
         val playButton =  root.findViewById<Button>(R.id.playGameButton)
         playButton.setOnClickListener {
