@@ -10,6 +10,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_green">#FFC7F5D3</color>
     <color name="light_orange">#FFFFD656</color>
-
+    <color name="infobox_highlight1">#0000FF</color>
+    <color name="infobox_highlight2">#483D8B</color>
     <color name="light_grey">#E5E4E2</color>
 </resources>

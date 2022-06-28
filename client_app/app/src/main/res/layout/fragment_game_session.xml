@@ -71,6 +71,7 @@
         android:textColor="@color/black"
         android:layout_margin="10dp"
         android:padding="10dp"
+        android:textSize="24sp"
         android:background="@drawable/info_box"/>
 
 <!--    <LinearLayout-->

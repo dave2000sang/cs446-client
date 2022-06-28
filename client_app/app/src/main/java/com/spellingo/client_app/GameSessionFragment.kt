@@ -1,14 +1,22 @@
 package com.spellingo.client_app
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -41,12 +49,54 @@ class GameSessionFragment : Fragment() {
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
-            // TODO(andrew): better formatting
-            val infoBoxString = word.definition + "\n" +
-                    word.usage + "\n" +
-                    word.origin + "\n" +
-                    word.part + "\n"
-            infoBox.text = infoBoxString
+            val part = word.part.replaceFirstChar { it.uppercase() }
+            val definition = word.definition.replaceFirstChar { it.uppercase() }
+            val usage = word.usage.replaceFirstChar { it.uppercase() }
+            val origin = word.origin.replaceFirstChar { it.uppercase() }
+            val infoBoxString = "$part\n\n$definition\n\nUsage\n\t$usage\n\nEtymology\n\t$origin"
+            val infoBoxSpannable = SpannableString(infoBoxString)
+            var textIdx = 0
+            // Span for part
+            infoBoxSpannable.setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.infobox_highlight1)),
+                textIdx, textIdx + part.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            // Span for "Usage"
+            textIdx += part.length + 2 + definition.length + 2
+            infoBoxSpannable.setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.infobox_highlight2)),
+                textIdx, textIdx + "Usage".length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            textIdx += "Usage".length + 2
+            // Span for usage
+            infoBoxSpannable.setSpan(
+                StyleSpan(Typeface.ITALIC),
+                textIdx, textIdx + usage.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            infoBoxSpannable.setSpan(
+                RelativeSizeSpan(0.8f),
+                textIdx, textIdx + usage.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            textIdx += usage.length + 2
+            // Span for "Etymology"
+            infoBoxSpannable.setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.infobox_highlight2)),
+                textIdx, textIdx + "Etymology".length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            textIdx += "Etymology".length + 2
+            // Span for origin
+            infoBoxSpannable.setSpan(
+                RelativeSizeSpan(0.8f),
+                textIdx, textIdx + origin.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            infoBox.text = infoBoxSpannable
         }))
 
         // Pronunciation audio
