@@ -11,6 +11,7 @@ import org.json.JSONObject
 class UpdateModel(application: Application) {
     private val wordDb = WordDatabase.getInstance(application)
     private val httpRequest = HttpRequest.getInstance()
+    private val histDb = HistoryDatabase.getInstance(application)
 
     /**
      * Fetch words from the server
@@ -24,6 +25,8 @@ class UpdateModel(application: Application) {
         //dao
         val dao = wordDb.wordDao()
         dao.clear()
+
+        //TODO error handling for empty fields (e.g. audio)
 
         try {
             val responseJson = JSONObject(response)

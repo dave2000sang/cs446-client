@@ -12,8 +12,6 @@ class WordModel(application: Application) {
     private val totalSessionWords = 5
     private var listOfWords = mutableListOf<Word>()
 
-    //TODO error handling for empty fields (e.g. audio)
-
     /**
      * Fetch some words from the database to use in a session and return a word
      */
