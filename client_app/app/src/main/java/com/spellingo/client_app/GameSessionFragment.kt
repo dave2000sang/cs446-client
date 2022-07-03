@@ -38,6 +38,7 @@ class GameSessionFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_game_session, container, false)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
         val submitButton = root.findViewById<MaterialButton>(R.id.buttonSubmit)
+        val hintButton = root.findViewById<ImageView>(R.id.button_hint)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
         val infoBox = root.findViewById<TextView>(R.id.info_box)
 
@@ -159,6 +160,16 @@ class GameSessionFragment : Fragment() {
                 submitButton.text = getString(R.string.submit)
                 submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
                 //TODO if remainingWords == 0, change submitButton into transition to stats page
+            }
+        }
+
+        // Get hint button
+        hintButton.setOnClickListener {
+            if(submitButton.text == getString(R.string.submit)) { // only show hint before submission
+                snack.setText("Hint: " + viewModel.getHint())
+                snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_yellow))
+                submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_yellow))
+                snack.show()
             }
         }
 
