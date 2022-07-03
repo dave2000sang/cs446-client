@@ -1,7 +1,6 @@
 package com.spellingo.client_app
 
 import android.app.Application
-import android.media.MediaPlayer
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 
@@ -12,6 +11,9 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private val wordModel = WordModel(application)
     private val pronunciationModel = PronunciationModel()
     private val _wordLiveData = MutableLiveData<Word>()
+    private var hintNum = 0
+    private var hintSeq = listOf<Int>()
+    private var hintCeil = 2 //TODO replace with global preference?
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
             val id = word.id
@@ -52,7 +54,30 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     fun nextWord(): Int {
         val curWord = wordModel.getWord() ?: return 0
         _wordLiveData.value = curWord
+        hintNum = 0
         return wordModel.numSessionWords()
+    }
+
+    /**
+     * Get hint text
+     * @return hint
+     */
+    fun getHint(): String {
+        if(_wordLiveData.value == null) {
+            return ""
+        }
+        val curText = _wordLiveData.value!!.id
+        val hintText = StringBuilder("_ ".repeat(curText.length))
+        if(hintNum == 0) { // first time getting hint for this word
+            // randomly order indices to get hint char
+            hintSeq = curText.indices.toList().shuffled()
+        }
+        for(i in 0 until listOf(hintNum, hintCeil, curText.length).min()) {
+            // reveal char at random indices
+            hintText.setCharAt(hintSeq[i] * 2, curText[hintSeq[i]])
+        }
+        hintNum++
+        return hintText.toString()
     }
 
     /**
