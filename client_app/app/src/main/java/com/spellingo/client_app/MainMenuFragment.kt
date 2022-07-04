@@ -24,7 +24,12 @@ class MainMenuFragment : Fragment() {
 
         val playButton =  root.findViewById<Button>(R.id.playGameButton)
         playButton.setOnClickListener {
-            findNavController().navigate(R.id.gameSessionFragment_to_mainMenuFragment)
+            findNavController().navigate(R.id.mainMenuFragment_to_gameSessionFragment)
+        }
+
+        val settingsButton = root.findViewById<Button>(R.id.settingsButton)
+        settingsButton.setOnClickListener {
+            findNavController().navigate(R.id.mainMenuFragment_to_settingsFragment)
         }
 
         return root

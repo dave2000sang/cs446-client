@@ -12,9 +12,13 @@
         tools:layout="@layout/fragment_main_menu">
 
         <action
-            android:id="@+id/gameSessionFragment_to_mainMenuFragment"
+            android:id="@+id/mainMenuFragment_to_gameSessionFragment"
             app:destination="@id/fragment_game_session" />
+        <action
+            android:id="@+id/mainMenuFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/fragment_game_session"
         android:name="com.spellingo.client_app.GameSessionFragment"
@@ -22,7 +26,18 @@
         tools:layout="@layout/fragment_game_session">
 
         <action
-            android:id="@+id/mainMenuFragment_to_gameSessionFragment"
+            android:id="@+id/gameSessionFragment_to_mainMenuFragment"
             app:destination="@id/fragment_main_menu" />
     </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.spellingo.client_app.SettingsFragment"
+        android:label="SettingsFragment">
+
+    <action
+        android:id="@+id/settingsFragment_to_mainMenuFragment"
+        app:destination="@id/fragment_main_menu" />
+    </fragment>
+
 </navigation>
