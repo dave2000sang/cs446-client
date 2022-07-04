@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 class GameSessionFragment : Fragment() {
 
     private val viewModel: GameSessionViewModel by activityViewModels()
+    private var snack : Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,9 +119,9 @@ class GameSessionFragment : Fragment() {
         }
 
         // Correct / incorrect message
-        val snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
-        val snackTextView = snack.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-        snackTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,18F)
+        snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
+        val snackTextView = snack?.view?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        snackTextView?.setTextSize(TypedValue.COMPLEX_UNIT_SP,18F)
         // Submit Button to check if entered word is correct. Look in text field
         submitButton.setOnClickListener {
             // Submit button and input in non-empty
@@ -132,8 +133,8 @@ class GameSessionFragment : Fragment() {
                 submitButton.text = getString(R.string.cont)
                 // Correct / incorrect message
                 if (mainWordField.text.toString() == getCorrectWord) {
-                    snack.setText("Correct")
-                    snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                    snack?.setText("Correct")
+                    snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
                 } else {
                     val snackText = "The correct spelling is: $getCorrectWord"
@@ -143,16 +144,16 @@ class GameSessionFragment : Fragment() {
                         snackText.length - getCorrectWord.length, snackText.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-                    snack.setText(snackSpannable)
-                    snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                    snack?.setText(snackSpannable)
+                    snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
                 }
-                snack.show()
+                snack?.show()
             }
             // Continue button
             else if (submitButton.text == getString(R.string.cont)) {
                 // Dismiss correct / incorrect message
-                snack.dismiss()
+                snack?.dismiss()
                 // Reset word field
                 mainWordField.text.clear()
                 val remainingWords = viewModel.nextWord()
@@ -166,10 +167,10 @@ class GameSessionFragment : Fragment() {
         // Get hint button
         hintButton.setOnClickListener {
             if(submitButton.text == getString(R.string.submit)) { // only show hint before submission
-                snack.setText("Hint: " + viewModel.getHint())
-                snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_yellow))
+                snack?.setText("Hint: " + viewModel.getHint())
+                snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_yellow))
                 submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_yellow))
-                snack.show()
+                snack?.show()
             }
         }
 
@@ -188,5 +189,10 @@ class GameSessionFragment : Fragment() {
 //            }
 //        })
         return root
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        snack?.takeIf{it.isShown}?.dismiss()
     }
 }
