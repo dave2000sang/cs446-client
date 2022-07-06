@@ -17,9 +17,6 @@
         <action
             android:id="@+id/mainMenuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/mainMenuFragment_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
     </fragment>
 
     <fragment
@@ -41,14 +38,6 @@
     <action
         android:id="@+id/settingsFragment_to_mainMenuFragment"
         app:destination="@id/fragment_main_menu" />
-    </fragment>
-    <fragment
-        android:id="@+id/statisticsFragment"
-        android:name="com.spellingo.client_app.StatisticsFragment"
-        android:label="StatisticsFragment" >
-        <action
-            android:id="@+id/action_statisticsFragment_to_fragment_main_menu"
-            app:destination="@id/fragment_main_menu" />
     </fragment>
 
 </navigation>
