@@ -18,7 +18,7 @@ class StatisticsFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
+        val root = inflater.inflate(R.layout.fragment_statistics_page, container, false)
 
 
         return root
