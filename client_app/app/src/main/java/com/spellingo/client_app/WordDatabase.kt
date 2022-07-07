@@ -6,7 +6,14 @@ import androidx.room.*
 /**
  * Room database for Word's
  */
-@Database(entities = [Word::class], version = 1)
+@Database(
+    entities = [Word::class],
+    version = 1,
+    //TODO either figure out migrations or remove the below commented code
+//    autoMigrations = [
+//        AutoMigration(from = 1, to = 2)
+//    ]
+)
 abstract class WordDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
 

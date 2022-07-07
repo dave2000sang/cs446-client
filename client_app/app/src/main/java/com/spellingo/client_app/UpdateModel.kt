@@ -19,6 +19,7 @@ class UpdateModel(application: Application) {
     private val histDb = HistoryDatabase.getInstance(application)
     private val connectivity = getSystemService(application.applicationContext,
         ConnectivityManager::class.java)
+    private val locale = "uk" //TODO replace with setting
 
     /**
      * Try to fetch words from server
@@ -30,7 +31,7 @@ class UpdateModel(application: Application) {
         val histList = mutableListOf<History>()
 
         // HTTP request
-        val response = httpRequest.getWords()
+        val response = httpRequest.getWords(num, locale)
 
         // Word and History database accessors
         val wordDao = wordDb.wordDao()
@@ -49,7 +50,7 @@ class UpdateModel(application: Application) {
                 val part = wordObj.getString("part")
                 val audio = wordObj.getString("audio")
                 val usage = wordObj.getString("usage")
-                wordList.add(Word(id, definition, usage, origin, part, audio))
+                wordList.add(Word(id, definition, usage, origin, part, audio, locale))
                 histList.add(History(id, 0, 0))
             }
         }
@@ -58,14 +59,11 @@ class UpdateModel(application: Application) {
             return num
         }
 
+        // Get existing requested words from word history
         val existing = histDao.getExisting(histList.map{it.id})
-            .map{it.id}.toHashSet()
-        wordList.filter {
-            existing.contains(it.id)
-        }
-        histList.filter {
-            existing.contains(it.id)
-        }
+
+        // Using DAO properties, History ignores dup keys and Word replaces them.
+        // This correct behaviour since locale changes can make smarter logic tricky.
 
         if(wordList.size > 0 && histList.size > 0) {
             wordDao.insert(*wordList.toTypedArray())
