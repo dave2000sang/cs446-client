@@ -1,13 +1,15 @@
 package com.spellingo.client_app
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceFragmentCompat
 
+
 class SettingsFragment : PreferenceFragmentCompat() {
+
+    // below describes the method of getting preferences saved in settings
+    // val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    // val variable_name = sharedPreferences.get_____(key_name, default_value_if_key_not_present)
 
     private val viewModel: SettingsViewModel by activityViewModels()
 
