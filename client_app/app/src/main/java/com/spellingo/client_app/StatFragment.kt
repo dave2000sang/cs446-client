@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -30,19 +31,23 @@ class StatisticsFragment: Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_statistics_page, container, false)
         pieChart = root.findViewById(R.id.piechart)
+        viewModel.requestGlobalStats()
         setupPieChart()
-        loadPieChartData()
+        viewModel.ratioLiveData.observe(viewLifecycleOwner, Observer(fun(ratio) {
+            loadPieChartData(ratio.first, ratio.second)
+        }))
         return root
     }
 
     private fun setupPieChart() {
+        //TODO change to our own color palette
         var labelSize = 12
         var centerLabelSize = 24
         pieChart.isDrawHoleEnabled = true
         pieChart.setUsePercentValues(true)
         pieChart.setEntryLabelTextSize(labelSize.toFloat())
         pieChart.setEntryLabelColor(Color.BLACK)
-        pieChart.setCenterText("Spelling Staistics")
+        pieChart.setCenterText("Spelling Statistics")
         pieChart.setCenterTextSize(centerLabelSize.toFloat())
         pieChart.description.isEnabled = false
 
@@ -56,11 +61,17 @@ class StatisticsFragment: Fragment() {
 
     }
 
-    private fun loadPieChartData () {
+    private fun loadPieChartData (correct: Int, total: Int) {
+        //TODO change to our own color palette
         val dataEntry = arrayListOf<PieEntry>()
-        dataEntry.add(PieEntry(0.40f, "Correct"))
-        dataEntry.add(PieEntry(0.50f, "Incorrect"))
-        dataEntry.add(PieEntry(0.10f, "Gave Up"))
+        if(total > 0 && correct >= 0 && correct <= total) {
+            val percentCorrect = correct.toFloat() / total
+            dataEntry.add(PieEntry(percentCorrect, "Correct"))
+            dataEntry.add(PieEntry(1 - percentCorrect, "Incorrect"))
+        }
+        else {
+            //TODO write a message like "No word statistics available"
+        }
 
         var colors = arrayListOf<Int>()
 

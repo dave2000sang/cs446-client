@@ -10,10 +10,13 @@ import kotlinx.coroutines.launch
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
     private val wordModel = WordModel(application)
     private val pronunciationModel = PronunciationModel()
+    private val histModel = HistoryChangeModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
     private var hintNum = 0
     private var hintSeq = listOf<Int>()
     private var hintCeil = 2 //TODO replace with global preference?
+    var previousDestination = 0
+//    private var results: MutableList<Pair<String, Int>> = mutableListOf()
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
             val id = word.id
@@ -35,7 +38,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     /**
      * Load the first word of a new session
      */
-    init {
+    fun startSession() {
         viewModelScope.launch {
             try {
                 val curWord = wordModel.getNewSessionWords()
@@ -78,6 +81,17 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         }
         hintNum++
         return hintText.toString()
+    }
+
+    /**
+     * Update results list
+     * @param word word that was just played
+     * @param result whether the spelling was correct
+     */
+    fun updateResults(word: String, result: Boolean) {
+        viewModelScope.launch {
+            histModel.update(word, result)
+        }
     }
 
     /**
