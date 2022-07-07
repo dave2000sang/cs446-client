@@ -37,6 +37,7 @@ class MainMenuFragment : Fragment() {
             findNavController().navigate(R.id.action_fragment_main_menu_to_statisticsFragment)
         }
 
+        viewModel.startApp()
 
         return root
     }

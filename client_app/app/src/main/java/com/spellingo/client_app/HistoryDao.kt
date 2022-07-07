@@ -2,6 +2,7 @@ package com.spellingo.client_app
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 /**
@@ -36,10 +37,18 @@ interface HistoryDao {
     suspend fun updateStats(id: String, success: Int)
 
     /**
+     * Get a list of existing words in the database
+     * @param words words to search for
+     * @return words from the parameter that are currently in the database
+     */
+    @Query("SELECT * FROM history WHERE id IN (:words)")
+    suspend fun getExisting(words: List<String>): List<History>
+
+    /**
      * Add words to database
      * @param words word history(s) to insert
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg words: History)
 
     /**
