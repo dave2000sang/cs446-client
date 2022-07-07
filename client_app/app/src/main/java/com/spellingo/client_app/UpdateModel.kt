@@ -15,7 +15,7 @@ class UpdateModel(application: Application) {
     private val RETRIES = 10
     private val localNumber = 10 //TODO setting? MUST be greater than 0
     private val wordDb = WordDatabase.getInstance(application)
-    private val httpRequest = HttpRequest.getInstance()
+    private val httpRequest = HttpRequest()
     private val histDb = HistoryDatabase.getInstance(application)
     private val connectivity = getSystemService(application.applicationContext,
         ConnectivityManager::class.java)

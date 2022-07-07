@@ -9,16 +9,6 @@ class HttpRequest() {
     private val ipAddr = "172.105.103.199"
     private val baseUrl = "https://$ipAddr:96"
 
-    // Singleton pattern
-    companion object {
-        @Volatile private var INSTANCE: HttpRequest? = null
-
-        fun getInstance(): HttpRequest =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: HttpRequest().also { INSTANCE = it }
-            }
-    }
-
     /**
      * Refresh local word list
      * @return JSON list of new words
