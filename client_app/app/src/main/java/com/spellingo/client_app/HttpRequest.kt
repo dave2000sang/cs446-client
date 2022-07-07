@@ -23,19 +23,22 @@ class HttpRequest() {
      * Refresh local word list
      * @return JSON list of new words
      */
-    suspend fun getWords(): String {
-        return sendRequest("/words", "GET")
+    suspend fun getWords(limit: Int, locale: String): String {
+        val query = "limit=$limit&locale=$locale"
+        return sendGetRequest("/words", query)
     }
 
     /**
-     * Create a HTTP request at a specified endpoint. Currently doesn't support request body
+     * Create a HTTP GET request at a specified endpoint. Currently doesn't support request body
      * @param endpoint API endpoint to request from
-     * @param method HTTP method
+     * @param query query string for GET
      * @return response body as a String
      */
-    private suspend fun sendRequest(endpoint: String, method: String): String {
+    private suspend fun sendGetRequest(endpoint: String, query: String): String {
+        val method = "GET"
         var data = ""
-        val url: URL = URL("$baseUrl$endpoint")
+        val suffix = if(query.isEmpty()) "" else "?$query"
+        val url: URL = URL("$baseUrl$endpoint$suffix")
         var conn: HttpsURLConnection? = null
         withContext(IO) {
             try {

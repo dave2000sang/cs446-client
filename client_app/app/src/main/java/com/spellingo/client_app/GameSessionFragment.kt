@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,12 +31,19 @@ class GameSessionFragment : Fragment() {
 
     private val viewModel: GameSessionViewModel by activityViewModels()
     private var snack : Snackbar? = null
+    private lateinit var navController: NavController
+    private val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        if(viewModel.previousDestination != destination.id
+            && destination.id == R.id.fragment_game_session) {
+            viewModel.startSession()
+        }
+        viewModel.previousDestination = destination.id
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Links Widgets to Variables
         val root = inflater.inflate(R.layout.fragment_game_session, container, false)
         val mainWordField = root.findViewById<EditText>(R.id.mainWordField)
@@ -42,6 +51,10 @@ class GameSessionFragment : Fragment() {
         val hintButton = root.findViewById<ImageView>(R.id.button_hint)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
         val infoBox = root.findViewById<TextView>(R.id.info_box)
+
+        // NavController
+        navController = findNavController()
+        navController.addOnDestinationChangedListener(navListener)
 
         // Mutable fields and observers
         var getCorrectWord = ""
@@ -126,13 +139,14 @@ class GameSessionFragment : Fragment() {
         submitButton.setOnClickListener {
             // Submit button and input in non-empty
             if (submitButton.text == getString(R.string.submit) && mainWordField.text.isNotEmpty()) {
+                val result = mainWordField.text.toString() == getCorrectWord
                 // Hide keyboard
                 val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
                 // Change to continue button
                 submitButton.text = getString(R.string.cont)
                 // Correct / incorrect message
-                if (mainWordField.text.toString() == getCorrectWord) {
+                if (result) {
                     snack?.setText("Correct")
                     snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
@@ -149,6 +163,7 @@ class GameSessionFragment : Fragment() {
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
                 }
                 snack?.show()
+                viewModel.updateResults(getCorrectWord, result)
             }
             // Continue button
             else if (submitButton.text == getString(R.string.cont)) {
@@ -194,5 +209,10 @@ class GameSessionFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         snack?.takeIf{it.isShown}?.dismiss()
+    }
+
+    override fun onDestroyView() {
+        navController.removeOnDestinationChangedListener(navListener)
+        super.onDestroyView()
     }
 }
