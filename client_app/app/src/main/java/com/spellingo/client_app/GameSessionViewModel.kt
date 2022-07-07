@@ -24,14 +24,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
             word.copy(usage = newUsage)
         }
     val pronunciationLiveData = _wordLiveData.switchMap { word ->
-        val filename = word.audio
-        val subdir: String = when {
-            filename.length >= 3 && filename.substring(0..3) == "bix" -> "bix"
-            filename.length >= 2 && filename.substring(0..2) == "gg" -> "gg"
-            filename.first().isDigit() || filename.first() == '_' -> "number"
-            else -> filename.first().toString()
-        }
-        val url = "https://media.merriam-webster.com/audio/prons/en/us/mp3/$subdir/$filename.mp3"
+        val url = word.audio
         pronunciationModel.getPlayer(url)
     }
 
