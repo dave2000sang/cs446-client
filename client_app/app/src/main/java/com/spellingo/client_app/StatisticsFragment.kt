@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.github.mikephil.charting.charts.BarChart
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
@@ -22,12 +21,12 @@ import com.github.mikephil.charting.utils.ColorTemplate
 
 class StatisticsFragment: Fragment() {
 
-    private val viewModel: StatViewModel by activityViewModels()
-    lateinit private var pieChart: PieChart
-    lateinit private var barChart: BarChart
-    lateinit private var barList: ArrayList<BarEntry>
-    lateinit private var barDataSet: BarDataSet
-    lateinit private var barData: BarData
+    private val viewModel: StatisticsViewModel by activityViewModels()
+    private lateinit var pieChart: PieChart
+    private lateinit var barChart: BarChart
+    private lateinit var barList: ArrayList<BarEntry>
+    private lateinit var barDataSet: BarDataSet
+    private lateinit var barData: BarData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +37,6 @@ class StatisticsFragment: Fragment() {
         // Initialize and draw PieChart Here
         pieChart = root.findViewById(R.id.pieChart)
         setupPieChart()
-        loadPieChartData(10, 50)
 
         // Initialize Bar Chart Here
         barChart = root.findViewById(R.id.barChart)

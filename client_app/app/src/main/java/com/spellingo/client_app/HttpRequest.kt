@@ -9,16 +9,6 @@ class HttpRequest() {
     private val ipAddr = "172.105.103.199"
     private val baseUrl = "https://$ipAddr:96"
 
-    // Singleton pattern
-    companion object {
-        @Volatile private var INSTANCE: HttpRequest? = null
-
-        fun getInstance(): HttpRequest =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: HttpRequest().also { INSTANCE = it }
-            }
-    }
-
     /**
      * Refresh local word list
      * @return JSON list of new words
@@ -42,12 +32,12 @@ class HttpRequest() {
         var conn: HttpsURLConnection? = null
         withContext(IO) {
             try {
-                conn = url.openConnection() as HttpsURLConnection;
+                conn = url.openConnection() as HttpsURLConnection
                 // Using IP address instead of domain breaks default hostname verifier
                 conn!!.setHostnameVerifier { hostname, _ ->
                     hostname.equals(ipAddr)
                 }
-                conn!!.requestMethod = method;
+                conn!!.requestMethod = method
                 data = conn!!.inputStream.bufferedReader().use { it.readText() }
             }
             catch(e: Exception) {
