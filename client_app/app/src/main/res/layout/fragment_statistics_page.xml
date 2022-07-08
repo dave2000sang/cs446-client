@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/barChart"
+        android:layout_width="413dp"
+        android:layout_height="331dp"
+        android:layout_marginBottom="320dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showBarGraph" />
+
     <Button
         android:id="@+id/showBarGraph"
         android:layout_width="203dp"

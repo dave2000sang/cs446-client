@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.Qusion:android-roundprogressbar:0.3.0'
     testImplementation 'junit:junit:4.13.2'
+//    implementation 'com.github.slobodanantonijevic:CustomTextView:1.0.6'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 

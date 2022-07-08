@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.components.LegendEntry
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
@@ -23,6 +22,10 @@ class StatisticsFragment: Fragment() {
 
     private val viewModel: StatViewModel by activityViewModels()
     lateinit private var pieChart: PieChart
+    lateinit private var barChart: BarChart
+    lateinit private var barList: ArrayList<BarEntry>
+    lateinit private var barDataSet: BarDataSet
+    lateinit private var barData: BarData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,22 +38,35 @@ class StatisticsFragment: Fragment() {
         setupPieChart()
         loadPieChartData()
 
-        // Buttons for chart switching
+        // Initialize Bar Chart Here
+        barChart = root.findViewById(R.id.barChart)
+        barList = arrayListOf<BarEntry>()
+        barList.add(BarEntry (1f, 2f))
+        barList.add(BarEntry (1f, 30f))
+        barList.add(BarEntry (2f, 40f))
+        barList.add(BarEntry (3f, 50f))
+        barList.add(BarEntry (4f, 60f))
+        barDataSet = BarDataSet(barList, "Words Summary")
+        barData = BarData(barDataSet)
+        barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
+        barDataSet.valueTextColor = Color.BLACK
+        barDataSet.valueTextSize = 15f
+        barChart.data = barData
+
         val pieChartButton = root.findViewById<Button>(R.id.showPieGraph)
         val barChartButton = root.findViewById<Button>(R.id.showBarGraph)
 
         pieChartButton.setOnClickListener {
             pieChart.isVisible = true
+            barChart.isVisible = false
         }
 
         barChartButton.setOnClickListener {
             pieChart.isVisible = false
+            barChart.isVisible = true
         }
 
-
-
-
-
+        barChart.isVisible = false // set barChart to be invisible on entry.
         return root
     }
 
