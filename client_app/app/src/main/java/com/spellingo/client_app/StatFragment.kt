@@ -1,15 +1,15 @@
 package com.spellingo.client_app
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
@@ -29,9 +29,28 @@ class StatisticsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_statistics_page, container, false)
-        pieChart = root.findViewById(R.id.piechart)
+
+        // Initialize and draw PieChart Here
+        pieChart = root.findViewById(R.id.pieChart)
         setupPieChart()
         loadPieChartData()
+
+        // Buttons for chart switching
+        val pieChartButton = root.findViewById<Button>(R.id.showPieGraph)
+        val barChartButton = root.findViewById<Button>(R.id.showBarGraph)
+
+        pieChartButton.setOnClickListener {
+            pieChart.isVisible = true
+        }
+
+        barChartButton.setOnClickListener {
+            pieChart.isVisible = false
+        }
+
+
+
+
+
         return root
     }
 
