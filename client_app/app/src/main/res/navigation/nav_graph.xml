@@ -18,8 +18,8 @@
             android:id="@+id/mainMenuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <action
-            android:id="@+id/action_fragment_main_menu_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
+            android:id="@+id/action_fragment_main_menu_to_statisticsSelectorFragment"
+            app:destination="@id/statisticsSelectorFragment" />
     </fragment>
 
     <fragment
@@ -47,8 +47,19 @@
         android:name="com.spellingo.client_app.StatisticsFragment"
         android:label="StatisticsFragment" >
         <action
-            android:id="@+id/action_statisticsFragment_to_fragment_main_menu"
+            android:id="@+id/action_statisticsFragment_to_statisticsSelectorFragment"
+            app:destination="@id/statisticsSelectorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statisticsSelectorFragment"
+        android:name="com.spellingo.client_app.StatisticsSelectorFragment"
+        android:label="StatisticsSelectorFragment" >
+        <action
+            android:id="@+id/action_statisticsSelectorFragment_to_fragment_main_menu"
             app:destination="@id/fragment_main_menu" />
+        <action
+            android:id="@+id/action_statisticsSelectorFragment_to_statisticsFragment"
+            app:destination="@id/statisticsFragment" />
     </fragment>
 
 </navigation>
