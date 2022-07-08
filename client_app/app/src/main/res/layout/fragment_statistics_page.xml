@@ -7,7 +7,7 @@
     android:background="#FFFFFF">
 
     <TextView
-        android:id="@+id/correctCounter4"
+        android:id="@+id/incorrectCounter"
         android:layout_width="61dp"
         android:layout_height="55dp"
         android:text="10"
@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.782" />
 
     <TextView
-        android:id="@+id/correctCounter5"
+        android:id="@+id/totalCounter"
         android:layout_width="61dp"
         android:layout_height="55dp"
         android:text="77"

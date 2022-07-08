@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -33,6 +34,12 @@ class StatisticsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_statistics_page, container, false)
+        var correctWordCounter = 0
+        var incorrectWordCounter = 0
+        var totalWordCounter = 0
+        var correctTextView = root.findViewById<TextView>(R.id.correctCounter)
+        var incorrectTextView = root.findViewById<TextView>(R.id.incorrectCounter)
+        var totalTextView = root.findViewById<TextView>(R.id.totalCounter)
 
         // Initialize and draw PieChart Here
         pieChart = root.findViewById(R.id.pieChart)
@@ -71,8 +78,21 @@ class StatisticsFragment: Fragment() {
         viewModel.requestGlobalStats()
         setupPieChart()
         viewModel.ratioLiveData.observe(viewLifecycleOwner, Observer(fun(ratio) {
-            loadPieChartData(ratio.first, ratio.second)
+            correctWordCounter = ratio.first
+            totalWordCounter = ratio.second
+            incorrectWordCounter = totalWordCounter-correctWordCounter
+            loadPieChartData(correctWordCounter, totalWordCounter)
+
+            // Setting Counter Information
+            correctTextView.text = correctWordCounter.toString()
+            incorrectTextView.text = incorrectWordCounter.toString()
+            totalTextView.text = totalWordCounter.toString()
         }))
+
+
+
+
+
         return root
     }
 
