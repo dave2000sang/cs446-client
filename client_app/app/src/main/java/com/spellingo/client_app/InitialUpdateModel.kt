@@ -1,27 +1,23 @@
 package com.spellingo.client_app
 
 import android.app.Application
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import androidx.core.content.ContextCompat
 
+/**
+ * Update model for application startup, which allows for slower but larger operations
+ */
 class InitialUpdateModel(application: Application) : UpdateModel(application) {
-    private val retries = 10
-    private val localNumber = 10 //TODO setting? MUST be greater than 0
-    private val locale = "uk" //TODO replace with setting
     private val purgeAttemptsCeil = 5 //TODO store in more centralized place
     private val purgeCountCeil = 100 //TODO store in more centralized place
     private val purgeAmount = 10 //TODO store in more centralized place
-    private val connectivity = ContextCompat.getSystemService(
-        application.applicationContext,
-        ConnectivityManager::class.java
-    )
+    private val minCache = 10 //TODO store somewhere? (min num words in cache desired)
+    private val limit = 10 //TODO store somewhere? (download chunk size, be generous)
+    private val retries = 5
 
-    override suspend fun purgeReusedWords() {
+    override suspend fun purgeReusedWords(): Int {
         val histDao = histDb.historyDao()
         val wordDao = wordDb.wordDao()
         val wordCount = histDao.getAllWords().size
-        if(wordCount <= 0) return
+        if(wordCount <= 0) return 0
         val attempts = histDao.getNumTotal()
 
         // Purge condition checks if average attempts is high or cache is too large
@@ -31,31 +27,24 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
                 Word(it.id, "", "", "", "", "", "")
             }.toTypedArray()
             wordDao.delete(*wordArray)
+            println("DEBUG purge $wordArray") // DEBUG
+            return wordArray.size
         }
+        return 0
     }
 
-    override suspend fun downloadWords() {
-        if(connectivity == null) {
-            return
+    override suspend fun downloadWords(locale: String): Int {
+        val wordDao = wordDb.wordDao()
+        val inCache = wordDao.getAllWords().size
+        // If we meet our minimum cache number, don't download
+        if(inCache >= minCache) return 0
+        var downloaded = 0
+        // Try up to retries times to download words to cache
+        for(retryIdx in 0 until retries) {
+            downloaded += tryFetchWords(limit, locale)
+            if(inCache + downloaded >= minCache) break
         }
-        val currentNetwork = connectivity.activeNetwork
-        val caps = connectivity.getNetworkCapabilities(currentNetwork)
-        val doDownload = if(caps == null) {
-            // default to metered dumb check
-            !connectivity.isActiveNetworkMetered
-        }
-        else {
-            // Allow Wifi and Ethernet connections
-            caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                    || caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-        }
-        var remainingNumber = localNumber
-        var retryIdx = 0
-        if(doDownload) {
-            while(remainingNumber > 0 && retryIdx < retries) {
-                remainingNumber = tryFetchWords(remainingNumber, locale)
-                retryIdx++
-            }
-        }
+        println("DEBUG downloadWords $downloaded") // DEBUG
+        return downloaded
     }
 }

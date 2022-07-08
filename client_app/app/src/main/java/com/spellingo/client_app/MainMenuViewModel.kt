@@ -7,7 +7,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class MainMenuViewModel(application: Application) : AndroidViewModel(application) {
-    private val model = InitialUpdateModel(application)
+    private val model: UpdateModel = InitialUpdateModel(application)
     private var startupLock = false
 
     /**

@@ -37,7 +37,6 @@ class StatisticsFragment: Fragment() {
         // Initialize and draw PieChart Here
         pieChart = root.findViewById(R.id.pieChart)
         setupPieChart()
-        loadPieChartData(10, 50)
 
         // Initialize Bar Chart Here
         barChart = root.findViewById(R.id.barChart)
