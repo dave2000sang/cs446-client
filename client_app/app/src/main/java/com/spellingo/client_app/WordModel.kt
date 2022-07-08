@@ -11,12 +11,13 @@ class WordModel(application: Application) {
     //TODO change to a user setting. MUST be greater than 0!
     private val totalSessionWords = 5
     private var listOfWords = mutableListOf<Word>()
+    private val locale = "uk" //TODO make global setting
 
     /**
      * Fetch some words from the database to use in a session and return a word
      */
     suspend fun getNewSessionWords(): Word {
-        val listRes = wordDb.wordDao().getRandomN(totalSessionWords)
+        val listRes = wordDb.wordDao().getRandomN(totalSessionWords, locale)
         listOfWords.clear()
         listOfWords.addAll(listRes)
         return listOfWords.removeAt(0)

@@ -23,9 +23,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Application startup tasks handled in Activity's ViewModel
-        val viewModel: MainActivityViewModel by viewModels()
-        viewModel.startApp()
     }
 }
