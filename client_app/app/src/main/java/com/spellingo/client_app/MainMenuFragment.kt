@@ -34,7 +34,7 @@ class MainMenuFragment : Fragment() {
 
         val statsButton = root.findViewById<Button>(R.id.statsButton)
         statsButton.setOnClickListener {
-            findNavController().navigate(R.id.action_fragment_main_menu_to_statisticsFragment)
+            findNavController().navigate(R.id.action_fragment_main_menu_to_statisticsSelectorFragment)
         }
 
         viewModel.startApp()
