@@ -29,6 +29,13 @@ interface HistoryDao {
     suspend fun getAllWords(): List<History>
 
     /**
+     * Get top played words
+     * @param n number of words to fetch
+     */
+    @Query("SELECT * FROM history ORDER BY total DESC LIMIT :n")
+    suspend fun getTopWords(n: Int): List<History>
+
+    /**
      * Update score for a specific word
      * @param id the word to search
      * @param success whether the word was spelled correctly, must be 0 or 1

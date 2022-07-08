@@ -1,9 +1,6 @@
 package com.spellingo.client_app
 
 import android.app.Application
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import androidx.core.content.ContextCompat.getSystemService
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -11,27 +8,22 @@ import org.json.JSONObject
  * Model for updating/populating the local word database
  * @param application ApplicationContext for database creation
  */
-class UpdateModel(application: Application) {
-    private val RETRIES = 10
-    private val localNumber = 10 //TODO setting? MUST be greater than 0
-    private val wordDb = WordDatabase.getInstance(application)
-    private val httpRequest = HttpRequest()
-    private val histDb = HistoryDatabase.getInstance(application)
-    private val connectivity = getSystemService(application.applicationContext,
-        ConnectivityManager::class.java)
-    private val locale = "uk" //TODO replace with setting
+abstract class UpdateModel(private val application: Application) {
+    protected val wordDb = WordDatabase.getInstance(application)
+    protected val histDb = HistoryDatabase.getInstance(application)
 
     /**
      * Try to fetch words from server
-     * @param num number of words to request from server
+     * @param limit number of words to request from server
+     * @param locale English locale
      * @return number of duplicate words received
      */
-    private suspend fun tryFetchWords(num: Int): Int {
+    protected suspend fun tryFetchWords(limit: Int, locale: String): Int {
         val wordList = mutableListOf<Word>()
         val histList = mutableListOf<History>()
 
         // HTTP request
-        val response = httpRequest.getWords(num, locale)
+        val response = HttpRequest().getWords(limit, locale)
 
         // Word and History database accessors
         val wordDao = wordDb.wordDao()
@@ -56,7 +48,7 @@ class UpdateModel(application: Application) {
         }
         catch(e: JSONException) {
             System.err.println(e.toString())
-            return num
+            return limit
         }
 
         // Get existing requested words from word history
@@ -73,31 +65,14 @@ class UpdateModel(application: Application) {
         return existing.size
     }
 
+    abstract suspend fun downloadWords()
+    abstract suspend fun purgeReusedWords()
+
     /**
      * Fetch words from the server
      */
     suspend fun generateWords() {
-        if(connectivity == null) {
-            return
-        }
-        val currentNetwork = connectivity.activeNetwork
-        val caps = connectivity.getNetworkCapabilities(currentNetwork)
-        val doDownload = if(caps == null) {
-            // default to metered dumb check
-            !connectivity.isActiveNetworkMetered
-        }
-        else {
-            // Allow Wifi and Ethernet connections
-            caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                    || caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-        }
-        if(doDownload) {
-            var remainingNumber = localNumber
-            var retryIdx = 0
-            while(remainingNumber > 0 && retryIdx < RETRIES) {
-                remainingNumber = tryFetchWords(remainingNumber)
-                retryIdx++
-            }
-        }
+        purgeReusedWords()
+        downloadWords()
     }
 }

@@ -32,12 +32,12 @@ class HttpRequest() {
         var conn: HttpsURLConnection? = null
         withContext(IO) {
             try {
-                conn = url.openConnection() as HttpsURLConnection;
+                conn = url.openConnection() as HttpsURLConnection
                 // Using IP address instead of domain breaks default hostname verifier
                 conn!!.setHostnameVerifier { hostname, _ ->
                     hostname.equals(ipAddr)
                 }
-                conn!!.requestMethod = method;
+                conn!!.requestMethod = method
                 data = conn!!.inputStream.bufferedReader().use { it.readText() }
             }
             catch(e: Exception) {
