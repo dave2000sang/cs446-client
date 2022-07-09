@@ -139,7 +139,7 @@ class GameSessionFragment : Fragment() {
         submitButton.setOnClickListener {
             // Submit button and input in non-empty
             if (submitButton.text == getString(R.string.submit) && mainWordField.text.isNotEmpty()) {
-                val result = mainWordField.text.toString() == getCorrectWord
+                val result = mainWordField.text.toString().equals(getCorrectWord, true)
                 // Hide keyboard
                 val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
