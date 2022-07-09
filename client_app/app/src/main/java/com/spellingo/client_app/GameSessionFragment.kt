@@ -126,6 +126,7 @@ class GameSessionFragment : Fragment() {
             try {
                 mediaPlayer!!.start()
             }
+            //TODO add toasts for error messages
             catch (e: NullPointerException) {} // mediaPlayer not observed
             catch (e: IllegalStateException) {} // mediaPlayer not ready
         }
