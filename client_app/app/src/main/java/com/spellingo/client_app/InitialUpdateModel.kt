@@ -13,6 +13,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
     private val limit = 10 //TODO store somewhere? (download chunk size, be generous)
     private val retries = 5
 
+    // See UpdateModel for signature
     override suspend fun purgeReusedWords(): Int {
         val histDao = histDb.historyDao()
         val wordDao = wordDb.wordDao()
@@ -26,6 +27,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
             val wordArray = topWords.map {
                 Word(it.id, "", "", "", "", "", "")
             }.toTypedArray()
+            // Remove most played words from cache
             wordDao.delete(*wordArray)
             println("DEBUG purge $wordArray") // DEBUG
             return wordArray.size
@@ -33,6 +35,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
         return 0
     }
 
+    // See UpdateModel for signature
     override suspend fun downloadWords(locale: String): Int {
         val wordDao = wordDb.wordDao()
         val inCache = wordDao.getAllWords().size

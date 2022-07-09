@@ -27,17 +27,16 @@ abstract class UpdateModel(private val application: Application) {
      * @return number of words fetched
      */
     protected suspend fun tryFetchWords(limit: Int, locale: String): Int {
+        // Disallow any bugs where limit is negative
         if(limit <= 0) return 0
 
         val wordList = mutableListOf<Word>()
-        val histList = mutableListOf<History>()
 
         // HTTP request
         val response = HttpRequest().getWords(limit, locale)
 
-        //TODO error handling for empty fields (e.g. audio)
-
         try {
+            // Parse JSON object
             val responseJson = JSONObject(response)
             val listWords = responseJson.getJSONArray("results")
             for(wordIdx in 0 until listWords.length()) {
@@ -48,11 +47,16 @@ abstract class UpdateModel(private val application: Application) {
                 val part = wordObj.getString("part")
                 val audio = wordObj.getString("audio")
                 val usage = wordObj.getString("usage")
+                // Check for empty fields in response
+                if(id.isEmpty() || definition.isEmpty() || origin.isEmpty()
+                    || part.isEmpty() || audio.isEmpty() || usage.isEmpty()) {
+                    throw Exception("Empty word field")
+                }
+                // Create new Word and History entries
                 wordList.add(Word(id, definition, usage, origin, part, audio, locale))
-                histList.add(History(id, 0, 0))
             }
         }
-        catch(e: JSONException) {
+        catch(e: Exception) {
             System.err.println(e.toString())
             return 0
         }
@@ -66,11 +70,12 @@ abstract class UpdateModel(private val application: Application) {
             it.id
         }.toHashSet()
 
+        // Get existing words in cache that match id and locale
         val cacheLocalMap = wordDao.getExisting(wordList.map { it.id }).associate {
             it.id to it.locale
         }
 
-        // Remove fetched words if they're in cache with the same locale OR they are in history
+        // Remove fetched words if they're in cache with the same locale OR OTHERWISE if they are in history
         wordList.removeAll {
             if(cacheLocalMap.containsKey(it.id)) {
                 cacheLocalMap[it.id] == locale
@@ -116,7 +121,6 @@ abstract class UpdateModel(private val application: Application) {
 
     /**
      * Download words from server
-     * @param limit number of words to request from server
      * @param locale English locale
      * @return number of words downloaded
      */
