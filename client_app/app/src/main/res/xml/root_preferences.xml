@@ -41,7 +41,7 @@
             app:entries="@array/language_locale"
             app:entryValues="@array/language_locale_dev"
             app:summary="Determines the locale of words and their corresponding spelling"
-            app:defaultValue="@string/us"/>
+            app:defaultValue="us"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
