@@ -3,6 +3,7 @@ package com.spellingo.client_app
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
+import java.lang.Integer.min
 
 /**
  * Application-aware ViewModel for the game session screen
@@ -15,6 +16,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private var hintNum = 0
     private var hintSeq = listOf<Int>()
     private var hintCeil = 2 //TODO replace with global preference?
+    private var hintBuilder = StringBuilder("")
     var previousDestination = 0
 //    private var results: MutableList<Pair<String, Int>> = mutableListOf()
     val wordLiveData: LiveData<Word>
@@ -63,17 +65,16 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
             return ""
         }
         val curText = _wordLiveData.value!!.id
-        val hintText = StringBuilder("_ ".repeat(curText.length))
         if(hintNum == 0) { // first time getting hint for this word
             // randomly order indices to get hint char
+            hintBuilder = StringBuilder("_ ".repeat(curText.length))
             hintSeq = curText.indices.toList().shuffled()
         }
-        for(i in 0 until listOf(hintNum, hintCeil, curText.length).min()) {
-            // reveal char at random indices
-            hintText.setCharAt(hintSeq[i] * 2, curText[hintSeq[i]])
+        else if(hintNum - 1 < min(hintCeil, curText.length / 2)) {
+            hintBuilder.setCharAt(hintSeq[hintNum - 1] * 2, curText[hintSeq[hintNum - 1]])
         }
         hintNum++
-        return hintText.toString()
+        return hintBuilder.toString()
     }
 
     /**
