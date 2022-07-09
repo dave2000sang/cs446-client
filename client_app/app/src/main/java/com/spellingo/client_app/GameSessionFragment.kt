@@ -6,8 +6,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -63,54 +61,19 @@ class GameSessionFragment : Fragment() {
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
-            val part = word.part.replaceFirstChar { it.uppercase() }
-            val definition = word.definition.replaceFirstChar { it.uppercase() }
-            val usage = word.usage.replaceFirstChar { it.uppercase() }
-            val origin = word.origin.replaceFirstChar { it.uppercase() }
-            val infoBoxString = "$part\n\n$definition\n\nUsage\n\t$usage\n\nEtymology\n\t$origin"
-            val infoBoxSpannable = SpannableString(infoBoxString)
-            var textIdx = 0
-            // Span for part
-            infoBoxSpannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.infobox_highlight1)),
-                textIdx, textIdx + part.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            // Span for "Usage"
-            textIdx += part.length + 2 + definition.length + 2
-            infoBoxSpannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.infobox_highlight2)),
-                textIdx, textIdx + "Usage".length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            textIdx += "Usage".length + 2
-            // Span for usage
-            infoBoxSpannable.setSpan(
-                StyleSpan(Typeface.ITALIC),
-                textIdx, textIdx + usage.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            infoBoxSpannable.setSpan(
-                RelativeSizeSpan(0.8f),
-                textIdx, textIdx + usage.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            textIdx += usage.length + 2
-            // Span for "Etymology"
-            infoBoxSpannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.infobox_highlight2)),
-                textIdx, textIdx + "Etymology".length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            textIdx += "Etymology".length + 2
-            // Span for origin
-            infoBoxSpannable.setSpan(
-                RelativeSizeSpan(0.8f),
-                textIdx, textIdx + origin.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-
-            infoBox.text = infoBoxSpannable
+            val infoList = mutableListOf<InfoBox>()
+            // Decorators for infobox, start with part of speech and definition only
+            infoList.add(GameSessionInfoBox(requireContext()))
+            // Add usage for medium difficulty
+            infoList.add(InfoBoxUsage(infoList.last(), requireContext()))
+            // Add origin for hard difficulty
+            infoList.add(InfoBoxOrigin(infoList.last(), requireContext()))
+            infoBox.text = when(viewModel.difficulty) {
+                "hard" -> infoList[0].getSpannable(word)
+                "medium" -> infoList[1].getSpannable(word)
+                "easy" -> infoList[2].getSpannable(word)
+                else -> ""
+            }
         }))
 
         // Pronunciation audio
@@ -127,6 +90,7 @@ class GameSessionFragment : Fragment() {
             try {
                 mediaPlayer!!.start()
             }
+            //TODO add toasts for error messages
             catch (e: NullPointerException) {} // mediaPlayer not observed
             catch (e: IllegalStateException) {} // mediaPlayer not ready
         }
@@ -139,7 +103,7 @@ class GameSessionFragment : Fragment() {
         submitButton.setOnClickListener {
             // Submit button and input in non-empty
             if (submitButton.text == getString(R.string.submit) && mainWordField.text.isNotEmpty()) {
-                val result = mainWordField.text.toString() == getCorrectWord
+                val result = mainWordField.text.toString().equals(getCorrectWord, true)
                 // Hide keyboard
                 val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)

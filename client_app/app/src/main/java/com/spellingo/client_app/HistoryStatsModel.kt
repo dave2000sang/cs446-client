@@ -11,6 +11,8 @@ class HistoryStatsModel(application: Application) {
      */
     suspend fun getTotalStats(): Pair<Int, Int> {
         val dao = histDb.historyDao()
+        val wordCount = dao.getAllWords().size
+        if(wordCount <= 0) return Pair(0, 0)
         val correct = dao.getNumCorrect()
         val total = dao.getNumTotal()
         return Pair(correct, total)
