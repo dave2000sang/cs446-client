@@ -16,7 +16,7 @@ class WordModel(application: Application) {
     /**
      * Fetch some words from the database to use in a session and return a word
      */
-    suspend fun getNewSessionWords(): Word {
+    suspend fun getNewSessionWords(category: String, difficulty: String): Word {
         val listRes = wordDb.wordDao().getRandomN(totalSessionWords, locale)
         listOfWords.clear()
         listOfWords.addAll(listRes)

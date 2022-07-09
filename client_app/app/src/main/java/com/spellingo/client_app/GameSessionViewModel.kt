@@ -18,6 +18,9 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private var hintCeil = 2 //TODO replace with global preference?
     private var hintBuilder = StringBuilder("")
     var previousDestination = 0
+    //TODO modify these from the category selection screen
+    var category = "standard"
+    var difficulty = "medium"
 //    private var results: MutableList<Pair<String, Int>> = mutableListOf()
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
@@ -36,7 +39,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     fun startSession() {
         viewModelScope.launch {
             try {
-                val curWord = wordModel.getNewSessionWords()
+                val curWord = wordModel.getNewSessionWords(category, difficulty)
                 _wordLiveData.postValue(curWord)
             }
             catch(e: Exception) {
