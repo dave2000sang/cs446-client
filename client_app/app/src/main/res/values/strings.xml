@@ -18,4 +18,18 @@
     <string name="stats">Stats</string>
     <string name="settings">Settings</string>
 
+    <!-- Settings Fragment (Locale) -->
+    <string name="uk">United Kingdom</string>
+    <string name="us">United States of America</string>
+
+    <string-array name="language_locale">
+        <item>@string/uk</item>
+        <item>@string/us</item>
+    </string-array>
+
+    <string-array name="language_locale_dev">
+        <item>uk</item>
+        <item>us</item>
+    </string-array>
+
 </resources>

@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        app:key="notifications_category"
-        app:title="Notifications">
+        app:key="general_category"
+        app:title="General">
 
         <SwitchPreferenceCompat
-            app:key="notifications"
-            app:title="Enable message notifications"/>
+            app:key="download_on_wifi_only"
+            app:title="Download on Wifi ONLY"
+            app:defaultValue="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:key="help_category"
-        app:title="Help">
+        app:key="statistics_category"
+        app:title="Statistics">
 
-        <Preference
-            app:key="feedback"
-            app:summary="Report technical issues or suggest new features"
-            app:title="Send feedback"/>
+        <SwitchPreferenceCompat
+            app:key="show_statistics"
+            app:title="Collect and Show Statistics"
+            app:defaultValue="true"/>
+    </PreferenceCategory>
 
+    <PreferenceCategory
+        app:key="game_category"
+        app:title="Game">
+
+        <SeekBarPreference
+            app:key="number_words_per_sessions"
+            app:title="Number of Words per Session"
+            app:defaultValue="10"
+            app:showSeekBarValue="true"
+            app:min="1"
+            android:max="50"/>
+
+        <ListPreference
+            app:key="locale_preferences"
+            app:title="Locale Preference"
+            app:entries="@array/language_locale"
+            app:entryValues="@array/language_locale_dev"
+            app:summary="Determines the locale of words and their corresponding spelling"
+            app:defaultValue="us"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
