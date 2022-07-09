@@ -20,7 +20,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     var previousDestination = 0
     //TODO modify these from the category selection screen
     var category = "standard"
-    var difficulty = "medium"
+    var difficulty = "easy"
 //    private var results: MutableList<Pair<String, Int>> = mutableListOf()
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
