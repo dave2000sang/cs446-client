@@ -60,6 +60,17 @@
         <action
             android:id="@+id/action_statisticsSelectorFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment" />
+        <action
+            android:id="@+id/action_statisticsSelectorFragment_to_sessionHistoryFragment"
+            app:destination="@id/sessionHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sessionHistoryFragment"
+        android:name="com.spellingo.client_app.SessionHistoryFragment"
+        android:label="SessionHistoryFragment" >
+        <action
+            android:id="@+id/action_sessionHistoryFragment_to_statisticsSelectorFragment"
+            app:destination="@id/statisticsSelectorFragment" />
     </fragment>
 
 </navigation>

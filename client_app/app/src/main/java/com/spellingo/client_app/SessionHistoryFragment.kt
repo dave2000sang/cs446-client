@@ -19,7 +19,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 
-class StatisticsSelectorFragment: Fragment() {
+class SessionHistoryFragment: Fragment() {
 
     private val viewModel: StatisticsViewModel by activityViewModels()
 
@@ -27,21 +27,10 @@ class StatisticsSelectorFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_stat_selector, container, false)
+        val root = inflater.inflate(R.layout.fragment_session_history, container, false)
 
-        // This class is for the UI Statistics Selector Page.
 
-        // Linking the UI Statistics Selector Page to the Overall Stats Page
-        val myStatsButton = root.findViewById<Button>(R.id.myStats)
-        myStatsButton.setOnClickListener {
-            findNavController().navigate(R.id.action_statisticsSelectorFragment_to_statisticsFragment)
-        }
 
-        // Linking the UI Statistics Selector Page to the Session History Page.
-        val mySessionStatsButton = root.findViewById<Button>(R.id.mySession)
-        mySessionStatsButton.setOnClickListener {
-            findNavController().navigate((R.id.action_statisticsSelectorFragment_to_sessionHistoryFragment))
-        }
         return root
     }
 }
