@@ -7,9 +7,11 @@ import androidx.room.PrimaryKey
 /**
  * History data structure in Room database
  */
-@Entity
+@Entity(primaryKeys = ["id", "locale", "category"])
 data class History(
-    @PrimaryKey val id: String,
+    val id: String,
+    val locale: Locale,
+    val category: String,
     @ColumnInfo(name = "correct") val score: Int,
     @ColumnInfo(name = "total") val total: Int
 )

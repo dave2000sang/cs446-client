@@ -7,13 +7,16 @@ import androidx.room.PrimaryKey
 /**
  * Word data structure in Room database
  */
-@Entity
+@Entity(primaryKeys = ["id", "locale", "category"])
 data class Word(
-    @PrimaryKey val id: String,
+    val id: String,
+    val locale: Locale,
+    val category: String,
     @ColumnInfo(name = "definition") val definition: String,
     @ColumnInfo(name = "usage") val usage: String,
     @ColumnInfo(name = "origin") val origin: String,
     @ColumnInfo(name = "part") val part: String,
     @ColumnInfo(name = "audio") val audio: String,
-    @ColumnInfo(name = "locale") val locale: Locale,
+    @ColumnInfo(name = "difficulty") val difficulty: Difficulty,
+    @ColumnInfo(name = "phonetic") val phonetic: String,
 )

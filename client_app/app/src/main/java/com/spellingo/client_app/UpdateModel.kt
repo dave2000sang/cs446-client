@@ -35,7 +35,7 @@ abstract class UpdateModel(private val application: Application) {
         val wordList = mutableListOf<Word>()
 
         // HTTP request
-        val response = HttpRequest().getWords(limit, locale.name.lowercase())
+        val response = HttpRequest().getWords(limit, locale, category, difficulty)
 
         try {
             // Parse JSON object
@@ -49,13 +49,14 @@ abstract class UpdateModel(private val application: Application) {
                 val part = wordObj.getString("part")
                 val audio = wordObj.getString("audio")
                 val usage = wordObj.getString("usage")
+                val phonetic = wordObj.getString("phoneticSpelling")
                 // Check for empty fields in response
                 if(id.isEmpty() || definition.isEmpty() || origin.isEmpty()
                     || part.isEmpty() || audio.isEmpty() || usage.isEmpty()) {
                     throw Exception("Empty word field")
                 }
                 // Create new Word and History entries
-                wordList.add(Word(id, definition, usage, origin, part, audio, locale))
+                wordList.add(Word(id, locale, category, definition, usage, origin, part, audio, difficulty, phonetic))
             }
         }
         catch(e: Exception) {
@@ -69,36 +70,22 @@ abstract class UpdateModel(private val application: Application) {
         val histDao = histDb.historyDao()
 
         // Get existing requested words from word history
-        val histExisting = histDao.getExisting(wordList.map { it.id } ).map {
-            it.id
-        }.toHashSet()
-
-        // Get existing words in cache that match id and locale
-        val cacheLocalMap = wordDao.getExisting(wordList.map { it.id }).associate {
-            it.id to it.locale
-        }
-
-        // Remove fetched words if they're in cache with the same locale OR OTHERWISE if they are in history
-        wordList.removeAll {
-            if(cacheLocalMap.containsKey(it.id)) {
-                cacheLocalMap[it.id] == locale
-            }
-            else {
-                histExisting.contains(it.id)
+        val newWordList = mutableListOf<Word>()
+        for(word in wordList) {
+            if(histDao.getExisting(word.id, word.locale, word.category) == null) {
+                newWordList.add(word)
             }
         }
 
-        // Using DAO properties, History ignores dup keys and Word replaces them.
-        // This means that words in cache of a different locale are allowed to be downloaded
-        if(wordList.isNotEmpty()) {
-            wordDao.insert(*wordList.toTypedArray())
-            histDao.insert(*wordList.map {
-                History(it.id, 0, 0)
+        if(newWordList.isNotEmpty()) {
+            wordDao.insert(*newWordList.toTypedArray())
+            histDao.insert(*newWordList.map {
+                History(it.id, it.locale, it.category, 0, 0)
             }.toTypedArray())
         }
-        println(wordList) // DEBUG
+        println(newWordList) // DEBUG
 
-        return wordList.size
+        return newWordList.size
     }
 
     /**
@@ -124,15 +111,13 @@ abstract class UpdateModel(private val application: Application) {
 
     /**
      * Download words from server
-     * @return number of words downloaded
      */
-    protected abstract suspend fun downloadWords(): Int
+    protected abstract suspend fun downloadWords()
 
     /**
      * Purge some words from local cache
-     * @return number of words purged
      */
-    protected abstract suspend fun purgeReusedWords(): Int
+    protected abstract suspend fun purgeReusedWords()
 
     /**
      * Fetch words from the server

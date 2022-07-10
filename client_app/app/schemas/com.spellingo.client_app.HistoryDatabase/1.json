@@ -2,15 +2,27 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6b7c2fbc56bdb856fbe2822ba0109611",
+    "identityHash": "cbdf438b5f32016b4375825466bc1bd8",
     "entities": [
       {
         "tableName": "History",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `correct` INTEGER NOT NULL, `total` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `locale` TEXT NOT NULL, `category` TEXT NOT NULL, `correct` INTEGER NOT NULL, `total` INTEGER NOT NULL, PRIMARY KEY(`id`, `locale`, `category`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "locale",
+            "columnName": "locale",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -30,7 +42,9 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "id"
+            "id",
+            "locale",
+            "category"
           ]
         },
         "indices": [],
@@ -40,7 +54,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b7c2fbc56bdb856fbe2822ba0109611')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cbdf438b5f32016b4375825466bc1bd8')"
     ]
   }
 }

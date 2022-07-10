@@ -44,12 +44,12 @@ interface HistoryDao {
     suspend fun updateStats(id: String, success: Int)
 
     /**
-     * Get a list of existing words in the database
-     * @param words words to search for
-     * @return words from the parameter that are currently in the database
+     * Check whether a word exists in database
+     * @param word word to search for
+     * @return WordKey if exists, null otherwise
      */
-    @Query("SELECT * FROM history WHERE id IN (:words)")
-    suspend fun getExisting(words: List<String>): List<History>
+    @Query("SELECT * FROM history WHERE id=:id AND locale=:locale AND category=:category")
+    suspend fun getExisting(id: String, locale: Locale, category: String): History?
 
     /**
      * Add words to database

@@ -10,11 +10,22 @@ class HttpRequest() {
     private val baseUrl = "https://$ipAddr:96"
 
     /**
+     * Get list of available categories
+     * @return JSON list of word categories
+     */
+    suspend fun getCategories(): String {
+        return sendGetRequest("/categories", "")
+    }
+
+    /**
      * Refresh local word list
      * @return JSON list of new words
      */
-    suspend fun getWords(limit: Int, locale: String): String {
-        val query = "limit=$limit&locale=$locale"
+    suspend fun getWords(limit: Int, locale: Locale, category: String, difficulty: Difficulty): String {
+        val localeString = locale.name.lowercase()
+        val difficultyString = difficulty.name.lowercase()
+        //TODO integrate category and difficulty into query
+        val query = "limit=$limit&locale=$localeString"
         return sendGetRequest("/words", query)
     }
 
