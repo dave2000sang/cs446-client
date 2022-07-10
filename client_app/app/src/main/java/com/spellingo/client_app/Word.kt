@@ -15,5 +15,5 @@ data class Word(
     @ColumnInfo(name = "origin") val origin: String,
     @ColumnInfo(name = "part") val part: String,
     @ColumnInfo(name = "audio") val audio: String,
-    @ColumnInfo(name = "locale") val locale: String
+    @ColumnInfo(name = "locale") val locale: Locale,
 )

@@ -21,6 +21,7 @@ class MainMenuViewModel(application: Application) : AndroidViewModel(application
                     model.generateWords()
                 }
                 catch(e: Exception) {
+                    System.err.println(e.printStackTrace())
                     System.err.println(e.toString())
                 }
             }

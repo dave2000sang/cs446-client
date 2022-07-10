@@ -14,7 +14,7 @@ interface WordDao {
      * @return list of words
      */
     @Query("SELECT * FROM word WHERE locale=:locale ORDER BY RANDOM() LIMIT :n")
-    suspend fun getRandomN(n: Int, locale: String): List<Word>
+    suspend fun getRandomN(n: Int, locale: Locale): List<Word>
 
     /**
      * Get words that match locale
@@ -26,9 +26,18 @@ interface WordDao {
 
     /**
      * Get all words in database
+     * TODO check if this is needed anymore
      */
     @Query("SELECT * FROM word")
     suspend fun getAllWords(): List<Word>
+
+    /**
+     * Get all words in database matching parameters
+     */
+    @Query("SELECT * FROM word WHERE locale=:locale")
+    suspend fun getCategoryWords(locale: Locale): List<Word>
+    //TODO uncomment below after we support everything
+//    suspend fun getCategoryWords(locale: Locale, category: Category, difficulty: Difficulty): List<Word>
 
     /**
      * Add words to database

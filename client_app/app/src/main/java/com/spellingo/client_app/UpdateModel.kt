@@ -12,7 +12,6 @@ import org.json.JSONObject
  * @param application ApplicationContext for database creation
  */
 abstract class UpdateModel(private val application: Application) {
-    private val locale = "uk" //TODO replace with setting
     private val connectivity = ContextCompat.getSystemService(
         application.applicationContext,
         ConnectivityManager::class.java
@@ -22,18 +21,21 @@ abstract class UpdateModel(private val application: Application) {
 
     /**
      * Try to fetch words from server
+     * TODO support category and difficulty
      * @param limit number of words to request from server
      * @param locale English locale
+     * @param category word category
+     * @param difficulty word difficulty for standard category
      * @return number of words fetched
      */
-    protected suspend fun tryFetchWords(limit: Int, locale: String): Int {
+    protected suspend fun tryFetchWords(limit: Int, locale: Locale, category: Category, difficulty: Difficulty): Int {
         // Disallow any bugs where limit is negative
         if(limit <= 0) return 0
 
         val wordList = mutableListOf<Word>()
 
         // HTTP request
-        val response = HttpRequest().getWords(limit, locale)
+        val response = HttpRequest().getWords(limit, locale.name.lowercase())
 
         try {
             // Parse JSON object
@@ -57,6 +59,7 @@ abstract class UpdateModel(private val application: Application) {
             }
         }
         catch(e: Exception) {
+            System.err.println(e.printStackTrace())
             System.err.println(e.toString())
             return 0
         }
@@ -121,10 +124,9 @@ abstract class UpdateModel(private val application: Application) {
 
     /**
      * Download words from server
-     * @param locale English locale
      * @return number of words downloaded
      */
-    protected abstract suspend fun downloadWords(locale: String): Int
+    protected abstract suspend fun downloadWords(): Int
 
     /**
      * Purge some words from local cache
@@ -138,7 +140,7 @@ abstract class UpdateModel(private val application: Application) {
     suspend fun generateWords() {
         if(canDownload()) {
             purgeReusedWords()
-            downloadWords(locale)
+            downloadWords()
         }
     }
 }

@@ -20,6 +20,7 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
                 val pair = histModel.getTotalStats()
                 _ratioLiveData.postValue(pair)
             } catch (e: Exception) {
+                System.err.println(e.printStackTrace())
                 System.err.println(e.toString())
             }
         }
