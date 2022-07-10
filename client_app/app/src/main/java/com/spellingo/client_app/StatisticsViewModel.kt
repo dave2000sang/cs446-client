@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.app.Application
+import android.se.omapi.Session
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +14,9 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     // Pair(correct, total) attempts for all words in history
     val ratioLiveData: LiveData<Pair<Int, Int>>
         get() = _ratioLiveData
+
+    // Kai add your sessions to the list below. I left it as String for now for testing purposes.
+    private var sessionList = MutableLiveData<String>()
 
     fun requestGlobalStats() {
         viewModelScope.launch {
