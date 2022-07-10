@@ -29,11 +29,19 @@ class StatisticsSelectorFragment: Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_stat_selector, container, false)
 
+        // This class is for the UI Statistics Selector Page.
+
+        // Linking the UI Statistics Selector Page to the Overall Stats Page
         val myStatsButton = root.findViewById<Button>(R.id.myStats)
         myStatsButton.setOnClickListener {
             findNavController().navigate(R.id.action_statisticsSelectorFragment_to_statisticsFragment)
         }
 
+        // Linking the UI Statistics Selector Page to the Session History Page.
+        val mySessionStatsButton = root.findViewById<Button>(R.id.mySession)
+        mySessionStatsButton.setOnClickListener {
+            findNavController().navigate((R.id.action_statisticsSelectorFragment_to_sessionHistoryFragment))
+        }
         return root
     }
 }
