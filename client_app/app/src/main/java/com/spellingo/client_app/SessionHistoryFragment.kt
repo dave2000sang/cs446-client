@@ -34,23 +34,32 @@ class SessionHistoryFragment: Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_session_history, container, false)
         val sessionList = root.findViewById<LinearLayout>(R.id.scrollLinearLayout)
-        val view = inflater.inflate(R.layout.session_entry_item, null)
-        val view1 = inflater.inflate(R.layout.session_entry_item, null)
-        val view2 = inflater.inflate(R.layout.session_entry_item, null)
-        val view3 = inflater.inflate(R.layout.session_entry_item, null)
-        val view4 = inflater.inflate(R.layout.session_entry_item, null)
-        val view5 = inflater.inflate(R.layout.session_entry_item, null)
-        val view6 = inflater.inflate(R.layout.session_entry_item, null)
+        val sessionExtract = viewModel.sessionHashMap
 
+        sessionExtract.put("1234", false)
 
+        for (i in sessionExtract) {
+            val view = inflater.inflate(R.layout.session_entry_item, null)
+            sessionList.addView(view)
+        }
 
-        sessionList.addView(view)
-        sessionList.addView(view1)
-        sessionList.addView(view2)
-        sessionList.addView(view3)
-        sessionList.addView(view4)
-        sessionList.addView(view5)
-        sessionList.addView(view6)
+//        val view = inflater.inflate(R.layout.session_entry_item, null)
+//        val view1 = inflater.inflate(R.layout.session_entry_item, null)
+//        val view2 = inflater.inflate(R.layout.session_entry_item, null)
+//        val view3 = inflater.inflate(R.layout.session_entry_item, null)
+//        val view4 = inflater.inflate(R.layout.session_entry_item, null)
+//        val view5 = inflater.inflate(R.layout.session_entry_item, null)
+//        val view6 = inflater.inflate(R.layout.session_entry_item, null)
+//
+//
+//
+//        sessionList.addView(view)
+//        sessionList.addView(view1)
+//        sessionList.addView(view2)
+//        sessionList.addView(view3)
+//        sessionList.addView(view4)
+//        sessionList.addView(view5)
+//        sessionList.addView(view6)
 
         return root
     }

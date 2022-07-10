@@ -16,9 +16,11 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     // Pair(correct, total) attempts for all words in history
     val ratioLiveData: LiveData<Pair<Int, Int>>
         get() = _ratioLiveData
+    val sessionHashMap = sessionModel.sessionWordMap
 
-    // Kai add your sessions to the list below. I left it as String for now for testing purposes.
-    private var sessionList = MutableLiveData<String>()
+
+
+
 
     fun requestGlobalStats() {
         viewModelScope.launch {
