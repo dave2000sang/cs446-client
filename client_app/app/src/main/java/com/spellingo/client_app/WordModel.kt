@@ -27,6 +27,14 @@ class WordModel(application: Application) {
     }
 
     /**
+     * Get word categories
+     * @return list of word categories supported in cache (excluding standard)
+     */
+    suspend fun getCategories(): List<String> {
+        return wordDb.wordDao().getCategories().filter { it != "standard" }.sorted()
+    }
+
+    /**
      * Selects a word from session's word list
      * @return Word information
      */

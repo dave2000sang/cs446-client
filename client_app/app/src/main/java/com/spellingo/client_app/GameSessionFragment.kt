@@ -61,6 +61,7 @@ class GameSessionFragment : Fragment() {
         // Show/hide hint depending on difficulty
         hintButton.visibility = when(viewModel.difficulty) {
             Difficulty.EASY -> View.VISIBLE
+            Difficulty.OTHER -> View.VISIBLE
             else -> View.GONE
         }
 
@@ -69,15 +70,16 @@ class GameSessionFragment : Fragment() {
             getCorrectWord = word.id
             val infoList = mutableListOf<InfoBox>()
             // Decorators for infobox, start with part of speech and definition only
-            infoList.add(GameSessionInfoBox(requireContext()))
+            val infoBoxBase = GameSessionInfoBox(requireContext())
             // Add usage for medium difficulty
-            infoList.add(InfoBoxUsage(infoList.last(), requireContext()))
+            val infoBoxWithUsage = InfoBoxUsage(infoBoxBase, requireContext())
             // Add origin for hard difficulty
-            infoList.add(InfoBoxOrigin(infoList.last(), requireContext()))
+            val infoBoxWithUsageEtymology = InfoBoxOrigin(infoBoxWithUsage, requireContext())
             infoBox.text = when(viewModel.difficulty) {
-                Difficulty.HARD -> infoList[0].getSpannable(word)
-                Difficulty.MEDIUM -> infoList[1].getSpannable(word)
-                Difficulty.EASY -> infoList[2].getSpannable(word)
+                Difficulty.HARD -> infoBoxBase.getSpannable(word)
+                Difficulty.MEDIUM -> infoBoxWithUsage.getSpannable(word)
+                Difficulty.EASY -> infoBoxWithUsageEtymology.getSpannable(word)
+                Difficulty.OTHER -> infoBoxWithUsageEtymology.getSpannable(word) //TODO use infoBoxWithUsage or a custom InfoBox
             }
         }))
 
@@ -86,6 +88,11 @@ class GameSessionFragment : Fragment() {
             if(mediaPlayer == null) {
                 mediaPlayer = mp
             }
+        }))
+
+        //TODO move following sample code to Category Selection screen
+        viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(categories) {
+            println(categories)
         }))
 
         // Listeners

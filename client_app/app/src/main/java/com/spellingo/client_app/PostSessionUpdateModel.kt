@@ -19,18 +19,24 @@ class PostSessionUpdateModel(
     private val retries = 20
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     var category = "standard" //TODO replace with ViewModel info
-    var difficulty = Difficulty.MEDIUM //TODO replace with ViewModel info
+    var difficulty = Difficulty.OTHER //TODO replace with ViewModel info
 
     // See UpdateModel for signature
-    override suspend fun purgeReusedWords(): Int {
+    override suspend fun purgeReusedWords() {
         val wordDao = wordDb.wordDao()
         val histDao = histDb.historyDao()
         // Get existing words of the finished session from history
-        val histList = histDao.getExisting(wordList.map {it.id})
+        val histList = mutableListOf<History>()
+        for(word in wordList) {
+            val hist = histDao.getExisting(word.id, word.locale, word.category)
+            if(hist != null) {
+                histList.add(hist)
+            }
+        }
 
         // Get words from session that have been attempted lots of times previously
         val purgeSet = histList.filter { it.total > attemptCeil }.map { it.id }.toHashSet()
-        if(purgeSet.size <= 0) return 0
+        if(purgeSet.size <= 0) return
 
         // Delete those high attempted words from cache
         wordDao.delete(*wordList.filter {
@@ -39,11 +45,10 @@ class PostSessionUpdateModel(
 
         // Request to download same size of words as just purged
         numToDownload = purgeSet.size
-        return purgeSet.size
     }
 
     // See UpdateModel for signature
-    override suspend fun downloadWords(): Int {
+    override suspend fun downloadWords() {
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val wordDao = wordDb.wordDao()
@@ -59,6 +64,5 @@ class PostSessionUpdateModel(
             )
             if(inCache + downloaded >= sessionNum) break
         }
-        return downloaded
     }
 }

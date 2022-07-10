@@ -2,15 +2,27 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7c22821bf13de21fcef84775fc66b27e",
+    "identityHash": "c8692f5bf6eaf4da0e24f954be209d23",
     "entities": [
       {
         "tableName": "Word",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `definition` TEXT NOT NULL, `usage` TEXT NOT NULL, `origin` TEXT NOT NULL, `part` TEXT NOT NULL, `audio` TEXT NOT NULL, `locale` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `locale` TEXT NOT NULL, `category` TEXT NOT NULL, `definition` TEXT NOT NULL, `usage` TEXT NOT NULL, `origin` TEXT NOT NULL, `part` TEXT NOT NULL, `audio` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `phonetic` TEXT NOT NULL, PRIMARY KEY(`id`, `locale`, `category`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "locale",
+            "columnName": "locale",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -45,8 +57,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "locale",
-            "columnName": "locale",
+            "fieldPath": "difficulty",
+            "columnName": "difficulty",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phonetic",
+            "columnName": "phonetic",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -54,7 +72,9 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "id"
+            "id",
+            "locale",
+            "category"
           ]
         },
         "indices": [],
@@ -64,7 +84,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7c22821bf13de21fcef84775fc66b27e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c8692f5bf6eaf4da0e24f954be209d23')"
     ]
   }
 }

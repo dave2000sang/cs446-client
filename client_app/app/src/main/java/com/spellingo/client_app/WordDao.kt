@@ -17,14 +17,6 @@ interface WordDao {
     suspend fun getRandomN(n: Int, locale: Locale): List<Word>
 
     /**
-     * Get words that match locale
-     * @param words words to look for in cache
-     * @return words found in cache
-     */
-    @Query("SELECT * FROM word WHERE id IN (:words)")
-    suspend fun getExisting(words: List<String>): List<Word>
-
-    /**
      * Get all words in database
      * TODO check if this is needed anymore
      */
@@ -35,9 +27,21 @@ interface WordDao {
      * Get all words in database matching parameters
      */
     @Query("SELECT * FROM word WHERE locale=:locale")
-    suspend fun getCategoryWords(locale: Locale): List<Word>
+    suspend fun getKeyedWords(locale: Locale): List<Word>
     //TODO uncomment below after we support everything
-//    suspend fun getCategoryWords(locale: Locale, category: Category, difficulty: Difficulty): List<Word>
+//    suspend fun getKeyedWords(locale: Locale, category: String, difficulty: Difficulty): List<Word>
+
+    /**
+     * Get all categories
+     */
+    @Query("SELECT category FROM word")
+    suspend fun getCategories(): List<String>
+
+    /**
+     * Delete a category's words
+     */
+    @Query("DELETE FROM word WHERE category=:category")
+    suspend fun deleteCategory(category: String)
 
     /**
      * Add words to database

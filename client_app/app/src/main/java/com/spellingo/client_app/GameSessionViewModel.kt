@@ -13,6 +13,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private val pronunciationModel = PronunciationModel()
     private val histModel = HistoryChangeModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
+    private val _categoryLiveData = MutableLiveData<List<String>>()
     private var hintNum = 0
     private var hintSeq = listOf<Int>()
     private var hintCeil = 2 //TODO replace with global preference?
@@ -20,7 +21,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     var previousDestination = 0
     //TODO modify these from the category selection screen
     var category = "standard"
-    var difficulty = Difficulty.EASY
+    var difficulty = Difficulty.OTHER
 //    private var results: MutableList<Pair<String, Int>> = mutableListOf()
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
@@ -32,6 +33,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         val url = word.audio
         pronunciationModel.getPlayer(url)
     }
+    val categoryLiveData: LiveData<List<String>>
+        get() = _categoryLiveData
 
     /**
      * Load the first word of a new session
@@ -41,6 +44,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
             try {
                 val curWord = wordModel.getNewSessionWords(category, difficulty)
                 _wordLiveData.postValue(curWord)
+                _categoryLiveData.postValue(wordModel.getCategories())
             }
             catch(e: Exception) {
                 System.err.println(e.printStackTrace())
