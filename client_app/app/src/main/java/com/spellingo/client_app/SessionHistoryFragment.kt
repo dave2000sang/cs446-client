@@ -37,11 +37,21 @@ class SessionHistoryFragment: Fragment() {
         val view = inflater.inflate(R.layout.session_entry_item, null)
         val view1 = inflater.inflate(R.layout.session_entry_item, null)
         val view2 = inflater.inflate(R.layout.session_entry_item, null)
+        val view3 = inflater.inflate(R.layout.session_entry_item, null)
+        val view4 = inflater.inflate(R.layout.session_entry_item, null)
+        val view5 = inflater.inflate(R.layout.session_entry_item, null)
+        val view6 = inflater.inflate(R.layout.session_entry_item, null)
+
 
 
         sessionList.addView(view)
         sessionList.addView(view1)
         sessionList.addView(view2)
+        sessionList.addView(view3)
+        sessionList.addView(view4)
+        sessionList.addView(view5)
+        sessionList.addView(view6)
+
         return root
     }
 }
