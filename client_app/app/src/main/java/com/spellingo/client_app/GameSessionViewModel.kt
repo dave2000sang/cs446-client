@@ -12,6 +12,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private val wordModel = WordModel(application)
     private val pronunciationModel = PronunciationModel()
     private val histModel = HistoryChangeModel(application)
+    private val sessionModel = SessionModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
     private val _categoryLiveData = MutableLiveData<List<String>>()
     private var hintNum = 0
@@ -43,6 +44,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             try {
                 val curWord = wordModel.getNewSessionWords(category, difficulty)
+                // sessionModel.getNewSession()
                 _wordLiveData.postValue(curWord)
                 _categoryLiveData.postValue(wordModel.getCategories())
             }
@@ -91,8 +93,18 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      * @param result whether the spelling was correct
      */
     fun updateResults(word: String, result: Boolean) {
+//        sessionModel.addToCurrentSession(word, result)
         viewModelScope.launch {
             histModel.update(word, result)
+        }
+    }
+
+    /**
+     * Save current session to local dB, called by onDestroyView
+     */
+    fun saveSession() {
+        viewModelScope.launch {
+            sessionModel.saveCurrentSession()
         }
     }
 

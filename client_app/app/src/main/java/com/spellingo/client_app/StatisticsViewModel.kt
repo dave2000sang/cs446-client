@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 
 class StatisticsViewModel(application: Application) : AndroidViewModel(application) {
     private val histModel = HistoryStatsModel(application)
+    private val sessionModel = SessionModel(application)
+    private val sessionDb = SessionDatabase.getInstance(application)
     private val _ratioLiveData = MutableLiveData<Pair<Int, Int>>()
     // Pair(correct, total) attempts for all words in history
     val ratioLiveData: LiveData<Pair<Int, Int>>
@@ -25,6 +27,21 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
                 _ratioLiveData.postValue(pair)
             } catch (e: Exception) {
                 System.err.println(e.printStackTrace())
+                System.err.println(e.toString())
+            }
+        }
+    }
+
+    fun testFunc() {
+        viewModelScope.launch {
+            try {
+                val sessions = sessionDb.sessionDao().getAllSessions()
+                for (session in sessions) {
+                    sessionModel.loadSessionToModel(session)
+                    // Do whatever with
+                    sessionModel.sessionWordMap
+                }
+            } catch (e: Exception) {
                 System.err.println(e.toString())
             }
         }

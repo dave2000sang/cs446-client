@@ -189,6 +189,7 @@ class GameSessionFragment : Fragment() {
 
     override fun onDestroyView() {
         navController.removeOnDestinationChangedListener(navListener)
+//        viewModel.saveSession()
         super.onDestroyView()
     }
 }
