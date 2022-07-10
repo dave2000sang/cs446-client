@@ -28,7 +28,7 @@ abstract class UpdateModel(private val application: Application) {
      * @param difficulty word difficulty for standard category
      * @return number of words fetched
      */
-    protected suspend fun tryFetchWords(limit: Int, locale: Locale, category: Category, difficulty: Difficulty): Int {
+    protected suspend fun tryFetchWords(limit: Int, locale: Locale, category: String, difficulty: Difficulty): Int {
         // Disallow any bugs where limit is negative
         if(limit <= 0) return 0
 

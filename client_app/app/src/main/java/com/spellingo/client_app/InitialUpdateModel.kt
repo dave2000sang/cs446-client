@@ -17,7 +17,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
      * Run tryFetchWords() until desired number of words downloaded
      * @return number of words downloaded
      */
-    private suspend fun downloadCategory(locale: Locale, category: Category, difficulty: Difficulty): Int {
+    private suspend fun downloadCategory(locale: Locale, category: String, difficulty: Difficulty): Int {
         val wordDao = wordDb.wordDao()
         //TODO uncomment after everything's supported
 //        val inCache = wordDao.getCategoryWords(locale, category, difficulty).size
@@ -61,13 +61,13 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
         var downloaded = 0
         for(loc in Locale.values()) {
 //            for(diff in Difficulty.values()) {
-//                downloaded += downloadCategory(loc, Category.STANDARD, diff)
+//                downloaded += downloadCategory(loc, "standard", diff)
 //            }
 //            for(cat in Category.values()) {
 //                downloaded += downloadCategory(loc, cat, Difficulty.OTHER)
 //            }
             //TODO remove below line and use above lines once category and difficulty supported
-            downloaded += downloadCategory(loc, Category.STANDARD, Difficulty.MEDIUM)
+            downloaded += downloadCategory(loc, "standard", Difficulty.MEDIUM)
         }
         return downloaded
     }
