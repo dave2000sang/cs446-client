@@ -58,6 +58,12 @@ class GameSessionFragment : Fragment() {
         var getCorrectWord = ""
         var mediaPlayer: MediaPlayer? = null
 
+        // Show/hide hint depending on difficulty
+        hintButton.visibility = when(viewModel.difficulty) {
+            Difficulty.EASY -> View.VISIBLE
+            else -> View.GONE
+        }
+
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
             getCorrectWord = word.id
@@ -69,10 +75,9 @@ class GameSessionFragment : Fragment() {
             // Add origin for hard difficulty
             infoList.add(InfoBoxOrigin(infoList.last(), requireContext()))
             infoBox.text = when(viewModel.difficulty) {
-                "hard" -> infoList[0].getSpannable(word)
-                "medium" -> infoList[1].getSpannable(word)
-                "easy" -> infoList[2].getSpannable(word)
-                else -> ""
+                Difficulty.HARD -> infoList[0].getSpannable(word)
+                Difficulty.MEDIUM -> infoList[1].getSpannable(word)
+                Difficulty.EASY -> infoList[2].getSpannable(word)
             }
         }))
 

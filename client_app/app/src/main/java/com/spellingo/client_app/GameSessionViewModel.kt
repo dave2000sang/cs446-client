@@ -19,8 +19,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private var hintBuilder = StringBuilder("")
     var previousDestination = 0
     //TODO modify these from the category selection screen
-    var category = "standard"
-    var difficulty = "easy"
+    var category = Category.STANDARD
+    var difficulty = Difficulty.EASY
 //    private var results: MutableList<Pair<String, Int>> = mutableListOf()
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
@@ -43,6 +43,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
                 _wordLiveData.postValue(curWord)
             }
             catch(e: Exception) {
+                System.err.println(e.printStackTrace())
                 System.err.println(e.toString())
             }
         }

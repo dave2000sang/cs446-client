@@ -16,6 +16,9 @@ class PostSessionUpdateModel(
     private var numToDownload = 0
     private val sessionNum = 10 //TODO link with settings
     private val retries = 20
+    var locale = Locale.UK //TODO replace with ViewModel info
+    var category = Category.STANDARD //TODO replace with ViewModel info
+    var difficulty = Difficulty.MEDIUM //TODO replace with ViewModel info
 
     // See UpdateModel for signature
     override suspend fun purgeReusedWords(): Int {
@@ -39,13 +42,18 @@ class PostSessionUpdateModel(
     }
 
     // See UpdateModel for signature
-    override suspend fun downloadWords(locale: String): Int {
+    override suspend fun downloadWords(): Int {
         val wordDao = wordDb.wordDao()
         val inCache = wordDao.getAllWords().size
         var downloaded = 0
         // Only retry if we don't have enough words for a session
         for(retryIdx in 0 until retries) {
-            downloaded += tryFetchWords(max(numToDownload, sessionNum - (inCache + downloaded)), locale)
+            downloaded += tryFetchWords(
+                max(numToDownload, sessionNum - (inCache + downloaded)),
+                locale,
+                category,
+                difficulty
+            )
             if(inCache + downloaded >= sessionNum) break
         }
         return downloaded
