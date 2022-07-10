@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.app.Application
+import androidx.preference.PreferenceManager
 import java.lang.Integer.max
 import java.lang.Integer.min
 
@@ -16,8 +17,8 @@ class PostSessionUpdateModel(
     private var numToDownload = 0
     private val sessionNum = 10 //TODO link with settings
     private val retries = 20
-    var locale = Locale.UK //TODO replace with ViewModel info
-    var category = Category.STANDARD //TODO replace with ViewModel info
+    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+    var category = "standard" //TODO replace with ViewModel info
     var difficulty = Difficulty.MEDIUM //TODO replace with ViewModel info
 
     // See UpdateModel for signature
@@ -43,6 +44,8 @@ class PostSessionUpdateModel(
 
     // See UpdateModel for signature
     override suspend fun downloadWords(): Int {
+        val localeString = sharedPreferences.getString("locale_preferences", "us")
+        val locale = Locale.getByName(localeString!!)
         val wordDao = wordDb.wordDao()
         val inCache = wordDao.getAllWords().size
         var downloaded = 0

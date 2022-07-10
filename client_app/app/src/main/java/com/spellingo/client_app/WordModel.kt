@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.app.Application
+import androidx.preference.PreferenceManager
 
 /**
  * Model for Word fetching
@@ -11,12 +12,14 @@ class WordModel(application: Application) {
     //TODO change to a user setting. MUST be greater than 0!
     private val totalSessionWords = 5
     private var listOfWords = mutableListOf<Word>()
-    var locale = Locale.UK //TODO access from ViewModel
+    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
     /**
      * Fetch some words from the database to use in a session and return a word
      */
-    suspend fun getNewSessionWords(category: Category, difficulty: Difficulty): Word {
+    suspend fun getNewSessionWords(category: String, difficulty: Difficulty): Word {
+        val localeString = sharedPreferences.getString("locale_preferences", "us")
+        val locale = Locale.getByName(localeString!!)
         val listRes = wordDb.wordDao().getRandomN(totalSessionWords, locale)
         listOfWords.clear()
         listOfWords.addAll(listRes)
