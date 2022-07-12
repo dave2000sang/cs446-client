@@ -152,6 +152,9 @@ class GameSessionFragment : Fragment() {
                 submitButton.text = getString(R.string.submit)
                 submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
                 //TODO if remainingWords == 0, change submitButton into transition to stats page
+                if (remainingWords == 0) {
+                    findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
+                }
             }
         }
 
@@ -165,20 +168,6 @@ class GameSessionFragment : Fragment() {
             }
         }
 
-        // The commented out code is for Textchange listeners for a Textfield may be useful later
-//        mainWordField.addTextChangedListener(object : TextWatcher {
-//
-//            override fun afterTextChanged(s: Editable) {}
-//
-//            override fun beforeTextChanged(s: CharSequence, start: Int,
-//                                           count: Int, after: Int) {
-//            }
-//
-//            override fun onTextChanged(s: CharSequence, start: Int,
-//                                       before: Int, count: Int) {
-//
-//            }
-//        })
         return root
     }
 
