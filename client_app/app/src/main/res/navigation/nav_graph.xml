@@ -31,6 +31,9 @@
         <action
             android:id="@+id/gameSessionFragment_to_mainMenuFragment"
             app:destination="@id/fragment_main_menu" />
+        <action
+            android:id="@+id/action_fragment_game_session_to_postGameStatisticsFragment"
+            app:destination="@id/postGameStatisticsFragment" />
     </fragment>
 
     <fragment
@@ -71,6 +74,14 @@
         <action
             android:id="@+id/action_sessionHistoryFragment_to_statisticsSelectorFragment"
             app:destination="@id/statisticsSelectorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postGameStatisticsFragment"
+        android:name="com.spellingo.client_app.PostGameStatisticsFragment"
+        android:label="PostGameStatisticsFragment" >
+        <action
+            android:id="@+id/action_postGameStatisticsFragment_to_fragment_main_menu"
+            app:destination="@id/fragment_main_menu" />
     </fragment>
 
 </navigation>

@@ -45,6 +45,10 @@ class WordModel(application: Application) {
         return listOfWords.removeAt(0)
     }
 
+    fun getListOfWords(): MutableList<Word> {
+        return listOfWords
+    }
+
     /**
      * Get number of words left in current session
      * @return number of remaining words

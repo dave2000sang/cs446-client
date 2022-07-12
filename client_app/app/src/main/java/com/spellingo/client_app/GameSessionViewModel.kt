@@ -108,6 +108,10 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    fun getListOfWords (): MutableList<Word> {
+        return wordModel.getListOfWords()
+    }
+
     /**
      * Cleanup model objects
      */
