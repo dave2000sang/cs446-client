@@ -35,7 +35,19 @@ class PostGameStatisticsFragment : Fragment() {
     ): View? {
         // Links Widgets to Variables
         val root = inflater.inflate(R.layout.fragment_post_session_statistics, container, false)
-        //
+        val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenu)
+        val listOfTestedWords = viewModel.getListOfWords()
+        val listOfWords = mutableListOf<String>()
+
+        for (i in listOfTestedWords) {
+            listOfWords.add(i.id)
+        }
+
+
+        returnToMainMenuButton.setOnClickListener {
+            findNavController().navigate(R.id.action_postGameStatisticsFragment_to_fragment_main_menu)
+        }
+
 
 
         return root
