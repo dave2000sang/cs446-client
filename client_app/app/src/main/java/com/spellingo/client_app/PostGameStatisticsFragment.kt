@@ -1,26 +1,13 @@
 package com.spellingo.client_app
 
-import android.content.Context
-import android.graphics.Typeface
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -35,6 +22,8 @@ class PostGameStatisticsFragment : Fragment() {
     ): View? {
         // Links Widgets to Variables
         val root = inflater.inflate(R.layout.fragment_post_session_statistics, container, false)
+        val correctCounter = root.findViewById<TextView>(R.id.sessionStatCorrectCounter)
+        val incorrectCounter = root.findViewById<TextView>(R.id.sessionStatIncorrectCounter)
         val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenu)
         val listOfTestedWords = viewModel.getListOfWords()
         val listOfWords = mutableListOf<String>()
@@ -43,13 +32,17 @@ class PostGameStatisticsFragment : Fragment() {
             listOfWords.add(i.id)
         }
 
+        // Setting Correct/Incorrect Word Counter
+        correctCounter.text = viewModel.getCorrectWordList().size.toString()
+        incorrectCounter.text = viewModel.getInCorrectWordList().size.toString()
+
+        // Remove All Data from Previous Session
+        viewModel.emptyCorrectWordList()
+        viewModel.emptyInCorrectWordList()
 
         returnToMainMenuButton.setOnClickListener {
             findNavController().navigate(R.id.action_postGameStatisticsFragment_to_fragment_main_menu)
         }
-
-
-
         return root
     }
 }
