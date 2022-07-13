@@ -41,6 +41,7 @@ class PostGameStatisticsFragment : Fragment() {
         viewModel.emptyInCorrectWordList()
 
         // Test DropDown
+        // Testing New Gradle.Properties
 
         returnToMainMenuButton.setOnClickListener {
             findNavController().navigate(R.id.action_postGameStatisticsFragment_to_fragment_main_menu)
