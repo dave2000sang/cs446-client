@@ -123,10 +123,12 @@ class GameSessionFragment : Fragment() {
                 submitButton.text = getString(R.string.cont)
                 // Correct / incorrect message
                 if (result) {
+                    viewModel.addCorrectWord(getCorrectWord)
                     snack?.setText("Correct")
                     snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
                 } else {
+                    viewModel.addInCorrectWord(getCorrectWord)
                     val snackText = "The correct spelling is: $getCorrectWord"
                     val snackSpannable = SpannableString(snackText)
                     snackSpannable.setSpan(
@@ -169,6 +171,10 @@ class GameSessionFragment : Fragment() {
         }
 
         return root
+    }
+
+    fun sessionFinishedNav () {
+
     }
 
     override fun onDetach() {

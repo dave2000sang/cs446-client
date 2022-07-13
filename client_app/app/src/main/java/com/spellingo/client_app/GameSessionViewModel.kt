@@ -15,6 +15,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private val sessionModel = SessionModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
     private val _categoryLiveData = MutableLiveData<List<String>>()
+    private val listOfCorrectWords = mutableListOf<String>()
+    private val listOfInCorrectWords = mutableListOf<String>()
     private var hintNum = 0
     private var hintSeq = listOf<Int>()
     private var hintCeil = 2 //TODO replace with global preference?
@@ -60,10 +62,11 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      * @return number of words left in session
      */
     fun nextWord(): Int {
+        val returnNum = wordModel.numSessionWords()
         val curWord = wordModel.getWord() ?: return 0
         _wordLiveData.value = curWord
         hintNum = 0
-        return wordModel.numSessionWords()
+        return returnNum
     }
 
     /**
@@ -110,6 +113,30 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
 
     fun getListOfWords (): MutableList<Word> {
         return wordModel.getListOfWords()
+    }
+
+    fun addCorrectWord (word: String) {
+        listOfCorrectWords.add(word)
+    }
+
+    fun addInCorrectWord (word: String) {
+        listOfInCorrectWords.add(word)
+    }
+
+    fun getCorrectWordList (): MutableList<String> {
+        return listOfCorrectWords
+    }
+
+    fun getInCorrectWordList (): MutableList<String> {
+        return listOfInCorrectWords
+    }
+
+    fun emptyCorrectWordList () {
+        listOfCorrectWords.clear()
+    }
+
+    fun emptyInCorrectWordList ()  {
+        listOfInCorrectWords.clear()
     }
 
     /**
