@@ -53,6 +53,8 @@ dependencies {
     implementation "androidx.preference:preference:1.0.0"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.Qusion:android-roundprogressbar:0.3.0'
+    implementation 'com.asksira.android:dropdownview:0.9.2'
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
