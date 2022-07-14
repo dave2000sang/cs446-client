@@ -10,12 +10,13 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.github.mikephil.charting.charts.BarChart
 import androidx.lifecycle.Observer
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.LegendEntry
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
@@ -45,20 +46,11 @@ class StatisticsFragment: Fragment() {
         pieChart = root.findViewById(R.id.pieChart)
         setupPieChart()
 
-        // Initialize Bar Chart Here
+        // Initialize and draw BarChart Here
         barChart = root.findViewById(R.id.barChart)
-        barList = arrayListOf<BarEntry>()
-        barList.add(BarEntry (1f, 2f))
-        barList.add(BarEntry (1f, 30f))
-        barList.add(BarEntry (2f, 40f))
-        barList.add(BarEntry (3f, 50f))
-        barList.add(BarEntry (4f, 60f))
-        barDataSet = BarDataSet(barList, "Words Summary")
-        barData = BarData(barDataSet)
-        barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
-        barDataSet.valueTextColor = Color.BLACK
-        barDataSet.valueTextSize = 15f
-        barChart.data = barData
+        setupBarChart()
+
+
 
         val pieChartButton = root.findViewById<Button>(R.id.showPieGraph)
         val barChartButton = root.findViewById<Button>(R.id.showBarGraph)
@@ -95,6 +87,38 @@ class StatisticsFragment: Fragment() {
 
         return root
     }
+
+    private fun setupBarChart () {
+        // Initialize Bar Chart Here
+
+        barList = arrayListOf<BarEntry>()
+        barList.add(BarEntry (1f, 2f))
+        barList.add(BarEntry (2f, 30f))
+        barDataSet = BarDataSet(barList, "Words Summary")
+        barData = BarData(barDataSet)
+        barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
+        barDataSet.valueTextColor = Color.BLACK
+        barDataSet.valueTextSize = 15f
+        barChart.data = barData
+
+        // Changing X - Axis to String (I have 0 clue how this works it just does)
+        val xAxis = barChart.xAxis
+        var categoryListLabel = mutableListOf<String>("Category 1", "Category 2")
+        xAxis.granularity = 1f
+        xAxis.setCenterAxisLabels(true)
+        xAxis.setDrawGridLines(false)
+        xAxis.labelRotationAngle = -45f
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.axisMinimum = barChart.xChartMin-.5f;
+        xAxis.axisMaximum = barChart.xChartMax+.5f;
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(categoryListLabel)
+
+        // Removing Legend and Description
+        barChart.legend.isEnabled = false
+        barChart.description.isEnabled = false
+
+    }
+
 
     private fun setupPieChart() {
         //TODO change to our own color palette
