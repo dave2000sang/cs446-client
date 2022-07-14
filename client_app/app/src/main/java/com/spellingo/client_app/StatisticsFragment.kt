@@ -90,10 +90,22 @@ class StatisticsFragment: Fragment() {
 
     private fun setupBarChart () {
         // Initialize Bar Chart Here
-
         barList = arrayListOf<BarEntry>()
-        barList.add(BarEntry (1f, 2f))
-        barList.add(BarEntry (2f, 30f))
+
+        // Enter your bar chart entries here. The first element of the pair leave it as 1, 2, 3, ...
+        // this is the X-Value labels which will be replaced with Strings below. It doesn't allow
+        // you to set them as strings. The strings will be your categories later.
+        // For the second element of the pair this is your y-axis counter. So number of times you
+        // tried each category.
+        var barChartEntries = mutableListOf<Pair<Float, Float>>()
+        barChartEntries.add(Pair(1f, 5f))
+        barChartEntries.add(Pair(2f, 8f))
+
+        for (i in barChartEntries) {
+            barList.add(BarEntry(i.first, i.second))
+        }
+
+        // Setting Labels, Colours, and Data Linkages here.
         barDataSet = BarDataSet(barList, "Words Summary")
         barData = BarData(barDataSet)
         barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
@@ -102,8 +114,11 @@ class StatisticsFragment: Fragment() {
         barChart.data = barData
 
         // Changing X - Axis to String (I have 0 clue how this works it just does)
-        val xAxis = barChart.xAxis
+        // Enter your category String Names below
         var categoryListLabel = mutableListOf<String>("Category 1", "Category 2")
+
+        // Modifying X-Axis Labels
+        val xAxis = barChart.xAxis
         xAxis.granularity = 1f
         xAxis.setCenterAxisLabels(true)
         xAxis.setDrawGridLines(false)
