@@ -9,8 +9,8 @@
 
         <SwitchPreferenceCompat
             app:key="download_on_wifi_only"
-            app:title="Download on Wifi ONLY"
-            app:defaultValue="false"/>
+            app:title="Download over Wi-Fi only"
+            app:defaultValue="true"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -19,7 +19,7 @@
 
         <SwitchPreferenceCompat
             app:key="show_statistics"
-            app:title="Collect and Show Statistics"
+            app:title="Show statistics at the end of a game session"
             app:defaultValue="true"/>
     </PreferenceCategory>
 
@@ -32,7 +32,7 @@
             app:title="Number of Words per Session"
             app:defaultValue="10"
             app:showSeekBarValue="true"
-            app:min="1"
+            app:min="5"
             android:max="50"/>
 
         <ListPreference

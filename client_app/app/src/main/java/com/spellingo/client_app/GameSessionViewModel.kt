@@ -2,6 +2,7 @@ package com.spellingo.client_app
 
 import android.app.Application
 import androidx.lifecycle.*
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.launch
 import java.lang.Integer.min
 
@@ -19,8 +20,10 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private val listOfInCorrectWords = mutableListOf<String>()
     private var hintNum = 0
     private var hintSeq = listOf<Int>()
-    private var hintCeil = 2 //TODO replace with global preference?
+    private var hintCeil = 2
     private var hintBuilder = StringBuilder("")
+    private val applicationCopy = application // avoid ViewModel override shenanigans
+    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     var previousDestination = 0
     //TODO modify these from the category selection screen
     var category = "standard"
@@ -38,6 +41,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     }
     val categoryLiveData: LiveData<List<String>>
         get() = _categoryLiveData
+    val showStats: Boolean
+        get() = sharedPreferences.getBoolean("show_statistics", true)
 
     /**
      * Load the first word of a new session
@@ -103,6 +108,16 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     /**
+     * Run post session updates
+     */
+    fun postSessionUpdate() {
+        val postSessionUpdateModel = PostSessionUpdateModel(applicationCopy, wordModel.sessionWords)
+        viewModelScope.launch {
+            postSessionUpdateModel.generateWords()
+        }
+    }
+
+    /**
      * Save current session to local dB, called by onDestroyView
      */
     fun saveSession() {
@@ -111,8 +126,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun getListOfWords (): MutableList<Word> {
-        return wordModel.getListOfWords()
+    fun getListOfWords (): List<Word> {
+        return wordModel.sessionWords
     }
 
     fun addCorrectWord (word: String) {
