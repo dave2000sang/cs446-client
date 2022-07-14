@@ -34,7 +34,10 @@ class SessionHistoryFragment: Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_session_history, container, false)
         val sessionList = root.findViewById<LinearLayout>(R.id.scrollLinearLayout)
-        val sessionExtract = viewModel.sessionHashMap
+
+        viewModel.loadSessionData()
+        viewModel.listOfSessions
+        val sessionExtract = HashMap<String, Boolean>()
 
         sessionExtract.put("1234", false)
 
