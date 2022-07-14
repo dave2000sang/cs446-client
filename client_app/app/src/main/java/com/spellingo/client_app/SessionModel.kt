@@ -19,7 +19,7 @@ class SessionModel(application: Application) {
     /**
      * Fetch some words from the database to use in a session and return a word
      */
-    suspend fun getNewSession() {
+    fun getNewSession() {
         println("DEBUG Fetching new session") // DEBUG
         sessionWordMap.clear()
         correct = 0
@@ -36,15 +36,15 @@ class SessionModel(application: Application) {
     /**
      * Load a fetched session
      */
-    fun loadSessionToModel(session: Session) {
-        sessionWordMap.clear()
+    fun mapSessionToHashMap(session: Session): HashMap<String, Boolean> {
+        val returnMap = HashMap<String, Boolean>()
         val words = session.sessionWords.split(";")
         val guesses = session.sessionGuess.split(";")
         for (i in words.indices) {
-            sessionWordMap[words[i]] = (guesses[i] == "1")
-            correct += guesses[i].toInt()
+            returnMap[words[i]] = guesses[i] == "true"
         }
         println("DEBUG Loading session") // DEBUG
+        return returnMap
     }
 
     /**

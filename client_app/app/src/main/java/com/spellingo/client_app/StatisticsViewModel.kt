@@ -15,11 +15,9 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     // Pair(correct, total) attempts for all words in history
     val ratioLiveData: LiveData<Pair<Int, Int>>
         get() = _ratioLiveData
-    val listOfSessions = ArrayList<HashMap<String, Boolean>>()
-
-
-
-
+    private val _listOfSessions = MutableLiveData<List<HashMap<String, Boolean>>>()
+    val listOfSessions: LiveData<List<HashMap<String, Boolean>>>
+        get() = _listOfSessions
 
     fun requestGlobalStats() {
         viewModelScope.launch {
@@ -36,14 +34,12 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     fun loadSessionData() {
         viewModelScope.launch {
             try {
-                listOfSessions.clear()
                 val sessions = sessionDb.sessionDao().getAllSessions()
                 println("DEBUG number of sessions: ${sessions.size}") // DEBUG
-                for (session in sessions) {
-                    sessionModel.loadSessionToModel(session)
-                    val deepCopy = HashMap<String, Boolean>(sessionModel.sessionWordMap)
-                    listOfSessions.add(deepCopy)
+                val mappedSessions = sessions.map {
+                    sessionModel.mapSessionToHashMap(it)
                 }
+                _listOfSessions.postValue(mappedSessions)
             } catch (e: Exception) {
                 System.err.println(e.toString())
             }
