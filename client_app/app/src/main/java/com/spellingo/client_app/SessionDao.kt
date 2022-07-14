@@ -20,7 +20,10 @@ interface SessionDao {
     /**
      * Get the next available id
      */
-    @Query("SELECT id + 1 FROM session ORDER BY id DESC LIMIT 1")
+    @Query("SELECT IFNULL(" +
+            "(SELECT id + 1 FROM session ORDER BY id DESC LIMIT 1)," +
+            "0" +
+            ")")
     suspend fun getNextId(): Int
 
     /**
