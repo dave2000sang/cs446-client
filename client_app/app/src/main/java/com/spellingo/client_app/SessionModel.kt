@@ -20,6 +20,7 @@ class SessionModel(application: Application) {
      * Fetch some words from the database to use in a session and return a word
      */
     suspend fun getNewSession() {
+        println("DEBUG Fetching new session") // DEBUG
         sessionWordMap.clear()
         correct = 0
     }
@@ -29,6 +30,7 @@ class SessionModel(application: Application) {
      */
     fun addToCurrentSession(word: String, result: Boolean) {
         sessionWordMap[word] = result
+        println("DEBUG Added $word as $result") //DEBUG
     }
 
     /**
@@ -42,6 +44,7 @@ class SessionModel(application: Application) {
             sessionWordMap[words[i]] = (guesses[i] == "1")
             correct += guesses[i].toInt()
         }
+        println("DEBUG Loading session") // DEBUG
     }
 
     /**
@@ -61,5 +64,6 @@ class SessionModel(application: Application) {
             guesses.substring(1)
         )
         sessionDb.sessionDao().insert(newSession)
+        println("DEBUG Current session saved") // DEBUG
     }
 }
