@@ -155,7 +155,15 @@ class GameSessionFragment : Fragment() {
                 submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
                 //TODO if remainingWords == 0, change submitButton into transition to stats page
                 if (remainingWords == 0) {
-                    findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
+                    // start post session update logic
+                    viewModel.postSessionUpdate()
+                    // Navigate to next fragment
+                    if(viewModel.showStats) {
+                        findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
+                    }
+                    else {
+                        findNavController().navigate(R.id.gameSessionFragment_to_mainMenuFragment)
+                    }
                 }
             }
         }

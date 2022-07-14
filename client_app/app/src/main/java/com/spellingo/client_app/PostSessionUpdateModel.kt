@@ -13,9 +13,8 @@ class PostSessionUpdateModel(
     application: Application,
     private val wordList: List<Word>
 ) : UpdateModel(application) {
-    private val attemptCeil = 10 //TODO centralized place?
+    private val attemptCeil = 10
     private var numToDownload = 0
-    private val sessionNum = 10 //TODO link with settings
     private val retries = 20
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     var category = "standard" //TODO replace with ViewModel info
@@ -49,6 +48,7 @@ class PostSessionUpdateModel(
 
     // See UpdateModel for signature
     override suspend fun downloadWords() {
+        val sessionNum = sharedPreferences.getInt("number_words_per_sessions", 10)
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val wordDao = wordDb.wordDao()

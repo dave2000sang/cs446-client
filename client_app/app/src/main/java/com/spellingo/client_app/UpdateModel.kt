@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -16,6 +17,7 @@ abstract class UpdateModel(private val application: Application) {
         application.applicationContext,
         ConnectivityManager::class.java
     )
+    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     protected val wordDb = WordDatabase.getInstance(application)
     protected val histDb = HistoryDatabase.getInstance(application)
 
@@ -96,6 +98,13 @@ abstract class UpdateModel(private val application: Application) {
         if(connectivity == null) {
             return false
         }
+
+        val wifiOnly = sharedPreferences.getBoolean("download_on_wifi_only", true)
+        if(!wifiOnly) {
+            // allow downloads through non-wifi connections
+            return true
+        }
+
         val currentNetwork = connectivity.activeNetwork
         val caps = connectivity.getNetworkCapabilities(currentNetwork)
         return if(caps == null) {

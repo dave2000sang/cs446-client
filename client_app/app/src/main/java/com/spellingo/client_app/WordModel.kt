@@ -9,15 +9,16 @@ import androidx.preference.PreferenceManager
  */
 class WordModel(application: Application) {
     private val wordDb = WordDatabase.getInstance(application)
-    //TODO change to a user setting. MUST be greater than 0!
-    private val totalSessionWords = 5
     private var listOfWords = mutableListOf<Word>()
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+    val sessionWords: List<Word>
+        get() = listOfWords
 
     /**
      * Fetch some words from the database to use in a session and return a word
      */
     suspend fun getNewSessionWords(category: String, difficulty: Difficulty): Word {
+        val totalSessionWords = sharedPreferences.getInt("number_words_per_sessions", 10)
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val listRes = wordDb.wordDao().getRandomN(totalSessionWords, locale)
@@ -43,10 +44,6 @@ class WordModel(application: Application) {
             return null
         }
         return listOfWords.removeAt(0)
-    }
-
-    fun getListOfWords(): MutableList<Word> {
-        return listOfWords
     }
 
     /**

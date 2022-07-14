@@ -7,11 +7,11 @@ import org.json.JSONObject
  * Update model for application startup, which allows for slower but larger operations
  */
 class InitialUpdateModel(application: Application) : UpdateModel(application) {
-    private val purgeAttemptsCeil = 2 //TODO store in more centralized place
-    private val purgeCountCeil = 100 //TODO store in more centralized place
-    private val purgeAmount = 10 //TODO store in more centralized place
-    private val minCache = 50 //TODO store somewhere? (min num words in cache desired)
-    private val limit = 10 //TODO store somewhere? (download chunk size, be generous)
+    private val purgeAttemptsCeil = 2 // average attempts per word to trigger purge
+    private val purgeAmount = 10 // number of words to purge
+    private val maxCache = 100 // too many words in cache
+    private val minCache = 50 // minimum words to keep in cache
+    private val limit = 10 // per-request download limit
     private val retries = 5
     private val categories = mutableSetOf("standard")
 
@@ -72,7 +72,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
         if(wordCount <= 0) return
         val attempts = histDao.getNumTotal()
 
-        if(attempts / wordCount >= purgeAttemptsCeil || wordCount >= purgeCountCeil) {
+        if(attempts / wordCount >= purgeAttemptsCeil || wordCount >= maxCache) {
             val topWords = histDao.getTopWords(purgeAmount)
             val wordArray = topWords.map {
                 Word(it.id, it.locale, it.category , "", "", "", "", "", Difficulty.OTHER, "")
