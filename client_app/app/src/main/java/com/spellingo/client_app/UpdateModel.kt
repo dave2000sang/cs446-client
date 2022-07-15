@@ -23,7 +23,6 @@ abstract class UpdateModel(private val application: Application) {
 
     /**
      * Try to fetch words from server
-     * TODO support category and difficulty
      * @param limit number of words to request from server
      * @param locale English locale
      * @param category word category
@@ -53,8 +52,11 @@ abstract class UpdateModel(private val application: Application) {
                 val usage = wordObj.getString("usage")
                 val phonetic = wordObj.getString("phoneticSpelling")
                 // Check for empty fields in response
-                if(id.isEmpty() || definition.isEmpty() || origin.isEmpty()
-                    || part.isEmpty() || audio.isEmpty() || usage.isEmpty()) {
+                if((id.isEmpty() || definition.isEmpty()) ||
+                    (category == "standard" && (origin.isEmpty() || part.isEmpty() ||
+                            audio.isEmpty() || usage.isEmpty())))
+
+                {
                     throw Exception("Empty word field")
                 }
                 // Create new Word and History entries

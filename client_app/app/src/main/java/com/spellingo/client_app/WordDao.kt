@@ -26,10 +26,8 @@ interface WordDao {
     /**
      * Get all words in database matching parameters
      */
-    @Query("SELECT * FROM word WHERE locale=:locale")
-    suspend fun getKeyedWords(locale: Locale): List<Word>
-    //TODO uncomment below after we support everything
-//    suspend fun getKeyedWords(locale: Locale, category: String, difficulty: Difficulty): List<Word>
+    @Query("SELECT * FROM word WHERE locale=:locale AND category=:category AND difficulty=:difficulty")
+    suspend fun getKeyedWords(locale: Locale, category: String, difficulty: Difficulty): List<Word>
 
     /**
      * Get all categories
