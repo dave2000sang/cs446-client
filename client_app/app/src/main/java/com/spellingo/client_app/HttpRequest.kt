@@ -24,8 +24,8 @@ class HttpRequest() {
     suspend fun getWords(limit: Int, locale: Locale, category: String, difficulty: Difficulty): String {
         val localeString = locale.name.lowercase()
         val difficultyString = difficulty.name.lowercase()
-        //TODO integrate category and difficulty into query
-        val query = "limit=$limit&locale=$localeString"
+        //TODO integrate difficulty into query
+        val query = "limit=$limit&locale=$localeString&category=$category"
         return sendGetRequest("/words", query)
     }
 
@@ -39,10 +39,10 @@ class HttpRequest() {
         val method = "GET"
         var data = ""
         val suffix = if(query.isEmpty()) "" else "?$query"
-        val url: URL = URL("$baseUrl$endpoint$suffix")
         var conn: HttpsURLConnection? = null
         withContext(IO) {
             try {
+                val url: URL = URL("$baseUrl$endpoint$suffix")
                 conn = url.openConnection() as HttpsURLConnection
                 // Using IP address instead of domain breaks default hostname verifier
                 conn!!.setHostnameVerifier { hostname, _ ->

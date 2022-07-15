@@ -39,9 +39,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
      */
     private suspend fun downloadCategory(locale: Locale, category: String, difficulty: Difficulty): Int {
         val wordDao = wordDb.wordDao()
-        //TODO uncomment after everything's supported
-//        val inCache = wordDao.getKeyedWords(locale, category, difficulty).size
-        val inCache = wordDao.getKeyedWords(locale).size
+        val inCache = wordDao.getKeyedWords(locale, category, difficulty).size
         // If we meet our minimum cache number, don't download
         if(inCache >= minCache) return 0
         var downloaded = 0
@@ -79,7 +77,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
             }.toTypedArray()
             // Remove most played words from cache
             wordDao.delete(*wordArray)
-            println("DEBUG purge $wordArray") // DEBUG
+            println("DEBUG purge " + wordArray.toList()) // DEBUG
         }
     }
 
@@ -87,6 +85,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
     override suspend fun downloadWords() {
         for(loc in Locale.values()) {
             for(cat in categories) {
+                println("DEBUG category $cat")
                 if(cat == "standard") {
 //                    for(diff in Difficulty.values()) {
 //                        downloaded += downloadCategory(loc, "standard", diff)
