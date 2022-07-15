@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
@@ -36,7 +37,12 @@ class SessionHistoryFragment: Fragment() {
         val sessionList = root.findViewById<LinearLayout>(R.id.scrollLinearLayout)
 
         viewModel.loadSessionData()
-        viewModel.listOfSessions
+
+        viewModel.listOfSessions.observe(viewLifecycleOwner, Observer(fun(sessions) {
+            println("DEBUG successfully grab sessions of size ${sessions.size}") // DEBUG
+            println("DEBUG ${sessions[0].keys}") // DEBUG
+        }))
+
         val sessionExtract = HashMap<String, Boolean>()
 
         sessionExtract.put("1234", false)
