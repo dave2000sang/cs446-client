@@ -42,6 +42,12 @@ class MainActivity : AppCompatActivity() {
     private fun scheduleNotification() {
         val notifyIntent = Intent(this, NotificationReceiver::class.java)
         notifyIntent.putExtra("CHANNEL_ID", CHANNEL_ID)
+
+        if(PendingIntent.getBroadcast(this, REQUEST_CODE, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null) {
+            println("DEBUG Alarm already set")
+            return
+        }
+
         val pendingIntent = PendingIntent.getBroadcast(
             this,
             REQUEST_CODE,
