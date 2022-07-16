@@ -12,8 +12,8 @@
         tools:layout="@layout/fragment_main_menu">
 
         <action
-            android:id="@+id/mainMenuFragment_to_gameSessionFragment"
-            app:destination="@id/fragment_game_session" />
+            android:id="@+id/mainMenuFragment_to_categorySelectionFragment"
+            app:destination="@id/fragment_category_selection" />
         <action
             android:id="@+id/mainMenuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
@@ -82,6 +82,14 @@
         <action
             android:id="@+id/action_postGameStatisticsFragment_to_fragment_main_menu"
             app:destination="@id/fragment_main_menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_category_selection"
+        android:name="com.spellingo.client_app.CategorySelectionFragment"
+        android:label="CategorySelectionFragment">
+        <action
+            android:id="@+id/action_fragmentCategorySelection_to_fragmentGameSession"
+            app:destination="@id/fragment_game_session" />
     </fragment>
 
 </navigation>
