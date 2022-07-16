@@ -15,8 +15,4 @@ class HistoryChangeModel(application: Application) {
         val resultInt = if(result) 1 else 0
         dao.updateStats(word, resultInt)
     }
-
-    /**
-     * Insert words
-     */
 }

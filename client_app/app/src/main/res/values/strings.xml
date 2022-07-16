@@ -18,6 +18,10 @@
     <string name="stats">Stats</string>
     <string name="settings">Settings</string>
 
+    <!-- Notification -->
+    <string name="channel_name">Word of the Day</string>
+    <string name="channel_description">Push word of the day reminders</string>
+
     <!-- Settings Fragment (Locale) -->
     <string name="uk">United Kingdom</string>
     <string name="us">United States of America</string>
