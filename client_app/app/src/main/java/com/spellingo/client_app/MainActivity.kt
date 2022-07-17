@@ -8,8 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.preference.PreferenceManager
 import com.spellingo.client_app.databinding.ActivityMainBinding
@@ -76,6 +75,25 @@ class MainActivity : AppCompatActivity() {
         catch(e: Exception) {
             System.err.println(e.toString())
             System.err.println(e.printStackTrace())
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val extras = intent.extras
+        if(extras != null) {
+            if(extras.getBoolean("NOTIFICATION")) {
+                val bundle = Bundle()
+                bundle.putBoolean("wotd", true)
+                val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+                val navController = navHostFragment.navController
+                navController.navigate(R.id.fragment_game_session, bundle)
+            }
         }
     }
 }

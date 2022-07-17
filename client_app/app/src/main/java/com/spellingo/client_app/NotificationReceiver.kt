@@ -14,13 +14,13 @@ import androidx.core.content.ContextCompat.getSystemService
 class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        //TODO populate with word of the day stuff
         try {
             if(intent!!.extras == null) throw Exception("No channel id")
             val channelId = intent.extras!!.getString("CHANNEL_ID")!!
             val activityIntent = Intent(context, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+            activityIntent.putExtra("NOTIFICATION", true)
             val mainPendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, activityIntent, PendingIntent.FLAG_IMMUTABLE)
             val builder = NotificationCompat.Builder(context!!, channelId)
                 .setSmallIcon(R.drawable.icon_bee)
@@ -29,7 +29,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(mainPendingIntent)
                 .setAutoCancel(true)
-            with(NotificationManagerCompat.from(context!!)) {
+            with(NotificationManagerCompat.from(context)) {
                 notify(0, builder.build())
             }
         }

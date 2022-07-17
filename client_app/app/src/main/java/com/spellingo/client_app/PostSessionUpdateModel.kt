@@ -11,14 +11,14 @@ import java.lang.Integer.min
  */
 class PostSessionUpdateModel(
     application: Application,
-    private val wordList: List<Word>
+    private val wordList: List<Word>,
+    private val category: String,
+    private val difficulty: Difficulty
 ) : UpdateModel(application) {
     private val attemptCeil = 10
     private var numToDownload = 0
     private val retries = 20
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
-    var category = "standard" //TODO replace with ViewModel info
-    var difficulty = Difficulty.OTHER //TODO replace with ViewModel info
 
     // See UpdateModel for signature
     override suspend fun purgeReusedWords() {

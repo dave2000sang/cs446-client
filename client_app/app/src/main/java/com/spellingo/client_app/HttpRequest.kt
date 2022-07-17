@@ -24,9 +24,16 @@ class HttpRequest() {
     suspend fun getWords(limit: Int, locale: Locale, category: String, difficulty: Difficulty): String {
         val localeString = locale.name.lowercase()
         val difficultyString = difficulty.name.lowercase()
-        //TODO integrate difficulty into query
-        val query = "limit=$limit&locale=$localeString&category=$category"
+        val query = "limit=$limit&locale=$localeString&category=$category&difficulty=$difficultyString"
         return sendGetRequest("/words", query)
+    }
+
+    /**
+     * Get word of the day from server
+     * @return word of the day
+     */
+    suspend fun getWotd(): String {
+        return sendGetRequest("/word_of_the_day", "")
     }
 
     /**

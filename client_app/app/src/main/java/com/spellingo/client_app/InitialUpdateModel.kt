@@ -10,7 +10,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
     private val purgeAttemptsCeil = 2 // average attempts per word to trigger purge
     private val purgeAmount = 10 // number of words to purge
     private val maxCache = 100 // too many words in cache
-    private val minCache = 50 // minimum words to keep in cache
+    private val minCache = 20 // minimum words to keep in cache
     private val limit = 10 // per-request download limit
     private val retries = 5
     private val categories = mutableSetOf("standard")
@@ -87,11 +87,9 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
             for(cat in categories) {
                 println("DEBUG category $cat")
                 if(cat == "standard") {
-//                    for(diff in Difficulty.values()) {
-//                        downloaded += downloadCategory(loc, "standard", diff)
-//                    }
-                    //TODO replace with above code once server supports difficulties
-                    downloadCategory(loc, "standard", Difficulty.OTHER)
+                    for(diff in Difficulty.values()) {
+                        downloadCategory(loc, "standard", diff)
+                    }
                 } else {
                     downloadCategory(loc, cat, Difficulty.OTHER)
                 }
