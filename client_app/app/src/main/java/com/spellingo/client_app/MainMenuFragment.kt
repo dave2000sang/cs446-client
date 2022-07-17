@@ -22,8 +22,13 @@ class MainMenuFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
 
-        val playButton =  root.findViewById<Button>(R.id.playGameButton)
-        playButton.setOnClickListener {
+        val playDifficultyButton = root.findViewById<Button>(R.id.playDifficultyButton)
+        playDifficultyButton.setOnClickListener {
+            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment)
+        }
+
+        val playCategoryButton = root.findViewById<Button>(R.id.playCategoryButton)
+        playCategoryButton.setOnClickListener {
             findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment)
         }
 

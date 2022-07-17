@@ -13,7 +13,7 @@
 
         <action
             android:id="@+id/mainMenuFragment_to_categorySelectionFragment"
-            app:destination="@id/fragment_category_selection" />
+            app:destination="@id/fragment_game_selection" />
         <action
             android:id="@+id/mainMenuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
@@ -84,11 +84,11 @@
             app:destination="@id/fragment_main_menu" />
     </fragment>
     <fragment
-        android:id="@+id/fragment_category_selection"
-        android:name="com.spellingo.client_app.CategorySelectionFragment"
-        android:label="CategorySelectionFragment">
+        android:id="@+id/fragment_game_selection"
+        android:name="com.spellingo.client_app.GameSelectionFragment"
+        android:label="GameSelectionFragment">
         <action
-            android:id="@+id/action_fragmentCategorySelection_to_fragmentGameSession"
+            android:id="@+id/action_fragmentGameSelection_to_fragmentGameSession"
             app:destination="@id/fragment_game_session" />
     </fragment>
 

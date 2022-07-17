@@ -8,7 +8,7 @@
     android:background="@color/white">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categoryList"
+        android:id="@+id/choices"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.9"
