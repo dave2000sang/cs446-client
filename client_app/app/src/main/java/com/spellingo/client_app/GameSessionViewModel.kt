@@ -4,7 +4,6 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
-import com.google.android.material.circularreveal.CircularRevealHelper
 import kotlinx.coroutines.launch
 import java.lang.Integer.min
 
@@ -12,10 +11,8 @@ import java.lang.Integer.min
  * Application-aware ViewModel for the game session screen
  */
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
-    private val categoryModel = WordCategoryModel(application)
     private val pronunciationModel = PronunciationModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
-    private val _categoryLiveData = MutableLiveData<List<String>>()
     private val listOfCorrectWords = mutableListOf<String>()
     private val listOfInCorrectWords = mutableListOf<String>()
     private var _strategyChoice = GameStrategy.STANDARD
@@ -27,22 +24,20 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private val applicationCopy = application // avoid ViewModel override shenanigans
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     var previousDestination = 0
-    //TODO modify these from the category selection screen
-    var category = "standard"
-    var difficulty = Difficulty.OTHER
+    private var category = "standard"
+    private var _difficulty = Difficulty.OTHER
 //    private var results: MutableList<Pair<String, Int>> = mutableListOf()
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
             val id = word.id
             val newUsage = word.usage.replace("[$id]", "_____")
-            word.copy(usage = newUsage)
+            val newDefinition = word.definition.replace(id, "_____")
+            word.copy(usage = newUsage, definition = newDefinition)
         }
     val pronunciationLiveData = _wordLiveData.switchMap { word ->
         val url = word.audio
         pronunciationModel.getPlayer(url)
     }
-    val categoryLiveData: LiveData<List<String>>
-        get() = _categoryLiveData
     val submitLiveData = MutableLiveData<String>()
     val colorLiveData = MutableLiveData<String>()
     val showStats: Boolean
@@ -50,21 +45,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     val listOfWords = mutableListOf<Word>()
     val strategyChoice: GameStrategy
         get() = _strategyChoice
-
-    /**
-     * Get categories for selection screen
-     */
-    fun getCategories() {
-        viewModelScope.launch {
-            try {
-                _categoryLiveData.postValue(categoryModel.getCategories())
-            }
-            catch(e: Exception) {
-                System.err.println(e.printStackTrace())
-                System.err.println(e.toString())
-            }
-        }
-    }
+    val difficulty: Difficulty
+        get() = _difficulty
 
     /**
      * Set strategy for ViewModel functions
@@ -82,8 +64,10 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     /**
      * Load the first word of a new session
      */
-    fun startSession() {
+    fun startSession(category: String, difficulty: Difficulty) {
         listOfWords.clear()
+        this.category = category
+        this._difficulty = difficulty
         viewModelScope.launch {
             try {
                 strategy.getSessionWords(_wordLiveData, category, difficulty)
@@ -149,7 +133,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     fun postSessionUpdate() {
         viewModelScope.launch {
             try {
-                strategy.postSessionUpdate(category, difficulty)
+                strategy.postSessionUpdate(category, _difficulty)
             }
             catch(e: Exception) {
                 System.err.println(e.printStackTrace())

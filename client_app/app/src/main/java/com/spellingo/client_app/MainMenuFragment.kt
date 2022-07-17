@@ -24,12 +24,16 @@ class MainMenuFragment : Fragment() {
 
         val playDifficultyButton = root.findViewById<Button>(R.id.playDifficultyButton)
         playDifficultyButton.setOnClickListener {
-            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment)
+            val bundle = Bundle()
+            bundle.putBoolean("standard", true)
+            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment, bundle)
         }
 
         val playCategoryButton = root.findViewById<Button>(R.id.playCategoryButton)
         playCategoryButton.setOnClickListener {
-            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment)
+            val bundle = Bundle()
+            bundle.putBoolean("standard", false)
+            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment, bundle)
         }
 
         val settingsButton = root.findViewById<Button>(R.id.settingsButton)
