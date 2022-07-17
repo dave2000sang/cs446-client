@@ -11,7 +11,7 @@ class StandardGameStrategy(private val application: Application) : GameSessionSt
 
     override suspend fun getSessionWords(wordLiveData: MutableLiveData<Word>, category: String, difficulty: Difficulty) {
         val curWord = wordModel.getNewSessionWords(category, difficulty)
-        sessionModel.getNewSession()
+        sessionModel.getNewSession(category, difficulty)
         wordLiveData.postValue(curWord)
     }
 
@@ -30,6 +30,6 @@ class StandardGameStrategy(private val application: Application) : GameSessionSt
     override suspend fun postSessionUpdate(category: String, difficulty: Difficulty) {
         val postSessionUpdateModel = PostSessionUpdateModel(application, wordModel.sessionWords, category, difficulty)
         postSessionUpdateModel.generateWords()
-        sessionModel.saveCurrentSession()
+//        sessionModel.saveCurrentSession()
     }
 }

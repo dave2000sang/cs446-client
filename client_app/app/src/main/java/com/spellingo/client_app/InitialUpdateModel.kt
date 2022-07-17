@@ -66,7 +66,7 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
         }
 
         // Purge condition checks if average attempts is high or cache is too large
-        val wordCount = histDao.getAllWords().size
+        val wordCount = histDao.countWords()
         if(wordCount <= 0) return
         val attempts = histDao.getNumTotal()
 

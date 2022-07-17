@@ -23,10 +23,10 @@ interface HistoryDao {
     suspend fun getNumTotal(): Int
 
     /**
-     * Get all words in database
+     * Count number of words in database
      */
-    @Query("SELECT * FROM history")
-    suspend fun getAllWords(): List<History>
+    @Query("SELECT COUNT(*) FROM history")
+    suspend fun countWords(): Int
 
     /**
      * Get top played words

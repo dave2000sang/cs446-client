@@ -34,12 +34,12 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     fun loadSessionData() {
         viewModelScope.launch {
             try {
-                val sessions = sessionDb.sessionDao().getAllSessions()
+                val sessions = sessionDb.sessionDao().getAllDates()
                 println("DEBUG number of sessions: ${sessions.size}") // DEBUG
-                val mappedSessions = sessions.map {
-                    sessionModel.mapSessionToHashMap(it)
-                }
-                _listOfSessions.postValue(mappedSessions)
+//                val mappedSessions = sessions.map {
+//                    sessionModel.mapSessionToHashMap(it)
+//                }
+//                _listOfSessions.postValue(mappedSessions)
             } catch (e: Exception) {
                 System.err.println(e.toString())
             }

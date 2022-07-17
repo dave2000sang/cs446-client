@@ -24,6 +24,12 @@ interface WordDao {
     suspend fun getAllWords(): List<Word>
 
     /**
+     * Count number of words in database
+     */
+    @Query("SELECT COUNT(*) FROM word")
+    suspend fun countWords(): Int
+
+    /**
      * Get all words in database matching parameters
      */
     @Query("SELECT * FROM word WHERE locale=:locale AND category=:category AND difficulty=:difficulty")

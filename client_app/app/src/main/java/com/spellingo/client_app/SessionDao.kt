@@ -1,9 +1,6 @@
 package com.spellingo.client_app
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 /**
  * Data Access Object for Word in Room database
@@ -14,7 +11,7 @@ interface SessionDao {
      * Store session in database
      * @param session - session(s) to insert
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg session: Session)
 
     /**
@@ -33,10 +30,10 @@ interface SessionDao {
     suspend fun getSessions(n: Int): List<Session>
 
     /**
-     * Get all sessions
+     * Get session dates and id
      */
-    @Query("SELECT * FROM session")
-    suspend fun getAllSessions(): List<Session>
+    @Query("SELECT id, date, category, difficulty FROM session")
+    suspend fun getAllDates(): List<SessionDate>
 
     /**
      * Remove session from database using id
