@@ -28,7 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 class GameSessionFragment : Fragment() {
 
     private val viewModel: GameSessionViewModel by activityViewModels()
-    private var snack : Snackbar? = null
+    private var snack: Snackbar? = null
     private lateinit var navController: NavController
     private val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
         // Have we just navigated to game session fragment?
@@ -43,6 +43,9 @@ class GameSessionFragment : Fragment() {
             }
             // Start the session by fetching words
             viewModel.startSession()
+            // Reset submitButton
+            viewModel.submitLiveData.value = getString(R.string.submit)
+            viewModel.colorLiveData.value = "yellow"
         }
         // Update destination tracking
         viewModel.previousDestination = destination.id
@@ -59,6 +62,9 @@ class GameSessionFragment : Fragment() {
         val hintButton = root.findViewById<ImageView>(R.id.button_hint)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
         val infoBox = root.findViewById<TextView>(R.id.info_box)
+
+        // Init snackbar
+        snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
 
         // NavController
         navController = findNavController()
@@ -101,6 +107,39 @@ class GameSessionFragment : Fragment() {
             }
         }))
 
+        // Submit button state
+        viewModel.submitLiveData.observe(viewLifecycleOwner, Observer {
+            submitButton.text = it
+        })
+        viewModel.colorLiveData.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                "green" -> {
+                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                    snack?.setText("Correct")
+                    snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                    snack?.show()
+                }
+                "red" -> {
+                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                    val snackText = "The correct spelling is: $getCorrectWord"
+                    val snackSpannable = SpannableString(snackText)
+                    snackSpannable.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        snackText.length - getCorrectWord.length, snackText.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    snack?.setText(snackSpannable)
+                    snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                    snack?.show()
+                }
+                else -> {
+                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
+                    // Dismiss correct / incorrect message
+                    snack?.dismiss()
+                }
+            }
+        })
+
         //TODO move following sample code to Category Selection screen
 //        viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(categories) {
 //            println(categories)
@@ -119,7 +158,6 @@ class GameSessionFragment : Fragment() {
         }
 
         // Correct / incorrect message
-        snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
         val snackTextView = snack?.view?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
         snackTextView?.setTextSize(TypedValue.COMPLEX_UNIT_SP,18F)
         // Submit Button to check if entered word is correct. Look in text field
@@ -131,39 +169,25 @@ class GameSessionFragment : Fragment() {
                 val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
                 // Change to continue button
-                submitButton.text = getString(R.string.cont)
+                viewModel.submitLiveData.value = getString(R.string.cont)
                 // Correct / incorrect message
                 if (result) {
                     viewModel.addCorrectWord(getCorrectWord)
-                    snack?.setText("Correct")
-                    snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
-                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                    viewModel.colorLiveData.value = "green"
                 } else {
                     viewModel.addInCorrectWord(getCorrectWord)
-                    val snackText = "The correct spelling is: $getCorrectWord"
-                    val snackSpannable = SpannableString(snackText)
-                    snackSpannable.setSpan(
-                        StyleSpan(Typeface.BOLD),
-                        snackText.length - getCorrectWord.length, snackText.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                    snack?.setText(snackSpannable)
-                    snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
-                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                    viewModel.colorLiveData.value = "red"
                 }
-                snack?.show()
                 viewModel.updateResults(getCorrectWord, result)
             }
             // Continue button
             else if (submitButton.text == getString(R.string.cont)) {
-                // Dismiss correct / incorrect message
-                snack?.dismiss()
                 // Reset word field
                 mainWordField.text.clear()
                 val remainingWords = viewModel.nextWord()
                 // Change to submit button
-                submitButton.text = getString(R.string.submit)
-                submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
+                viewModel.submitLiveData.value = getString(R.string.submit)
+                viewModel.colorLiveData.value = "yellow"
                 //TODO if remainingWords == 0, change submitButton into transition to stats page
                 if (remainingWords == 0) {
                     // start post session update logic
@@ -192,10 +216,6 @@ class GameSessionFragment : Fragment() {
         return root
     }
 
-    fun sessionFinishedNav () {
-
-    }
-
     override fun onDetach() {
         super.onDetach()
         snack?.takeIf{it.isShown}?.dismiss()
@@ -203,7 +223,6 @@ class GameSessionFragment : Fragment() {
 
     override fun onDestroyView() {
         navController.removeOnDestinationChangedListener(navListener)
-//        viewModel.saveSession()
         super.onDestroyView()
     }
 }
