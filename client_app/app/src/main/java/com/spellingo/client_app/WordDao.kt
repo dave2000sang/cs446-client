@@ -13,8 +13,8 @@ interface WordDao {
      * @param locale desired English locale
      * @return list of words
      */
-    @Query("SELECT * FROM word WHERE locale=:locale ORDER BY RANDOM() LIMIT :n")
-    suspend fun getRandomN(n: Int, locale: Locale): List<Word>
+    @Query("SELECT * FROM word WHERE locale=:locale AND category=:category AND difficulty=:difficulty ORDER BY RANDOM() LIMIT :n")
+    suspend fun getRandomN(n: Int, locale: Locale, category: String, difficulty: Difficulty): List<Word>
 
     /**
      * Get all words in database
@@ -32,7 +32,7 @@ interface WordDao {
     /**
      * Get all categories
      */
-    @Query("SELECT category FROM word")
+    @Query("SELECT DISTINCT category FROM word")
     suspend fun getCategories(): List<String>
 
     /**

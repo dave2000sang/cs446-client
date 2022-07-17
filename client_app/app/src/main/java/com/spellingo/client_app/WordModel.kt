@@ -21,7 +21,7 @@ class WordModel(application: Application) {
         val totalSessionWords = sharedPreferences.getInt("number_words_per_sessions", 10)
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
-        val listRes = wordDb.wordDao().getRandomN(totalSessionWords, locale)
+        val listRes = wordDb.wordDao().getRandomN(totalSessionWords, locale, category, difficulty)
         listOfWords.clear()
         listOfWords.addAll(listRes)
         return listOfWords.removeAt(0)

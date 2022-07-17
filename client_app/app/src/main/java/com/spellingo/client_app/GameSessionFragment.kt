@@ -41,8 +41,21 @@ class GameSessionFragment : Fragment() {
             else {
                 viewModel.updateStrategy(GameStrategy.STANDARD)
             }
+            val category = if(arguments != null && arguments!!.getString("category") != null) {
+                arguments!!.getString("category")!!
+            }
+            else {
+                "standard"
+            }
+            val difficulty = if(arguments != null && arguments!!.getString("difficulty") != null) {
+                arguments!!.getString("difficulty")!!
+            }
+            else {
+                "OTHER"
+            }
+            println("DEBUG ============================== $category $difficulty")
             // Start the session by fetching words
-            viewModel.startSession()
+            viewModel.startSession(category, Difficulty.getByName(difficulty))
             // Reset submitButton
             viewModel.submitLiveData.value = getString(R.string.submit)
             viewModel.colorLiveData.value = "yellow"
