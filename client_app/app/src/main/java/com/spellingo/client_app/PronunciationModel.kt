@@ -1,11 +1,13 @@
 package com.spellingo.client_app
 
+import android.app.Application
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-class PronunciationModel {
+class PronunciationModel(private val application: Application) {
     private val mediaPlayer = MediaPlayer()
     private val mediaData = MutableLiveData<MediaPlayer>()
 
@@ -33,7 +35,7 @@ class PronunciationModel {
             }
         }
         catch(e: Exception) {
-            //TODO toast message
+            Toast.makeText(application, "Failed to get audio file", Toast.LENGTH_SHORT).show()
             System.err.println(e.toString())
         }
         return mediaData
