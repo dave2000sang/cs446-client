@@ -43,6 +43,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     }
     val categoryLiveData: LiveData<List<String>>
         get() = _categoryLiveData
+    val submitLiveData = MutableLiveData<String>()
+    val colorLiveData = MutableLiveData<String>()
     val showStats: Boolean
         get() = sharedPreferences.getBoolean("show_statistics", true)
     val listOfWords = mutableListOf<Word>()

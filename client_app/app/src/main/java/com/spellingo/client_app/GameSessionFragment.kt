@@ -43,6 +43,9 @@ class GameSessionFragment : Fragment() {
             }
             // Start the session by fetching words
             viewModel.startSession()
+            // Reset submitButton
+            viewModel.submitLiveData.value = getString(R.string.submit)
+            viewModel.colorLiveData.value = "yellow"
         }
         // Update destination tracking
         viewModel.previousDestination = destination.id
@@ -101,6 +104,18 @@ class GameSessionFragment : Fragment() {
             }
         }))
 
+        // Submit button state
+        viewModel.submitLiveData.observe(viewLifecycleOwner, Observer {
+            submitButton.text = it
+        })
+        viewModel.colorLiveData.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                "green" -> submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                "red" -> submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                else -> submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
+            }
+        })
+
         //TODO move following sample code to Category Selection screen
 //        viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(categories) {
 //            println(categories)
@@ -131,13 +146,13 @@ class GameSessionFragment : Fragment() {
                 val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
                 // Change to continue button
-                submitButton.text = getString(R.string.cont)
+                viewModel.submitLiveData.value = getString(R.string.cont)
                 // Correct / incorrect message
                 if (result) {
                     viewModel.addCorrectWord(getCorrectWord)
                     snack?.setText("Correct")
                     snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
-                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
+                    viewModel.colorLiveData.value = "green"
                 } else {
                     viewModel.addInCorrectWord(getCorrectWord)
                     val snackText = "The correct spelling is: $getCorrectWord"
@@ -149,7 +164,7 @@ class GameSessionFragment : Fragment() {
                     )
                     snack?.setText(snackSpannable)
                     snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
-                    submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_red))
+                    viewModel.colorLiveData.value = "red"
                 }
                 snack?.show()
                 viewModel.updateResults(getCorrectWord, result)
@@ -162,8 +177,8 @@ class GameSessionFragment : Fragment() {
                 mainWordField.text.clear()
                 val remainingWords = viewModel.nextWord()
                 // Change to submit button
-                submitButton.text = getString(R.string.submit)
-                submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.submit_button_color))
+                viewModel.submitLiveData.value = getString(R.string.submit)
+                viewModel.colorLiveData.value = "yellow"
                 //TODO if remainingWords == 0, change submitButton into transition to stats page
                 if (remainingWords == 0) {
                     // start post session update logic
