@@ -3,6 +3,7 @@ package com.spellingo.client_app
 import android.app.Application
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
+import com.google.android.material.circularreveal.CircularRevealHelper
 import kotlinx.coroutines.launch
 import java.lang.Integer.min
 
@@ -10,14 +11,14 @@ import java.lang.Integer.min
  * Application-aware ViewModel for the game session screen
  */
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
-    private val wordModel = WordModel(application)
+    private val categoryModel = WordCategoryModel(application)
     private val pronunciationModel = PronunciationModel()
-    private val histModel = HistoryChangeModel(application)
-    private val sessionModel = SessionModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
     private val _categoryLiveData = MutableLiveData<List<String>>()
     private val listOfCorrectWords = mutableListOf<String>()
     private val listOfInCorrectWords = mutableListOf<String>()
+    private var _strategyChoice = GameStrategy.STANDARD
+    private var strategy: GameSessionStrategy = StandardGameStrategy(application)
     private var hintNum = 0
     private var hintSeq = listOf<Int>()
     private var hintCeil = 2
@@ -43,19 +44,49 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         get() = _categoryLiveData
     val showStats: Boolean
         get() = sharedPreferences.getBoolean("show_statistics", true)
+    val listOfWords = mutableListOf<Word>()
+    val strategyChoice: GameStrategy
+        get() = _strategyChoice
+
+    /**
+     * Get categories for selection screen
+     */
+    fun getCategories() {
+        viewModelScope.launch {
+            try {
+                _categoryLiveData.postValue(categoryModel.getCategories())
+            }
+            catch(e: Exception) {
+                System.err.println(e.printStackTrace())
+                System.err.println(e.toString())
+            }
+        }
+    }
+
+    /**
+     * Set strategy for ViewModel functions
+     * @param GameStrategy to use
+     */
+    fun updateStrategy(selected: GameStrategy) {
+        if(selected == _strategyChoice) return
+        this.strategy = when(selected) {
+            GameStrategy.STANDARD -> StandardGameStrategy(applicationCopy)
+            GameStrategy.WOTD -> WordOfTheDayStrategy(applicationCopy)
+        }
+        _strategyChoice = selected
+    }
 
     /**
      * Load the first word of a new session
      */
     fun startSession() {
+        listOfWords.clear()
         viewModelScope.launch {
             try {
-                val curWord = wordModel.getNewSessionWords(category, difficulty)
-                sessionModel.getNewSession()
-                _wordLiveData.postValue(curWord)
-                _categoryLiveData.postValue(wordModel.getCategories())
+                strategy.getSessionWords(_wordLiveData, category, difficulty)
             }
             catch(e: Exception) {
+                //TODO toast message
                 System.err.println(e.printStackTrace())
                 System.err.println(e.toString())
             }
@@ -67,11 +98,8 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      * @return number of words left in session
      */
     fun nextWord(): Int {
-        val returnNum = wordModel.numSessionWords()
-        val curWord = wordModel.getWord() ?: return 0
-        _wordLiveData.value = curWord
         hintNum = 0
-        return returnNum
+        return strategy.nextWord(_wordLiveData)
     }
 
     /**
@@ -101,9 +129,14 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      * @param result whether the spelling was correct
      */
     fun updateResults(word: String, result: Boolean) {
-        sessionModel.addToCurrentSession(word, result)
         viewModelScope.launch {
-            histModel.update(word, result)
+            try {
+                strategy.updateResults(word, result)
+            }
+            catch(e: Exception) {
+                System.err.println(e.printStackTrace())
+                System.err.println(e.toString())
+            }
         }
     }
 
@@ -111,15 +144,15 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      * Run post session updates
      */
     fun postSessionUpdate() {
-        val postSessionUpdateModel = PostSessionUpdateModel(applicationCopy, wordModel.sessionWords)
         viewModelScope.launch {
-            postSessionUpdateModel.generateWords()
-            sessionModel.saveCurrentSession()
+            try {
+                strategy.postSessionUpdate(category, difficulty)
+            }
+            catch(e: Exception) {
+                System.err.println(e.printStackTrace())
+                System.err.println(e.toString())
+            }
         }
-    }
-
-    fun getListOfWords (): List<Word> {
-        return wordModel.sessionWords
     }
 
     fun addCorrectWord (word: String) {

@@ -28,7 +28,7 @@ class PostGameStatisticsFragment : Fragment() {
         val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenu)
         var dropDownView: DropDownView = root.findViewById(R.id.dropdownview)
         var dropDownViewInCorrect: DropDownView = root.findViewById(R.id.dropdownview2)
-        val listOfTestedWords = viewModel.getListOfWords()
+        val listOfTestedWords = viewModel.listOfWords
         val listOfWords = mutableListOf<String>()
 
         for (i in listOfTestedWords) {

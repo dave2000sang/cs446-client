@@ -15,20 +15,26 @@ class PronunciationModel {
      * @return LiveData of media player when it's prepared
      */
     fun getPlayer(url: String): LiveData<MediaPlayer> {
-        mediaPlayer.apply {
-            reset()
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-            setDataSource(url)
-            setOnPreparedListener {
-                it.start()
-                mediaData.postValue(it)
+        try {
+            mediaPlayer.apply {
+                reset()
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
+                setDataSource(url)
+                setOnPreparedListener {
+                    it.start()
+                    mediaData.postValue(it)
+                }
+                prepareAsync()
             }
-            prepareAsync()
+        }
+        catch(e: Exception) {
+            //TODO toast message
+            System.err.println(e.toString())
         }
         return mediaData
     }

@@ -31,10 +31,20 @@ class GameSessionFragment : Fragment() {
     private var snack : Snackbar? = null
     private lateinit var navController: NavController
     private val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        // Have we just navigated to game session fragment?
         if(viewModel.previousDestination != destination.id
             && destination.id == R.id.fragment_game_session) {
+            // Are we doing word of the day?
+            if(arguments != null && arguments!!.getBoolean("wotd")) {
+                viewModel.updateStrategy(GameStrategy.WOTD)
+            }
+            else {
+                viewModel.updateStrategy(GameStrategy.STANDARD)
+            }
+            // Start the session by fetching words
             viewModel.startSession()
         }
+        // Update destination tracking
         viewModel.previousDestination = destination.id
     }
 
@@ -67,6 +77,7 @@ class GameSessionFragment : Fragment() {
 
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
+            viewModel.listOfWords.add(word)
             getCorrectWord = word.id
             val infoList = mutableListOf<InfoBox>()
             // Decorators for infobox, start with part of speech and definition only
@@ -79,7 +90,7 @@ class GameSessionFragment : Fragment() {
                 Difficulty.HARD -> infoBoxBase.getSpannable(word)
                 Difficulty.MEDIUM -> infoBoxWithUsage.getSpannable(word)
                 Difficulty.EASY -> infoBoxWithUsageEtymology.getSpannable(word)
-                Difficulty.OTHER -> infoBoxWithUsageEtymology.getSpannable(word) //TODO use infoBoxWithUsage or a custom InfoBox
+                Difficulty.OTHER -> infoBoxBase.getSpannable(word)
             }
         }))
 
@@ -158,7 +169,7 @@ class GameSessionFragment : Fragment() {
                     // start post session update logic
                     viewModel.postSessionUpdate()
                     // Navigate to next fragment
-                    if(viewModel.showStats) {
+                    if(viewModel.showStats && viewModel.strategyChoice == GameStrategy.STANDARD) {
                         findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
                     }
                     else {
