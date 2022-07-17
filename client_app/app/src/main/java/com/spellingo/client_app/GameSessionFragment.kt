@@ -102,9 +102,9 @@ class GameSessionFragment : Fragment() {
         }))
 
         //TODO move following sample code to Category Selection screen
-        viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(categories) {
-            println(categories)
-        }))
+//        viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(categories) {
+//            println(categories)
+//        }))
 
         // Listeners
 
@@ -113,9 +113,9 @@ class GameSessionFragment : Fragment() {
             try {
                 mediaPlayer!!.start()
             }
-            //TODO add toasts for error messages
-            catch (e: NullPointerException) {} // mediaPlayer not observed
-            catch (e: IllegalStateException) {} // mediaPlayer not ready
+            catch (e: Exception) {
+                Toast.makeText(requireContext(), "Internal audio player error", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Correct / incorrect message

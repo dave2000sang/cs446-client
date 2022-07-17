@@ -3,6 +3,7 @@ package com.spellingo.client_app
 import android.app.Application
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import org.json.JSONException
@@ -64,6 +65,7 @@ abstract class UpdateModel(private val application: Application) {
             }
         }
         catch(e: Exception) {
+            Toast.makeText(application, "Failed to download words", Toast.LENGTH_SHORT).show()
             System.err.println(e.printStackTrace())
             System.err.println(e.toString())
             return 0

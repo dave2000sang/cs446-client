@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
 import com.google.android.material.circularreveal.CircularRevealHelper
@@ -12,7 +13,7 @@ import java.lang.Integer.min
  */
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
     private val categoryModel = WordCategoryModel(application)
-    private val pronunciationModel = PronunciationModel()
+    private val pronunciationModel = PronunciationModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
     private val _categoryLiveData = MutableLiveData<List<String>>()
     private val listOfCorrectWords = mutableListOf<String>()
@@ -86,7 +87,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
                 strategy.getSessionWords(_wordLiveData, category, difficulty)
             }
             catch(e: Exception) {
-                //TODO toast message
+                Toast.makeText(applicationCopy, "Failed to get words", Toast.LENGTH_SHORT).show()
                 System.err.println(e.printStackTrace())
                 System.err.println(e.toString())
             }
