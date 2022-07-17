@@ -19,10 +19,20 @@
         android:layout_margin="5dp"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/playGameButton"
+        android:id="@+id/playDifficultyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/play"
+        android:text="@string/playDifficulty"
+        android:textSize="20sp"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/monokai_yellow"
+        android:layout_margin="5dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/playCategoryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/playCategory"
         android:textSize="20sp"
         app:cornerRadius="8dp"
         android:backgroundTint="@color/monokai_yellow"

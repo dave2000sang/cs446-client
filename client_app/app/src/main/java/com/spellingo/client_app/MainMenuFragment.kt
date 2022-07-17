@@ -1,7 +1,6 @@
 package com.spellingo.client_app
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,9 +22,14 @@ class MainMenuFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
 
-        val playButton =  root.findViewById<Button>(R.id.playGameButton)
-        playButton.setOnClickListener {
-            findNavController().navigate(R.id.mainMenuFragment_to_gameSessionFragment)
+        val playDifficultyButton = root.findViewById<Button>(R.id.playDifficultyButton)
+        playDifficultyButton.setOnClickListener {
+            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment)
+        }
+
+        val playCategoryButton = root.findViewById<Button>(R.id.playCategoryButton)
+        playCategoryButton.setOnClickListener {
+            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment)
         }
 
         val settingsButton = root.findViewById<Button>(R.id.settingsButton)
