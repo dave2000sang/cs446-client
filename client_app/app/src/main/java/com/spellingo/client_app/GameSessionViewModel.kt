@@ -11,6 +11,7 @@ import java.lang.Integer.min
  * Application-aware ViewModel for the game session screen
  */
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
+    private val sessionModel = SessionModel(application)
     private val pronunciationModel = PronunciationModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
     private val listOfCorrectWords = mutableListOf<String>()
@@ -64,13 +65,14 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     /**
      * Load the first word of a new session
      */
-    fun startSession(category: String, difficulty: Difficulty) {
+    fun startSession(category: String, difficulty: Difficulty, suddenDeathMode: SuddenDeathMode) {
         listOfWords.clear()
         this.category = category
         this._difficulty = difficulty
         viewModelScope.launch {
             try {
                 strategy.getSessionWords(_wordLiveData, category, difficulty)
+                sessionModel.getNewSession()
             }
             catch(e: Exception) {
                 Toast.makeText(applicationCopy, "Failed to get words", Toast.LENGTH_SHORT).show()
@@ -119,6 +121,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             try {
                 strategy.updateResults(word, result)
+                sessionModel.addToCurrentSession(word, result)
             }
             catch(e: Exception) {
                 System.err.println(e.printStackTrace())

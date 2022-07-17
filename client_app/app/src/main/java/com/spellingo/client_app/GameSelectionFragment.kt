@@ -30,9 +30,8 @@ class GameSelectionFragment : Fragment() {
             val choices = choicesParam.map { choice ->
                 choice.replaceFirstChar { it.uppercase() }
             }
-            println("DEBUG ============================ $choices")
             val choicesRecyclerView = root.findViewById<RecyclerView>(R.id.choices)
-            var selected = arrayOf("")
+            val selected = arrayOf("")
             choicesRecyclerView.adapter = GameSelectionItemAdapter(this, choices, selected)
             val doneSelectionButton = root.findViewById<MaterialButton>(R.id.doneSelection)
             doneSelectionButton.setOnClickListener {
@@ -45,7 +44,6 @@ class GameSelectionFragment : Fragment() {
                         bundle.putString("category", selected[0].lowercase())
                         bundle.putString("difficulty", "OTHER")
                     }
-                    println("DEBUG after select adapter ================================ " + selected[0])
                     findNavController().navigate(R.id.action_fragmentGameSelection_to_fragmentGameSession, bundle)
                 }
             }

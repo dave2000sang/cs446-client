@@ -5,7 +5,7 @@ import androidx.preference.PreferenceManager
 import org.json.JSONObject
 
 class WordOfTheDayModel(application: Application) {
-    private val wotdCategory = "_wotd"
+    private val wotdCategory = "Word of the Day"
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private val histDb = HistoryDatabase.getInstance(application)
 

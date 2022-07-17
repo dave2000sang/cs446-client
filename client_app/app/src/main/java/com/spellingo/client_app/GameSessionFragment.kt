@@ -53,9 +53,14 @@ class GameSessionFragment : Fragment() {
             else {
                 "OTHER"
             }
-            println("DEBUG ============================== $category $difficulty")
+            val suddenDeath = if(arguments != null && arguments!!.getString("suddenDeath") != null) {
+                arguments!!.getString("suddenDeath")!!
+            }
+            else {
+                "STANDARD"
+            }
             // Start the session by fetching words
-            viewModel.startSession(category, Difficulty.getByName(difficulty))
+            viewModel.startSession(category, Difficulty.getByName(difficulty), SuddenDeathMode.getByName(suddenDeath))
             // Reset submitButton
             viewModel.submitLiveData.value = getString(R.string.submit)
             viewModel.colorLiveData.value = "yellow"
@@ -153,11 +158,6 @@ class GameSessionFragment : Fragment() {
             }
         })
 
-        //TODO move following sample code to Category Selection screen
-//        viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(categories) {
-//            println(categories)
-//        }))
-
         // Listeners
 
         // Pronunciation button to replay audio
@@ -201,7 +201,7 @@ class GameSessionFragment : Fragment() {
                 // Change to submit button
                 viewModel.submitLiveData.value = getString(R.string.submit)
                 viewModel.colorLiveData.value = "yellow"
-                //TODO if remainingWords == 0, change submitButton into transition to stats page
+                // change submitButton into transition to stats page
                 if (remainingWords == 0) {
                     // start post session update logic
                     viewModel.postSessionUpdate()
