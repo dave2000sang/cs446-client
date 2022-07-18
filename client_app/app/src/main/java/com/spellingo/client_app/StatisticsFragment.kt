@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,7 +20,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 
-class StatisticsFragment: Fragment() {
+class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
 
     private val viewModel: StatisticsViewModel by activityViewModels()
     private lateinit var pieChart: PieChart
@@ -41,6 +40,7 @@ class StatisticsFragment: Fragment() {
         var correctTextView = root.findViewById<TextView>(R.id.correctCounter)
         var incorrectTextView = root.findViewById<TextView>(R.id.incorrectCounter)
         var totalTextView = root.findViewById<TextView>(R.id.totalCounter)
+        var spinnerText = root.findViewById<TextView>(R.id.spinnerText)
 
         // Initialize and draw PieChart Here
         pieChart = root.findViewById(R.id.pieChart)
@@ -50,19 +50,35 @@ class StatisticsFragment: Fragment() {
         barChart = root.findViewById(R.id.barChart)
         setupBarChart()
 
+        // Stat Spinner Content Setup
+        val statSpinner = root.findViewById<Spinner>(R.id.statMenuSpinner)
+        var statArrayAdapter = ArrayAdapter.createFromResource(this.requireActivity(), R.array.statSpinnerString, android.R.layout.simple_spinner_item)
+        statArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        statSpinner.adapter = statArrayAdapter
+        spinnerText.bringToFront()
 
+        // Spinner Options Section
+        statSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                parent?.getChildAt(0)
 
-        val pieChartButton = root.findViewById<Button>(R.id.showPieGraph)
-        val barChartButton = root.findViewById<Button>(R.id.showBarGraph)
+                // Write your if statements here of what happens when you select a dropdown item.
+                // For examples of the name is "Categories write a if statement for it then do
+                // whatever you want
+                val selectedItem = parent?.getItemAtPosition(position).toString()
+                if (selectedItem == "Categories") {
+                    pieChart.isVisible = true
+                    barChart.isVisible = false
+                } else {
+                    pieChart.isVisible = false
+                    barChart.isVisible = true
+                }
+            }
 
-        pieChartButton.setOnClickListener {
-            pieChart.isVisible = true
-            barChart.isVisible = false
-        }
-
-        barChartButton.setOnClickListener {
-            pieChart.isVisible = false
-            barChart.isVisible = true
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                val test = 0
+                TODO("Not yet implemented")
+            }
         }
 
         barChart.isVisible = false // set barChart to be invisible on entry.
@@ -80,11 +96,6 @@ class StatisticsFragment: Fragment() {
             incorrectTextView.text = incorrectWordCounter.toString()
             totalTextView.text = totalWordCounter.toString()
         }))
-
-
-
-
-
         return root
     }
 
@@ -191,6 +202,16 @@ class StatisticsFragment: Fragment() {
 
         pieChart.data = data
         pieChart.invalidate()
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        TODO("Not yet implemented")
+        var text = p0?.getItemAtPosition(p2).toString()
+        Toast.makeText(p0?.context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 
 

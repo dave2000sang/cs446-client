@@ -6,6 +6,42 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+
+    <RelativeLayout
+        android:layout_width="336dp"
+        android:layout_height="55dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.00999999">
+
+        <Spinner
+            android:id="@+id/statMenuSpinner"
+            android:layout_width="304dp"
+            android:layout_height="match_parent"
+            android:theme="@style/spinnerTheme" />
+
+        <TextView
+            android:id="@+id/spinnerText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="#FBFBFA"
+            android:backgroundTint="#FBF7CF"
+            android:gravity="center"
+            android:text="Select Data Format"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/incorrectCounter"
         android:layout_width="61dp"
@@ -81,6 +117,7 @@
         app:layout_constraintStart_toStartOf="@+id/correctTextView"
         app:layout_constraintTop_toBottomOf="@+id/correctTextView" />
 
+
     <TextView
         android:id="@+id/correctTextView"
         android:layout_width="181dp"
@@ -103,18 +140,7 @@
         android:layout_height="331dp"
         android:layout_marginBottom="320dp"
         android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/showBarGraph" />
-
-    <Button
-        android:id="@+id/showBarGraph"
-        android:layout_width="203dp"
-        android:layout_height="74dp"
-        android:text="Bar Chart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"
@@ -126,16 +152,27 @@
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.181" />
+        app:layout_constraintVertical_bias="0.181" /><![CDATA[
 
-    <Button
-        android:id="@+id/showPieGraph"
-        android:layout_width="203dp"
-        android:layout_height="74dp"
-        android:text="Pie Chart"
+
+
+    app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
 
+
+
+
+
+
+
+
+
+
+
+
+]]>
 </androidx.constraintlayout.widget.ConstraintLayout>

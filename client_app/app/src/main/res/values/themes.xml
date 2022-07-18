@@ -23,6 +23,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="spinnerTheme">
+        <item name="android:textColor">@color/monokai_black</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
     <style name="Theme.Client_app.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Client_app.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
