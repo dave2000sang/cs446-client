@@ -17,13 +17,6 @@ interface WordDao {
     suspend fun getRandomN(n: Int, locale: Locale, category: String, difficulty: Difficulty): List<Word>
 
     /**
-     * Get all words in database
-     * TODO check if this is needed anymore
-     */
-    @Query("SELECT * FROM word")
-    suspend fun getAllWords(): List<Word>
-
-    /**
      * Count number of words in database
      */
     @Query("SELECT COUNT(*) FROM word")
@@ -60,10 +53,4 @@ interface WordDao {
      */
     @Delete
     suspend fun delete(vararg words: Word)
-
-    /**
-     * Clear database
-     */
-    @Query("DELETE FROM word")
-    suspend fun clear()
 }

@@ -8,9 +8,9 @@ class SessionStatsModel(application: Application) {
     /**
      * Load a fetched session
      */
-    fun getSessionStats(session: Session): List<Pair<String, Boolean>> {
+    fun getSessionStats(session: Session): List<Pair<String, String>> {
         val words = session.sessionWords.split(";")
-        val guesses = session.sessionGuess.split(";").map { it == "true" }
+        val guesses = session.sessionGuess.split(";")
         return words zip guesses
     }
 }

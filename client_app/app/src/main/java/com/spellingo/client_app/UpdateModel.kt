@@ -61,7 +61,7 @@ abstract class UpdateModel(private val application: Application) {
                     throw Exception("Empty word field")
                 }
                 // Create new Word and History entries
-                wordList.add(Word(id, locale, category, definition, usage, origin, part, audio, difficulty, phonetic))
+                wordList.add(Word(id.lowercase(), locale, category, definition, usage, origin, part, audio, difficulty, phonetic))
             }
         }
         catch(e: Exception) {

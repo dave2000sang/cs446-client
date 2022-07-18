@@ -1,10 +1,7 @@
 package com.spellingo.client_app
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Model for Session fetching
@@ -13,17 +10,19 @@ import kotlin.collections.HashMap
 class SessionModel(application: Application) {
     private val sessionDb = SessionDatabase.getInstance(application)
 
-//    val sessionWordMap = HashMap<String, Boolean>()
-    var correct = 0
-    var currentId = 0
-    var currentSession: Session? = null
+    private var correct = 0
+    private var currentId = 0
+    private var currentSession: Session? = null
+    private val _listOfWords = mutableListOf<Pair<String, String>>()
+    val listOfWords: List<Pair<String, String>>
+        get() = _listOfWords
 
     /**
      * Fetch some words from the database to use in a session and return a word
      */
     suspend fun getNewSession(category: String, difficulty: Difficulty) {
         println("DEBUG Fetching new session") // DEBUG
-//        sessionWordMap.clear()
+        _listOfWords.clear()
         correct = 0
         currentId = sessionDb.sessionDao().getNextId()
         currentSession = Session(
@@ -39,10 +38,12 @@ class SessionModel(application: Application) {
     /**
      * Add the current game word to the running session
      */
-    suspend fun addToCurrentSession(word: String, result: Boolean) {
+    suspend fun addToCurrentSession(word: String, attempt: String) {
         if(currentSession == null) return
+        val result = word == attempt
+        _listOfWords.add(Pair(word, attempt))
         currentSession!!.sessionWords += ";$word"
-        currentSession!!.sessionGuess += ";$result"
+        currentSession!!.sessionGuess += ";$attempt"
         println("DEBUG Added $word as $result") //DEBUG
         println("DEBUG session currently " + currentSession?.sessionWords + " " + currentSession?.sessionGuess)
         sessionDb.sessionDao().insert(currentSession!!.copy(

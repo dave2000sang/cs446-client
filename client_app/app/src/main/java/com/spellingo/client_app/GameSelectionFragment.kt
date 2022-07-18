@@ -22,8 +22,6 @@ class GameSelectionFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_game_selection, container, false)
 
-        // TODO (Nathan) could use an enum or something else, for now 0 is difficulty, 1 is category
-
         val isStandard = arguments == null || arguments!!.getBoolean("standard")
         viewModel.getCategories(isStandard)
         viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(choicesParam) {
@@ -44,6 +42,8 @@ class GameSelectionFragment : Fragment() {
                         bundle.putString("category", selected[0].lowercase())
                         bundle.putString("difficulty", "OTHER")
                     }
+                    //TODO Nathan integrate sudden death in UI
+//                    bundle.putString("suddenDeath", "SUDDEN_DEATH")
                     findNavController().navigate(R.id.action_fragmentGameSelection_to_fragmentGameSession, bundle)
                 }
             }

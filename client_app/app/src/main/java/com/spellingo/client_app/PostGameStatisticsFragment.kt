@@ -28,42 +28,6 @@ class PostGameStatisticsFragment : Fragment() {
         val returnToMainMenuButton = root.findViewById<Button>(R.id.goBackToMenu)
         var dropDownView: DropDownView = root.findViewById(R.id.dropdownview)
         var dropDownViewInCorrect: DropDownView = root.findViewById(R.id.dropdownview2)
-        val listOfTestedWords = viewModel.listOfWords
-        val listOfWords = mutableListOf<String>()
-
-        for (i in listOfTestedWords) {
-            listOfWords.add(i.id)
-        }
-
-        // Setting Correct/Incorrect Word Counter
-        correctCounter.text = viewModel.getCorrectWordList().size.toString()
-        incorrectCounter.text = viewModel.getInCorrectWordList().size.toString()
-
-
-
-        // Correct DropDown
-        val dropDownCorrectList: MutableList<String> = mutableListOf()
-        val getCorrectWordList = viewModel.getCorrectWordList()
-        for (i in getCorrectWordList) {
-            dropDownCorrectList.add(i)
-        }
-        dropDownView.setDropDownListItem(dropDownCorrectList)
-        dropDownView.setOnClickListener {
-        }
-
-        // Incorrect DropDown
-        val dropDownInCorrectList: MutableList<String> = mutableListOf()
-        val getInCorrectWordList = viewModel.getInCorrectWordList()
-        for (i in getInCorrectWordList) {
-            dropDownInCorrectList.add(i)
-        }
-        dropDownViewInCorrect.setDropDownListItem(dropDownInCorrectList)
-        dropDownViewInCorrect.setOnClickListener {
-        }
-
-        // Remove All Data from Previous Session
-        viewModel.emptyCorrectWordList()
-        viewModel.emptyInCorrectWordList()
 
         returnToMainMenuButton.setOnClickListener {
             findNavController().navigate(R.id.action_postGameStatisticsFragment_to_fragment_main_menu)

@@ -57,10 +57,4 @@ interface HistoryDao {
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg words: History)
-
-    /**
-     * Clear database
-     */
-    @Query("DELETE FROM history")
-    suspend fun clear()
 }
