@@ -11,7 +11,7 @@ import java.lang.Integer.min
  * Application-aware ViewModel for the game session screen
  */
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
-    private val sessionModel = SessionModel(application)
+    private val sessionChangeModel = SessionChangeModel(application)
     private val pronunciationModel = PronunciationModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
     private var _strategyChoice = GameStrategy.STANDARD
@@ -76,7 +76,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
                 strategy.getSessionWords(_wordLiveData, category, difficulty)
                 // Create new session if we're not continuing a sudden death session
                 if(suddenDeath != SuddenDeathMode.SD_CONTINUE) {
-                    sessionModel.getNewSession(category, difficulty)
+                    sessionChangeModel.getNewSession(category, difficulty)
                 }
             }
             catch(e: Exception) {
@@ -126,7 +126,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             try {
                 strategy.updateResults(word, attempt == word)
-                sessionModel.addToCurrentSession(word, attempt)
+                sessionChangeModel.addToCurrentSession(word, attempt)
             }
             catch(e: Exception) {
                 System.err.println(e.printStackTrace())
@@ -156,7 +156,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      * @return list of word-attempt pairs
      */
     fun getSessionResults(): List<Pair<String, String>> {
-        return sessionModel.listOfWords
+        return sessionChangeModel.listOfWords
     }
 
     /**

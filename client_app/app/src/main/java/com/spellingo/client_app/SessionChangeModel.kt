@@ -7,7 +7,7 @@ import java.util.*
  * Model for Session fetching
  * @param application ApplicationContext for database creation
  */
-class SessionModel(application: Application) {
+class SessionChangeModel(application: Application) {
     private val sessionDb = SessionDatabase.getInstance(application)
 
     private var correct = 0

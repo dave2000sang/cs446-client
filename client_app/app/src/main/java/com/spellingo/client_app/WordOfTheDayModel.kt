@@ -36,6 +36,6 @@ class WordOfTheDayModel(application: Application) {
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val successInt = if(result) 1 else 0
-        histDb.historyDao().insert(History(word, locale, wotdCategory, successInt, 1))
+        histDb.historyDao().insert(History(word, locale, wotdCategory, Difficulty.OTHER, successInt, 1))
     }
 }

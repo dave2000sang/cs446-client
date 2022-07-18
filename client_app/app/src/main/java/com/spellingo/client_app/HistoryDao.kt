@@ -23,6 +23,36 @@ interface HistoryDao {
     suspend fun getNumTotal(): Int
 
     /**
+     * Get total number of correct words spelled for a category
+     */
+    @Query("SELECT SUM(correct) FROM history WHERE category=:category")
+    suspend fun getNumCorrect(category: String): Int
+
+    /**
+     * Get total number of attempts for a category
+     */
+    @Query("SELECT SUM(total) FROM history WHERE category=:category")
+    suspend fun getNumTotal(category: String): Int
+
+    /**
+     * Get total number of correct words spelled for a difficulty
+     */
+    @Query("SELECT SUM(correct) FROM history WHERE difficulty=:difficulty")
+    suspend fun getNumCorrect(difficulty: Difficulty): Int
+
+    /**
+     * Get total number of attempts for a category
+     */
+    @Query("SELECT SUM(total) FROM history WHERE difficulty=:difficulty")
+    suspend fun getNumTotal(difficulty: Difficulty): Int
+
+    /**
+     * Get all categories
+     */
+    @Query("SELECT DISTINCT category FROM history")
+    suspend fun getCategories(): List<String>
+
+    /**
      * Count number of words in database
      */
     @Query("SELECT COUNT(*) FROM history")
@@ -30,6 +60,7 @@ interface HistoryDao {
 
     /**
      * Get top played words
+     * TODO see if needed
      * @param n number of words to fetch
      */
     @Query("SELECT * FROM history ORDER BY total DESC LIMIT :n")

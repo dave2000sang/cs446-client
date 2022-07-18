@@ -86,7 +86,7 @@ abstract class UpdateModel(private val application: Application) {
         if(newWordList.isNotEmpty()) {
             wordDao.insert(*newWordList.toTypedArray())
             histDao.insert(*newWordList.map {
-                History(it.id, it.locale, it.category, 0, 0)
+                History(it.id, it.locale, it.category, difficulty, 0, 0)
             }.toTypedArray())
         }
         println(newWordList) // DEBUG

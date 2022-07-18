@@ -30,6 +30,12 @@ interface SessionDao {
     suspend fun getSessions(n: Int): List<Session>
 
     /**
+     * Get session by id
+     */
+    @Query("SELECT * FROM session WHERE id=:id")
+    suspend fun getSession(id: Int): Session
+
+    /**
      * Get session dates and id
      */
     @Query("SELECT id, date, category, difficulty FROM session")
