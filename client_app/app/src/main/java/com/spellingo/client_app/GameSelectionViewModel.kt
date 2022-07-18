@@ -20,10 +20,10 @@ class GameSelectionViewModel(application: Application) : AndroidViewModel(applic
         viewModelScope.launch {
             try {
                 if(isStandard) {
-                    _categoryLiveData.postValue(listOf("Easy", "Medium", "Hard"))
+                    _categoryLiveData.postValue(listOf(Difficulty.EASY, Difficulty.MEDIUM, Difficulty.HARD).map { it.toString().lowercase() })
                 }
                 else {
-                    _categoryLiveData.postValue(categoryModel.getCategories())
+                    _categoryLiveData.postValue(categoryModel.getCategories().map { it.lowercase() })
                 }
             }
             catch(e: Exception) {

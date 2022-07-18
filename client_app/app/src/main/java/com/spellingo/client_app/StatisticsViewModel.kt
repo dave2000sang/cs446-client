@@ -9,15 +9,17 @@ import kotlinx.coroutines.launch
 
 class StatisticsViewModel(application: Application) : AndroidViewModel(application) {
     private val histModel = HistoryStatsModel(application)
-    private val sessionModel = SessionModel(application)
-    private val sessionDb = SessionDatabase.getInstance(application)
+    private val sessionStatsModel = SessionStatsModel(application)
     private val _ratioLiveData = MutableLiveData<Pair<Int, Int>>()
+    private val _listOfSessions = MutableLiveData<List<SessionDate>>()
+    private val _guessLiveData = MutableLiveData<List<Pair<String, String>>>()
     // Pair(correct, total) attempts for all words in history
     val ratioLiveData: LiveData<Pair<Int, Int>>
         get() = _ratioLiveData
-    private val _listOfSessions = MutableLiveData<List<HashMap<String, Boolean>>>()
-    val listOfSessions: LiveData<List<HashMap<String, Boolean>>>
+    val listOfSessions: LiveData<List<SessionDate>>
         get() = _listOfSessions
+    val guessLiveData: LiveData<List<Pair<String, String>>>
+        get() = _guessLiveData
 
     fun requestGlobalStats() {
         viewModelScope.launch {
@@ -34,15 +36,25 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     fun loadSessionData() {
         viewModelScope.launch {
             try {
-                val sessions = sessionDb.sessionDao().getAllSessions()
+                val sessions = sessionStatsModel.getSessionDates()
                 println("DEBUG number of sessions: ${sessions.size}") // DEBUG
-                val mappedSessions = sessions.map {
-                    sessionModel.mapSessionToHashMap(it)
-                }
-                _listOfSessions.postValue(mappedSessions)
+                _listOfSessions.postValue(sessions)
             } catch (e: Exception) {
                 System.err.println(e.toString())
             }
         }
     }
+
+    fun getSession(session: SessionDate) {
+        val id = session.id
+        viewModelScope.launch {
+            try {
+                val guess = sessionStatsModel.getSessionStats(id)
+                _guessLiveData.postValue(guess)
+
+            } catch (e: Exception) {
+                System.err.println(e.toString())
+            }
+    }
+}
 }

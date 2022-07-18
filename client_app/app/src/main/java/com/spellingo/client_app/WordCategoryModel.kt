@@ -11,7 +11,7 @@ class WordCategoryModel(application: Application) {
      */
     suspend fun getCategories(): List<String> {
         return wordDb.wordDao().getCategories().filter {
-            it != "standard" && it != "_wotd"
+            it != "standard"
         }.sorted()
     }
 }

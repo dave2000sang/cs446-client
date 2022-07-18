@@ -52,7 +52,7 @@ class PostSessionUpdateModel(
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val wordDao = wordDb.wordDao()
-        val inCache = wordDao.getAllWords().size
+        val inCache = wordDao.countWords()
         var downloaded = 0
         // Only retry if we don't have enough words for a session
         for(retryIdx in 0 until retries) {

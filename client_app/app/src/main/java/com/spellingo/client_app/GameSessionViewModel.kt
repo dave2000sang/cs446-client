@@ -11,10 +11,9 @@ import java.lang.Integer.min
  * Application-aware ViewModel for the game session screen
  */
 class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
+    private val sessionChangeModel = SessionChangeModel(application)
     private val pronunciationModel = PronunciationModel(application)
     private val _wordLiveData = MutableLiveData<Word>()
-    private val listOfCorrectWords = mutableListOf<String>()
-    private val listOfInCorrectWords = mutableListOf<String>()
     private var _strategyChoice = GameStrategy.STANDARD
     private var strategy: GameSessionStrategy = StandardGameStrategy(application)
     private var hintNum = 0
@@ -23,10 +22,9 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private var hintBuilder = StringBuilder("")
     private val applicationCopy = application // avoid ViewModel override shenanigans
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
-    var previousDestination = 0
-    private var category = "standard"
+    private var _category = "standard"
     private var _difficulty = Difficulty.OTHER
-//    private var results: MutableList<Pair<String, Int>> = mutableListOf()
+    private var _suddenDeath = SuddenDeathMode.STANDARD
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
             val id = word.id
@@ -42,11 +40,15 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     val colorLiveData = MutableLiveData<String>()
     val showStats: Boolean
         get() = sharedPreferences.getBoolean("show_statistics", true)
-    val listOfWords = mutableListOf<Word>()
     val strategyChoice: GameStrategy
         get() = _strategyChoice
     val difficulty: Difficulty
         get() = _difficulty
+    val category: String
+        get() = _category
+    val suddenDeath: SuddenDeathMode
+        get() = _suddenDeath
+    var previousDestination = 0
 
     /**
      * Set strategy for ViewModel functions
@@ -64,13 +66,18 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     /**
      * Load the first word of a new session
      */
-    fun startSession(category: String, difficulty: Difficulty) {
-        listOfWords.clear()
-        this.category = category
+    fun startSession(category: String, difficulty: Difficulty, suddenDeath: SuddenDeathMode) {
+        this._category = category
         this._difficulty = difficulty
+        this._suddenDeath = suddenDeath
         viewModelScope.launch {
             try {
+                // Get new words for session
                 strategy.getSessionWords(_wordLiveData, category, difficulty)
+                // Create new session if we're not continuing a sudden death session
+                if(suddenDeath != SuddenDeathMode.SD_CONTINUE) {
+                    sessionChangeModel.getNewSession(category, difficulty)
+                }
             }
             catch(e: Exception) {
                 Toast.makeText(applicationCopy, "Failed to get words", Toast.LENGTH_SHORT).show()
@@ -113,12 +120,13 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     /**
      * Update results list
      * @param word word that was just played
-     * @param result whether the spelling was correct
+     * @param attempt the attempted spelling
      */
-    fun updateResults(word: String, result: Boolean) {
+    fun updateResults(word: String, attempt: String) {
         viewModelScope.launch {
             try {
-                strategy.updateResults(word, result)
+                strategy.updateResults(word, attempt == word)
+                sessionChangeModel.addToCurrentSession(word, attempt)
             }
             catch(e: Exception) {
                 System.err.println(e.printStackTrace())
@@ -133,7 +141,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     fun postSessionUpdate() {
         viewModelScope.launch {
             try {
-                strategy.postSessionUpdate(category, _difficulty)
+                strategy.postSessionUpdate(_category, _difficulty)
             }
             catch(e: Exception) {
                 System.err.println(e.printStackTrace())
@@ -142,28 +150,13 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun addCorrectWord (word: String) {
-        listOfCorrectWords.add(word)
-    }
-
-    fun addInCorrectWord (word: String) {
-        listOfInCorrectWords.add(word)
-    }
-
-    fun getCorrectWordList (): MutableList<String> {
-        return listOfCorrectWords
-    }
-
-    fun getInCorrectWordList (): MutableList<String> {
-        return listOfInCorrectWords
-    }
-
-    fun emptyCorrectWordList () {
-        listOfCorrectWords.clear()
-    }
-
-    fun emptyInCorrectWordList ()  {
-        listOfInCorrectWords.clear()
+    /**
+     * Get session words and the attempted spelling
+     * TODO Nathan should use this in PostGameStatisticsFragment
+     * @return list of word-attempt pairs
+     */
+    fun getSessionResults(): List<Pair<String, String>> {
+        return sessionChangeModel.listOfWords
     }
 
     /**

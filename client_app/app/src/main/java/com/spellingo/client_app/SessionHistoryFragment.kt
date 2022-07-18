@@ -40,17 +40,17 @@ class SessionHistoryFragment: Fragment() {
 
         viewModel.listOfSessions.observe(viewLifecycleOwner, Observer(fun(sessions) {
             println("DEBUG successfully grab sessions of size ${sessions.size}") // DEBUG
-            println("DEBUG ${sessions[0].keys}") // DEBUG
+            //TODO Nathan display list of cards
         }))
-
-        val sessionExtract = HashMap<String, Boolean>()
-
-        sessionExtract.put("1234", false)
-
-        for (i in sessionExtract) {
-            val view = inflater.inflate(R.layout.session_entry_item, null)
-            sessionList.addView(view)
-        }
+//
+//        val sessionExtract = HashMap<String, Boolean>()
+//
+//        sessionExtract.put("1234", false)
+//
+//        for (i in sessionExtract) {
+//            val view = inflater.inflate(R.layout.session_entry_item, null)
+//            sessionList.addView(view)
+//        }
 
 //        val view = inflater.inflate(R.layout.session_entry_item, null)
 //        val view1 = inflater.inflate(R.layout.session_entry_item, null)
