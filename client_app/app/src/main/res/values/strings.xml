@@ -40,4 +40,11 @@
         <item>us</item>
     </string-array>
 
+    <string-array name="statSpinnerString">
+        <item>Categories</item>
+        <item>Correct/Incorrect</item>
+        <item>Most Played Word</item>
+    </string-array>
+
+
 </resources>
