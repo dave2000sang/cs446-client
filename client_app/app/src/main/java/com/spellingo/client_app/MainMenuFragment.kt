@@ -26,8 +26,6 @@ class MainMenuFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
 
-
-
         val playDifficultyButton = root.findViewById<Button>(R.id.playDifficultyButton)
         playDifficultyButton.setOnClickListener {
             val bundle = Bundle()

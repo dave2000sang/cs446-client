@@ -5,6 +5,9 @@ import kotlinx.coroutines.withContext
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+/**
+ * Common HTTP request logic
+ */
 class HttpRequest() {
     private val ipAddr = "172.105.103.199"
     private val baseUrl = "https://$ipAddr:96"
@@ -19,6 +22,10 @@ class HttpRequest() {
 
     /**
      * Refresh local word list
+     * @param limit total number of words to request
+     * @param locale word locale
+     * @param category word category
+     * @param difficulty word difficulty
      * @return JSON list of new words
      */
     suspend fun getWords(limit: Int, locale: Locale, category: String, difficulty: Difficulty): String {

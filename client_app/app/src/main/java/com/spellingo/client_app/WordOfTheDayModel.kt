@@ -4,12 +4,19 @@ import android.app.Application
 import androidx.preference.PreferenceManager
 import org.json.JSONObject
 
+/**
+ * Model for fetching Word of the Day
+ */
 class WordOfTheDayModel(application: Application) {
     private val wotdCategory = "Word of the Day"
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private val histDb = HistoryDatabase.getInstance(application)
 
-    suspend fun getWord(category: String): Word {
+    /**
+     * Get Word of the Day from server
+     * @return word of the day
+     */
+    suspend fun getWord(): Word {
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val response = HttpRequest().getWotd()
@@ -32,6 +39,11 @@ class WordOfTheDayModel(application: Application) {
         return Word(id, locale, wotdCategory, definition, usage, origin, part, audio, Difficulty.OTHER, phonetic)
     }
 
+    /**
+     * Save result in history database
+     * @param word new word to enter
+     * @param result true if and only if the word was spelled correctly
+     */
     suspend fun saveResult(word: String, result: Boolean) {
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)

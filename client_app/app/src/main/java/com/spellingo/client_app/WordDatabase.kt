@@ -6,30 +6,23 @@ import androidx.room.*
 /**
  * Room database for Words
  */
-@Database(
-    entities = [Word::class],
-    version = 1,
-    //TODO either figure out migrations or remove the below commented code
-//    autoMigrations = [
-//        AutoMigration(from = 1, to = 2)
-//    ]
-)
+@Database(entities = [Word::class], version = 1)
 abstract class WordDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
 
     /*
-    Singleton design pattern for WordDatabase instance
+    Singleton design pattern, as suggested by Android documentation and official sample code
     https://stackoverflow.com/questions/40398072/singleton-with-parameter-in-kotlin
     https://github.com/android/architecture-components-samples.git
+    https://developer.android.com/training/data-storage/room#database
      */
     companion object {
         @Volatile private var INSTANCE: WordDatabase? = null
 
-        /*
-        Double check locking
-        1. Do a fast NULL check. If INSTANCE not NULL, return
-        2. If NULL, acquire lock. INSTANCE may not be NULL due to race cond
-        3. If not NULL, return. Otherwise create DB and assign INSTANCE to it
+        /**
+         * Get single instance of [WordDatabase]
+         * @param context application context needed for Room database
+         * @return database
          */
         fun getInstance(context: Context): WordDatabase =
             INSTANCE ?: synchronized(this) {
