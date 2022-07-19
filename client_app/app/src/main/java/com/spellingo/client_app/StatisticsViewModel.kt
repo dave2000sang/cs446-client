@@ -24,7 +24,9 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
         return listOf(
             Pair("Correct", pair.first),
             Pair("Incorrect", pair.second - pair.first)
-        )
+        ).filterNot {
+            it.second == 0
+        }
     }
 
     /**
@@ -51,7 +53,11 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     fun requestCategoryBreakdown() {
         viewModelScope.launch {
             try {
-                val categories = histModel.getOverallCategoryStats().filterNot { it.second == 0 }
+                val categories = histModel.getOverallCategoryStats().map { pair ->
+                    Pair(pair.first.replaceFirstChar { it.uppercase() }, pair.second)
+                }.filterNot {
+                    it.second == 0
+                }
                 _ratioLiveData.postValue(categories)
             }
             catch (e: Exception) {

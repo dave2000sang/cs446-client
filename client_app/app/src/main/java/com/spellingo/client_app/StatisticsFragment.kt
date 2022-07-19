@@ -5,22 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.core.view.isVisible
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 
-class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
+class StatisticsFragment: Fragment() {
 
     private val viewModel: StatisticsViewModel by activityViewModels()
     private lateinit var pieChart: PieChart
@@ -71,6 +70,8 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
                     "Categories" -> viewModel.requestCategoryBreakdown()
                     "Difficulties" -> viewModel.requestDifficultyBreakdown()
                 }
+                //TODO Nathan use requestSpecificCategory and requestSpecificDifficulty in nested choice
+                //TODO Nathan spinner double show when pie char is visible
 //                pieChart.isVisible = true
 //                    barChart.isVisible = false
 //                if (selectedItem == "Categories") {
@@ -152,7 +153,7 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
         var labelSize = 12
         var centerLabelSize = 24
         pieChart.isDrawHoleEnabled = true
-        pieChart.setUsePercentValues(true)
+        pieChart.setUsePercentValues(false)
         pieChart.setEntryLabelTextSize(labelSize.toFloat())
         pieChart.setEntryLabelColor(Color.BLACK)
         pieChart.setCenterText("Spelling Statistics")
@@ -170,17 +171,10 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun loadPieChartData (ratio: List<Pair<String, Int>>) {
-        //TODO change to our own color palette
         val dataEntry = ratio.map { PieEntry(it.second.toFloat(), it.first) }
-//        if(total > 0 && correct >= 0 && correct <= total) {
-//            val percentCorrect = correct.toFloat() / total
-//            dataEntry.add(PieEntry(percentCorrect, "Correct"))
-//            dataEntry.add(PieEntry(1 - percentCorrect, "Incorrect"))
-//        }
-//        else {
-//            //TODO write a message like "No word statistics available"
-//        }
+        //TODO Nathan write a message like "No word statistics available" for empty list
 
+        //TODO Nathan change to our own color palette
         var colors = arrayListOf<Int>()
 
         for (i in ColorTemplate.MATERIAL_COLORS) {
@@ -192,28 +186,21 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
         }
 
 
-        val dataSet = PieDataSet(dataEntry, "")
+        val dataSet = PieDataSet(dataEntry, "Stats")
         dataSet.setColors(colors)
 
         val data: PieData = PieData(dataSet)
         data.setDrawValues(true)
-        data.setValueFormatter(PercentFormatter(pieChart))
+        val formatter: ValueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return "" + value.toInt()
+            }
+        }
+        data.setValueFormatter(formatter)
         data.setValueTextSize(12f)
         data.setValueTextColor(Color.BLACK)
 
         pieChart.data = data
         pieChart.invalidate()
     }
-
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        TODO("Not yet implemented")
-        var text = p0?.getItemAtPosition(p2).toString()
-        Toast.makeText(p0?.context, text, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("Not yet implemented")
-    }
-
-
 }
