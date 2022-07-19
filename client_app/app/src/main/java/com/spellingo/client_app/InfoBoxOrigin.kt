@@ -9,7 +9,15 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.core.content.ContextCompat
 
+/**
+ * Decorator to add word origin to [InfoBox]
+ */
 class InfoBoxOrigin(box: InfoBox, private val context: Context) : InfoBoxDecorator(box) {
+    /**
+     * Add origin to [box]'s spannable string
+     * @param word [Word] containing all information
+     * @return spannable string
+     */
     override fun getSpannable(word: Word): SpannableStringBuilder {
         val spannable = super.getSpannable(word)
         val origin = word.origin.replaceFirstChar { it.uppercase() }

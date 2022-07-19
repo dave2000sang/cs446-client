@@ -24,7 +24,7 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
 
     private val viewModel: StatisticsViewModel by activityViewModels()
     private lateinit var pieChart: PieChart
-    private lateinit var barChart: BarChart
+//    private lateinit var barChart: BarChart
     private lateinit var barList: ArrayList<BarEntry>
     private lateinit var barDataSet: BarDataSet
     private lateinit var barData: BarData
@@ -47,8 +47,8 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
         setupPieChart()
 
         // Initialize and draw BarChart Here
-        barChart = root.findViewById(R.id.barChart)
-        setupBarChart()
+//        barChart = root.findViewById(R.id.barChart)
+//        setupBarChart()
 
         // Stat Spinner Content Setup
         val statSpinner = root.findViewById<Spinner>(R.id.statMenuSpinner)
@@ -58,92 +58,93 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
         spinnerText.bringToFront()
 
         // Spinner Options Section
-        statSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        statSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                parent?.getChildAt(0)
+//                parent?.getChildAt(0)
 
                 // Write your if statements here of what happens when you select a dropdown item.
                 // For examples of the name is "Categories write a if statement for it then do
                 // whatever you want
                 val selectedItem = parent?.getItemAtPosition(position).toString()
-                if (selectedItem == "Categories") {
-                    pieChart.isVisible = true
-                    barChart.isVisible = false
-                } else {
-                    pieChart.isVisible = false
-                    barChart.isVisible = true
+                when(selectedItem) {
+                    "All Words" -> viewModel.requestGlobalStats()
+                    "Categories" -> viewModel.requestCategoryBreakdown()
+                    "Difficulties" -> viewModel.requestDifficultyBreakdown()
                 }
+//                pieChart.isVisible = true
+//                    barChart.isVisible = false
+//                if (selectedItem == "Categories") {
+//                    pieChart.isVisible = true
+//                    barChart.isVisible = false
+//                } else {
+//                    pieChart.isVisible = false
+//                    barChart.isVisible = true
+//                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                val test = 0
-                TODO("Not yet implemented")
             }
         }
+//        pieChart.isVisible = false
 
-        barChart.isVisible = false // set barChart to be invisible on entry.
-        pieChart = root.findViewById(R.id.pieChart)
+//        barChart.isVisible = false // set barChart to be invisible on entry.
         viewModel.requestGlobalStats()
-        setupPieChart()
         viewModel.ratioLiveData.observe(viewLifecycleOwner, Observer(fun(ratio) {
-            correctWordCounter = ratio.first
-            totalWordCounter = ratio.second
-            incorrectWordCounter = totalWordCounter-correctWordCounter
-            loadPieChartData(correctWordCounter, totalWordCounter)
+            loadPieChartData(ratio)
 
             // Setting Counter Information
-            correctTextView.text = correctWordCounter.toString()
-            incorrectTextView.text = incorrectWordCounter.toString()
-            totalTextView.text = totalWordCounter.toString()
+//            correctTextView.text = correctWordCounter.toString()
+//            incorrectTextView.text = incorrectWordCounter.toString()
+//            totalTextView.text = totalWordCounter.toString()
         }))
         return root
     }
 
-    private fun setupBarChart () {
-        // Initialize Bar Chart Here
-        barList = arrayListOf<BarEntry>()
-
-        // Enter your bar chart entries here. The first element of the pair leave it as 1, 2, 3, ...
-        // this is the X-Value labels which will be replaced with Strings below. It doesn't allow
-        // you to set them as strings. The strings will be your categories later.
-        // For the second element of the pair this is your y-axis counter. So number of times you
-        // tried each category.
-        var barChartEntries = mutableListOf<Pair<Float, Float>>()
-        barChartEntries.add(Pair(1f, 5f))
-        barChartEntries.add(Pair(2f, 8f))
-
-        for (i in barChartEntries) {
-            barList.add(BarEntry(i.first, i.second))
-        }
-
-        // Setting Labels, Colours, and Data Linkages here.
-        barDataSet = BarDataSet(barList, "Words Summary")
-        barData = BarData(barDataSet)
-        barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
-        barDataSet.valueTextColor = Color.BLACK
-        barDataSet.valueTextSize = 15f
-        barChart.data = barData
-
-        // Changing X - Axis to String (I have 0 clue how this works it just does)
-        // Enter your category String Names below
-        var categoryListLabel = mutableListOf<String>("Category 1", "Category 2")
-
-        // Modifying X-Axis Labels
-        val xAxis = barChart.xAxis
-        xAxis.granularity = 1f
-        xAxis.setCenterAxisLabels(true)
-        xAxis.setDrawGridLines(false)
-        xAxis.labelRotationAngle = -45f
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.axisMinimum = barChart.xChartMin-.5f;
-        xAxis.axisMaximum = barChart.xChartMax+.5f;
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(categoryListLabel)
-
-        // Removing Legend and Description
-        barChart.legend.isEnabled = false
-        barChart.description.isEnabled = false
-
-    }
+//    private fun setupBarChart () {
+//        // Initialize Bar Chart Here
+//        barList = arrayListOf<BarEntry>()
+//
+//        // Enter your bar chart entries here. The first element of the pair leave it as 1, 2, 3, ...
+//        // this is the X-Value labels which will be replaced with Strings below. It doesn't allow
+//        // you to set them as strings. The strings will be your categories later.
+//        // For the second element of the pair this is your y-axis counter. So number of times you
+//        // tried each category.
+//        var barChartEntries = mutableListOf<Pair<Float, Float>>()
+//        barChartEntries.add(Pair(1f, 5f))
+//        barChartEntries.add(Pair(2f, 8f))
+//
+//        for (i in barChartEntries) {
+//            barList.add(BarEntry(i.first, i.second))
+//        }
+//
+//        // Setting Labels, Colours, and Data Linkages here.
+//        barDataSet = BarDataSet(barList, "Words Summary")
+//        barData = BarData(barDataSet)
+//        barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
+//        barDataSet.valueTextColor = Color.BLACK
+//        barDataSet.valueTextSize = 15f
+//        barChart.data = barData
+//
+//        // Changing X - Axis to String (I have 0 clue how this works it just does)
+//        // Enter your category String Names below
+//        var categoryListLabel = mutableListOf<String>("Category 1", "Category 2")
+//
+//        // Modifying X-Axis Labels
+//        val xAxis = barChart.xAxis
+//        xAxis.granularity = 1f
+//        xAxis.setCenterAxisLabels(true)
+//        xAxis.setDrawGridLines(false)
+//        xAxis.labelRotationAngle = -45f
+//        xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        xAxis.axisMinimum = barChart.xChartMin-.5f;
+//        xAxis.axisMaximum = barChart.xChartMax+.5f;
+//        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(categoryListLabel)
+//
+//        // Removing Legend and Description
+//        barChart.legend.isEnabled = false
+//        barChart.description.isEnabled = false
+//
+//    }
 
 
     private fun setupPieChart() {
@@ -168,17 +169,17 @@ class StatisticsFragment: Fragment(), AdapterView.OnItemSelectedListener {
 
     }
 
-    private fun loadPieChartData (correct: Int, total: Int) {
+    private fun loadPieChartData (ratio: List<Pair<String, Int>>) {
         //TODO change to our own color palette
-        val dataEntry = arrayListOf<PieEntry>()
-        if(total > 0 && correct >= 0 && correct <= total) {
-            val percentCorrect = correct.toFloat() / total
-            dataEntry.add(PieEntry(percentCorrect, "Correct"))
-            dataEntry.add(PieEntry(1 - percentCorrect, "Incorrect"))
-        }
-        else {
-            //TODO write a message like "No word statistics available"
-        }
+        val dataEntry = ratio.map { PieEntry(it.second.toFloat(), it.first) }
+//        if(total > 0 && correct >= 0 && correct <= total) {
+//            val percentCorrect = correct.toFloat() / total
+//            dataEntry.add(PieEntry(percentCorrect, "Correct"))
+//            dataEntry.add(PieEntry(1 - percentCorrect, "Incorrect"))
+//        }
+//        else {
+//            //TODO write a message like "No word statistics available"
+//        }
 
         var colors = arrayListOf<Int>()
 

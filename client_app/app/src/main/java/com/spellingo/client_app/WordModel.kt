@@ -5,7 +5,6 @@ import androidx.preference.PreferenceManager
 
 /**
  * Model for Word fetching
- * @param application ApplicationContext for database creation
  */
 class WordModel(application: Application) {
     private val wordDb = WordDatabase.getInstance(application)
@@ -16,6 +15,9 @@ class WordModel(application: Application) {
 
     /**
      * Fetch some words from the database to use in a session and return a word
+     * @param category word category
+     * @param difficulty word difficulty
+     * @return first word of new session
      */
     suspend fun getNewSessionWords(category: String, difficulty: Difficulty): Word {
         val totalSessionWords = sharedPreferences.getInt("number_words_per_sessions", 10)
@@ -29,7 +31,7 @@ class WordModel(application: Application) {
 
     /**
      * Selects a word from session's word list
-     * @return Word information
+     * @return next word of current session
      */
     fun getWord(): Word? {
         if(listOfWords.size == 0) {

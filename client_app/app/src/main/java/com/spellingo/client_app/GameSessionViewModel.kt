@@ -25,6 +25,10 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private var _category = "standard"
     private var _difficulty = Difficulty.OTHER
     private var _suddenDeath = SuddenDeathMode.STANDARD
+
+    /**
+     * Current [Word], filtered to hide the word's spelling in example and definition
+     */
     val wordLiveData: LiveData<Word>
         get() = _wordLiveData.map { word ->
             val id = word.id
@@ -32,27 +36,58 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
             val newDefinition = word.definition.replace(id, "_____")
             word.copy(usage = newUsage, definition = newDefinition)
         }
+
+    /**
+     * MediaPlayer for word's pronunciation
+     */
     val pronunciationLiveData = _wordLiveData.switchMap { word ->
         val url = word.audio
         pronunciationModel.getPlayer(url)
     }
+
+    /**
+     * Submit button state is stored in ViewModel to survive configuration changes
+     */
     val submitLiveData = MutableLiveData<String>()
+
+    /**
+     * Submit color state is stored in ViewModel to survive configuration changes
+     */
     val colorLiveData = MutableLiveData<String>()
-    val showStats: Boolean
-        get() = sharedPreferences.getBoolean("show_statistics", true)
+
+    /**
+     * [GameStrategy] for deciding what mode of play we use (e.g. word of the day)
+     */
     val strategyChoice: GameStrategy
         get() = _strategyChoice
+
+    /**
+     * Current session's word and game difficulty
+     */
     val difficulty: Difficulty
         get() = _difficulty
+
+    /**
+     * Current session's word category
+     */
     val category: String
         get() = _category
+
+    /**
+     * Current session's [SuddenDeathMode]
+     */
     val suddenDeath: SuddenDeathMode
         get() = _suddenDeath
+
+    /**
+     * Fragment id stored in ViewModel to remember the last fragment visited
+     */
     var previousDestination = 0
 
     /**
      * Set strategy for ViewModel functions
-     * @param GameStrategy to use
+     * Pushes to [strategyChoice]
+     * @param selected GameStrategy to use
      */
     fun updateStrategy(selected: GameStrategy) {
         if(selected == _strategyChoice) return
@@ -65,6 +100,10 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
 
     /**
      * Load the first word of a new session
+     * Pushes to [category], [difficulty], [suddenDeath], [wordLiveData]
+     * @param category word category
+     * @param difficulty word difficulty
+     * @param suddenDeath whether current session is playing sudden death
      */
     fun startSession(category: String, difficulty: Difficulty, suddenDeath: SuddenDeathMode) {
         this._category = category
@@ -89,6 +128,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
 
     /**
      * Get next word, refresh state, and get number of remaining words in session
+     * Pushes to [wordLiveData]
      * @return number of words left in session
      */
     fun nextWord(): Int {
@@ -125,7 +165,7 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     fun updateResults(word: String, attempt: String) {
         viewModelScope.launch {
             try {
-                strategy.updateResults(word, attempt == word)
+                strategy.updateResults(word, category, attempt == word)
                 sessionChangeModel.addToCurrentSession(word, attempt)
             }
             catch(e: Exception) {

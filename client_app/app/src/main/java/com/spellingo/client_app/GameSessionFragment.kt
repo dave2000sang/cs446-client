@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,6 +31,7 @@ class GameSessionFragment : Fragment() {
 
     private val viewModel: GameSessionViewModel by activityViewModels()
     private var snack: Snackbar? = null
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var navController: NavController
     private val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
         // Have we just navigated to game session fragment?
@@ -41,25 +44,27 @@ class GameSessionFragment : Fragment() {
             else {
                 viewModel.updateStrategy(GameStrategy.STANDARD)
             }
+            // Get selected category
             val category = if(arguments != null && arguments!!.getString("category") != null) {
                 arguments!!.getString("category")!!
             }
             else {
                 "standard"
             }
+            // Get selected difficulty
             val difficulty = if(arguments != null && arguments!!.getString("difficulty") != null) {
                 Difficulty.getByName(arguments!!.getString("difficulty")!!)
             }
             else {
                 Difficulty.OTHER
             }
+            // Get sudden death mode
             val suddenDeath = if(arguments != null && arguments!!.getString("suddenDeath") != null) {
                 SuddenDeathMode.getByName(arguments!!.getString("suddenDeath")!!)
             }
             else {
                 SuddenDeathMode.STANDARD
             }
-            println("DEBUG ===================== $suddenDeath")
             // Start the session by fetching words
             viewModel.startSession(category, difficulty, suddenDeath)
             // Reset submitButton
@@ -81,6 +86,9 @@ class GameSessionFragment : Fragment() {
         val hintButton = root.findViewById<ImageView>(R.id.button_hint)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
         val infoBox = root.findViewById<TextView>(R.id.info_box)
+
+        // Shared preferences
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         // Init snackbar
         snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
@@ -240,7 +248,7 @@ class GameSessionFragment : Fragment() {
         // start post session update logic
         viewModel.postSessionUpdate()
         // Navigate to next fragment
-        if(viewModel.showStats && viewModel.strategyChoice == GameStrategy.STANDARD) {
+        if(sharedPreferences.getBoolean("show_statistics", true) && viewModel.strategyChoice == GameStrategy.STANDARD) {
             findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
         }
         else {

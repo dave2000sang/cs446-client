@@ -26,7 +26,7 @@ import com.github.mikephil.charting.utils.ColorTemplate
 
 class SessionHistoryFragment: Fragment() {
 
-    private val viewModel: StatisticsViewModel by activityViewModels()
+    private val viewModel: SessionHistoryViewModel by activityViewModels()
 
     @SuppressLint("ResourceType")
     override fun onCreateView(

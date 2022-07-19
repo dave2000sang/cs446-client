@@ -52,7 +52,9 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
         return downloaded
     }
 
-    // See UpdateModel for signature
+    /**
+     * Purge most played words if existing words has been used too much
+     */
     override suspend fun purgeReusedWords() {
         val histDao = histDb.historyDao()
         val wordDao = wordDb.wordDao()
@@ -81,11 +83,15 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
         }
     }
 
-    // See UpdateModel for signature
+    /**
+     * Download words from server from all categories/locales/difficulties
+     */
     override suspend fun downloadWords() {
+        // For each locale, download words
         for(loc in Locale.values()) {
+            // For each category, download words
             for(cat in categories) {
-                println("DEBUG category $cat")
+                // Iterate over difficulty for standard category
                 if(cat == "standard") {
                     for(diff in Difficulty.values()) {
                         downloadCategory(loc, "standard", diff)

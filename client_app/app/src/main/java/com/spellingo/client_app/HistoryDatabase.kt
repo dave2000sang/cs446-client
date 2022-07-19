@@ -13,18 +13,18 @@ abstract class HistoryDatabase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
 
     /*
-    Singleton design pattern for WordDatabase instance
+    Singleton design pattern, as suggested by Android documentation and official sample code
     https://stackoverflow.com/questions/40398072/singleton-with-parameter-in-kotlin
     https://github.com/android/architecture-components-samples.git
+    https://developer.android.com/training/data-storage/room#database
      */
     companion object {
         @Volatile private var INSTANCE: HistoryDatabase? = null
 
-        /*
-        Double check locking
-        1. Do a fast NULL check. If INSTANCE not NULL, return
-        2. If NULL, acquire lock. INSTANCE may not be NULL due to race cond
-        3. If not NULL, return. Otherwise create DB and assign INSTANCE to it
+        /**
+         * Get single instance of [HistoryDatabase]
+         * @param context application context needed for Room database
+         * @return database
          */
         fun getInstance(context: Context): HistoryDatabase =
             INSTANCE ?: synchronized(this) {

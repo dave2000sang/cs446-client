@@ -7,6 +7,9 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
+/**
+ * Model for creating and starting word pronunciation's [MediaPlayer]
+ */
 class PronunciationModel(private val application: Application) {
     private val mediaPlayer = MediaPlayer()
     private val mediaData = MutableLiveData<MediaPlayer>()

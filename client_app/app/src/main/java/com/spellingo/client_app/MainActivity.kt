@@ -39,9 +39,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun scheduleNotification() {
+        // Create intent to send notification
         val notifyIntent = Intent(this, NotificationReceiver::class.java)
         notifyIntent.putExtra("CHANNEL_ID", CHANNEL_ID)
 
+        // Check if the alarm is already set to display notification daily
         if(PendingIntent.getBroadcast(this, REQUEST_CODE, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null) {
             println("DEBUG Alarm already set")
             return
@@ -54,6 +56,8 @@ class MainActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        // Set notification to run daily
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             System.currentTimeMillis(),
@@ -69,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
 
         try {
+            // Notification for Word of the Day
             createNotificationChannel()
             scheduleNotification()
         }
@@ -80,6 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        // Catch notification's intent
         setIntent(intent)
     }
 
@@ -87,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val extras = intent.extras
         if(extras != null) {
+            // If we came from notification, navigate to game session to play Word of the Day
             if(extras.getBoolean("NOTIFICATION")) {
                 val bundle = Bundle()
                 bundle.putBoolean("wotd", true)

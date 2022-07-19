@@ -16,6 +16,7 @@ interface SessionDao {
 
     /**
      * Get the next available id
+     * @return next available id
      */
     @Query("SELECT IFNULL(" +
             "(SELECT id + 1 FROM session ORDER BY id DESC LIMIT 1)," +
@@ -24,40 +25,17 @@ interface SessionDao {
     suspend fun getNextId(): Int
 
     /**
-     * Get the 'n' most recent sessions stored locally
-     */
-    @Query("SELECT * FROM session ORDER BY id DESC LIMIT :n")
-    suspend fun getSessions(n: Int): List<Session>
-
-    /**
      * Get session by id
+     * @param id session id
+     * @return specified session
      */
     @Query("SELECT * FROM session WHERE id=:id")
     suspend fun getSession(id: Int): Session
 
     /**
      * Get session dates and id
+     * @return list of all session identifying data as [SessionDate]'s
      */
     @Query("SELECT id, date, category, difficulty FROM session")
     suspend fun getAllDates(): List<SessionDate>
-
-    /**
-     * Remove session from database using id
-     * @param id session(s) to remove
-     */
-    @Query("DELETE FROM session WHERE id = :id")
-    suspend fun deleteById(id: String)
-
-    /**
-     * Remove sessions from database
-     * @param sessions session(s) to remove
-     */
-    @Delete
-    suspend fun delete(vararg sessions: Session)
-
-    /**
-     * Clear entire database
-     */
-    @Query("DELETE FROM session")
-    suspend fun clear()
 }

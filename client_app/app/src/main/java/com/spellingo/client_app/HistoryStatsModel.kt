@@ -2,6 +2,9 @@ package com.spellingo.client_app
 
 import android.app.Application
 
+/**
+ * Model to get statistics from [HistoryDatabase]
+ */
 class HistoryStatsModel(application: Application) {
     private val histDb = HistoryDatabase.getInstance(application)
 
@@ -29,18 +32,19 @@ class HistoryStatsModel(application: Application) {
 
     /**
      * Get total attempts by difficulty for standard play
-     * @return map of difficulties and their attempts
+     * @return list of difficulties and their attempts
      */
-    suspend fun getOverallDifficultyStats(): Map<Difficulty, Int> {
+    suspend fun getOverallDifficultyStats(): List<Pair<Difficulty, Int>> {
         val dao = histDb.historyDao()
         val difficulties = listOf(Difficulty.EASY, Difficulty.MEDIUM, Difficulty.HARD)
-        return difficulties.associateWith { difficulty ->
-            dao.getNumTotal(difficulty)
+        return difficulties.map { difficulty ->
+            Pair(difficulty, dao.getNumTotal(difficulty))
         }
     }
 
     /**
-     * Get stats for category
+     * Get stats for a category
+     * @param category the category to get stats from
      * @return pair of (correct, total) integers representing attempts
      */
     suspend fun getSpecificCategoryStats(category: String): Pair<Int, Int> {
@@ -51,7 +55,8 @@ class HistoryStatsModel(application: Application) {
     }
 
     /**
-     * Get stats for difficulty
+     * Get stats for a difficulty
+     * @param difficulty the difficulty to get stats from
      * @return pair of (correct, total) integers representing attempts
      */
     suspend fun getSpecificDifficultyStats(difficulty: Difficulty): Pair<Int, Int> {

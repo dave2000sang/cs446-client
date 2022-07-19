@@ -133,11 +133,14 @@ abstract class UpdateModel(private val application: Application) {
     protected abstract suspend fun purgeReusedWords()
 
     /**
-     * Fetch words from the server
+     * Template for fetching words from the server
      */
     suspend fun generateWords() {
+        // Only update words if we're on Wi-Fi
         if(canDownload()) {
+            // First evict some words from local database
             purgeReusedWords()
+            // Download new words
             downloadWords()
         }
     }

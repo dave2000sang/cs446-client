@@ -10,11 +10,17 @@ import kotlinx.coroutines.launch
 class GameSelectionViewModel(application: Application) : AndroidViewModel(application) {
     private val categoryModel = WordCategoryModel(application)
     private val _categoryLiveData = MutableLiveData<List<String>>()
+
+    /**
+     * List of categories to select from
+     */
     val categoryLiveData: LiveData<List<String>>
         get() = _categoryLiveData
 
     /**
      * Get categories for selection screen
+     * Pushes to [categoryLiveData]
+     * @param isStandard true if and only if we want standard category's difficulties
      */
     fun getCategories(isStandard: Boolean) {
         viewModelScope.launch {
