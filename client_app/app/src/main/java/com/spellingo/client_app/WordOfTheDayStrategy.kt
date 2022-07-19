@@ -16,7 +16,7 @@ class WordOfTheDayStrategy(application: Application) : GameSessionStrategy {
      * @param difficulty requested word difficulty
      */
     override suspend fun getSessionWords(
-        wordLiveData: MutableLiveData<Word>,
+        wordLiveData: MutableLiveData<Word?>,
         category: String,
         difficulty: Difficulty
     ) {
@@ -30,7 +30,7 @@ class WordOfTheDayStrategy(application: Application) : GameSessionStrategy {
      * @param wordLiveData word return placeholder
      * @return remaining words in session
      */
-    override fun nextWord(wordLiveData: MutableLiveData<Word>): Int {
+    override fun nextWord(wordLiveData: MutableLiveData<Word?>): Int {
         // Only one word is played, so there is no next word
         return 0
     }

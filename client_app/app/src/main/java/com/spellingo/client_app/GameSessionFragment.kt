@@ -37,6 +37,9 @@ class GameSessionFragment : Fragment() {
         // Have we just navigated to game session fragment?
         if(viewModel.previousDestination != destination.id
             && destination.id == R.id.fragment_game_session) {
+            // Reset livedata
+            viewModel.resetLiveData()
+
             // Are we doing word of the day?
             if(arguments != null && arguments!!.getBoolean("wotd")) {
                 viewModel.updateStrategy(GameStrategy.WOTD)
@@ -110,6 +113,7 @@ class GameSessionFragment : Fragment() {
 
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
+            if(word == null) return
             getCorrectWord = word.id
             // Decorators for infobox, start with part of speech and definition only
             val infoBoxBase = GameSessionInfoBox(requireContext())
@@ -133,10 +137,12 @@ class GameSessionFragment : Fragment() {
         }))
 
         // Submit button state
-        viewModel.submitLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.submitLiveData.observe(viewLifecycleOwner, Observer(fun(it) {
+            if(it == null) return
             submitButton.text = it
-        })
-        viewModel.colorLiveData.observe(viewLifecycleOwner, Observer {
+        }))
+        viewModel.colorLiveData.observe(viewLifecycleOwner, Observer(fun(it) {
+            if(it == null) return
             when(it) {
                 "green" -> {
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
@@ -163,7 +169,7 @@ class GameSessionFragment : Fragment() {
                     snack?.dismiss()
                 }
             }
-        })
+        }))
 
         // Listeners
 

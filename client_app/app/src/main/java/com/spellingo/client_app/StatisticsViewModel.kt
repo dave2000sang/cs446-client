@@ -10,14 +10,14 @@ import kotlinx.coroutines.launch
 /**
  * Persistent state and data bindings for [StatisticsFragment]
  */
-class StatisticsViewModel(application: Application) : AndroidViewModel(application) {
+class StatisticsViewModel(application: Application) : DynamicViewModel(application) {
     private val histModel = HistoryStatsModel(application)
-    private val _ratioLiveData = MutableLiveData<List<Pair<String, Int>>>()
+    private val _ratioLiveData = MutableLiveData<List<Pair<String, Int>>?>()
 
     /**
      * Pair of correct spellings and total attempts for all words in history
      */
-    val ratioLiveData: LiveData<List<Pair<String, Int>>>
+    val ratioLiveData: LiveData<List<Pair<String, Int>>?>
         get() = _ratioLiveData
 
     private fun correctPairToRatio(pair: Pair<Int, Int>): List<Pair<String, Int>> {
@@ -122,5 +122,13 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
                 System.err.println(e.toString())
             }
         }
+    }
+
+    /**
+     * Reset all LiveData
+     * Pushes to [ratioLiveData]
+     */
+    override fun resetLiveData() {
+        _ratioLiveData.value = null
     }
 }

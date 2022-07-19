@@ -12,14 +12,14 @@ interface GameSessionStrategy {
      * @param category requested word category
      * @param difficulty requested word difficulty
      */
-    suspend fun getSessionWords(wordLiveData: MutableLiveData<Word>, category: String, difficulty: Difficulty)
+    suspend fun getSessionWords(wordLiveData: MutableLiveData<Word?>, category: String, difficulty: Difficulty)
 
     /**
      * Get next session word
      * @param wordLiveData word return placeholder
      * @return remaining words in session
      */
-    fun nextWord(wordLiveData: MutableLiveData<Word>): Int
+    fun nextWord(wordLiveData: MutableLiveData<Word?>): Int
 
     /**
      * Track the outcome of the user's spelling

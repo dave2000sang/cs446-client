@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
@@ -27,6 +29,15 @@ class StatisticsFragment: Fragment() {
     private lateinit var barList: ArrayList<BarEntry>
     private lateinit var barDataSet: BarDataSet
     private lateinit var barData: BarData
+    private lateinit var navController: NavController
+    private val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        if(viewModel.previousDestination != destination.id
+            && destination.id == R.id.statisticsFragment) {
+            // Reset all old livedata
+            viewModel.resetLiveData()
+        }
+        viewModel.previousDestination = destination.id
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +51,10 @@ class StatisticsFragment: Fragment() {
         var incorrectTextView = root.findViewById<TextView>(R.id.incorrectCounter)
         var totalTextView = root.findViewById<TextView>(R.id.totalCounter)
         var spinnerText = root.findViewById<TextView>(R.id.spinnerText)
+
+        // NavController
+        navController = findNavController()
+        navController.addOnDestinationChangedListener(navListener)
 
         // Initialize and draw PieChart Here
         pieChart = root.findViewById(R.id.pieChart)
@@ -91,6 +106,7 @@ class StatisticsFragment: Fragment() {
 //        barChart.isVisible = false // set barChart to be invisible on entry.
         viewModel.requestGlobalStats()
         viewModel.ratioLiveData.observe(viewLifecycleOwner, Observer(fun(ratio) {
+            if(ratio == null) return
             loadPieChartData(ratio)
 
             // Setting Counter Information

@@ -15,7 +15,6 @@ import com.spellingo.client_app.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private val CHANNEL_ID = "wordday"

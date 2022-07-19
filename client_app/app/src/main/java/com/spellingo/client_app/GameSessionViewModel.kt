@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.app.Application
+import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
@@ -10,10 +11,10 @@ import java.lang.Integer.min
 /**
  * Application-aware ViewModel for the game session screen
  */
-class GameSessionViewModel(application: Application) : AndroidViewModel(application) {
+class GameSessionViewModel(application: Application) : DynamicViewModel(application) {
     private val sessionChangeModel = SessionChangeModel(application)
     private val pronunciationModel = PronunciationModel(application)
-    private val _wordLiveData = MutableLiveData<Word>()
+    private val _wordLiveData = MutableLiveData<Word?>()
     private var _strategyChoice = GameStrategy.STANDARD
     private var strategy: GameSessionStrategy = StandardGameStrategy(application)
     private var hintNum = 0
@@ -21,7 +22,6 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     private var hintCeil = 2
     private var hintBuilder = StringBuilder("")
     private val applicationCopy = application // avoid ViewModel override shenanigans
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private var _category = "standard"
     private var _difficulty = Difficulty.OTHER
     private var _suddenDeath = SuddenDeathMode.STANDARD
@@ -29,31 +29,41 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
     /**
      * Current [Word], filtered to hide the word's spelling in example and definition
      */
-    val wordLiveData: LiveData<Word>
+    val wordLiveData: LiveData<Word?>
         get() = _wordLiveData.map { word ->
-            val id = word.id
-            val newUsage = word.usage.replace("[$id]", "_____")
-            val newDefinition = word.definition.replace(id, "_____")
-            word.copy(usage = newUsage, definition = newDefinition)
+            if(word == null) {
+                null
+            }
+            else {
+                val id = word.id
+                val newUsage = word.usage.replace("[$id]", "_____")
+                val newDefinition = word.definition.replace(id, "_____")
+                word.copy(usage = newUsage, definition = newDefinition)
+            }
         }
 
     /**
      * MediaPlayer for word's pronunciation
      */
-    val pronunciationLiveData = _wordLiveData.switchMap { word ->
-        val url = word.audio
-        pronunciationModel.getPlayer(url)
+    val pronunciationLiveData: LiveData<MediaPlayer?> = _wordLiveData.switchMap { word ->
+        if(word == null) {
+            MutableLiveData(null)
+        }
+        else {
+            val url = word.audio
+            pronunciationModel.getPlayer(url)
+        }
     }
 
     /**
      * Submit button state is stored in ViewModel to survive configuration changes
      */
-    val submitLiveData = MutableLiveData<String>()
+    val submitLiveData = MutableLiveData<String?>()
 
     /**
      * Submit color state is stored in ViewModel to survive configuration changes
      */
-    val colorLiveData = MutableLiveData<String>()
+    val colorLiveData = MutableLiveData<String?>()
 
     /**
      * [GameStrategy] for deciding what mode of play we use (e.g. word of the day)
@@ -78,11 +88,6 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      */
     val suddenDeath: SuddenDeathMode
         get() = _suddenDeath
-
-    /**
-     * Fragment id stored in ViewModel to remember the last fragment visited
-     */
-    var previousDestination = 0
 
     /**
      * Set strategy for ViewModel functions
@@ -197,6 +202,15 @@ class GameSessionViewModel(application: Application) : AndroidViewModel(applicat
      */
     fun getSessionResults(): List<Pair<String, String>> {
         return sessionChangeModel.listOfWords
+    }
+
+    /**
+     * Reset LiveData
+     */
+    override fun resetLiveData() {
+        _wordLiveData.value = null
+        submitLiveData.value = null
+        colorLiveData.value = null
     }
 
     /**

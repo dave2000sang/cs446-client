@@ -19,7 +19,7 @@ class PronunciationModel(private val application: Application) {
      * @param url URL of audio file
      * @return LiveData of media player when it's prepared
      */
-    fun getPlayer(url: String): LiveData<MediaPlayer> {
+    fun getPlayer(url: String): LiveData<MediaPlayer?> {
         try {
             mediaPlayer.apply {
                 reset()

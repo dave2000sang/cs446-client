@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
@@ -25,10 +26,17 @@ import com.github.mikephil.charting.utils.ColorTemplate
 
 
 class SessionHistoryFragment: Fragment() {
-
     private val viewModel: SessionHistoryViewModel by activityViewModels()
+    private lateinit var navController: NavController
+    private val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        if(viewModel.previousDestination != destination.id
+            && destination.id == R.id.sessionHistoryFragment) {
+            // Reset all old livedata
+            viewModel.resetLiveData()
+        }
+        viewModel.previousDestination = destination.id
+    }
 
-    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,13 +44,36 @@ class SessionHistoryFragment: Fragment() {
         val root = inflater.inflate(R.layout.fragment_session_history, container, false)
         val sessionList = root.findViewById<LinearLayout>(R.id.scrollLinearLayout)
 
+        // NavController
+        navController = findNavController()
+        navController.addOnDestinationChangedListener(navListener)
+
         viewModel.loadSessionData()
 
         viewModel.listOfSessions.observe(viewLifecycleOwner, Observer(fun(sessions) {
-            println("DEBUG successfully grab sessions of size ${sessions.size}") // DEBUG
+            if(sessions == null) return
+            // DEBUG START
+            println("DEBUG ===================== session list") // DEBUG
+            for(sess in sessions) { println(sess) }
+            for(sess in sessions.takeLast(1)) {
+                //TODO Nathan use below line to get info of a specific session
+                viewModel.getSession(sess)
+            }
+            // DEBUG END
             //TODO Nathan display list of cards
         }))
-//
+
+        viewModel.guessLiveData.observe(viewLifecycleOwner, Observer(fun(guesses) {
+            if(guesses == null) return
+            // DEBUG START
+            println("DEBUG ===================== session guesses") // DEBUG
+            for(guess in guesses) { println(guess) }
+            // DEBUG END
+            //TODO Nathan display session guess info
+            //TODO note that the livedata still exists after returning to session stats fragment,
+            //     need to hide
+        }))
+
 //        val sessionExtract = HashMap<String, Boolean>()
 //
 //        sessionExtract.put("1234", false)

@@ -18,7 +18,7 @@ class StandardGameStrategy(private val application: Application) : GameSessionSt
      * @param category requested word category
      * @param difficulty requested word difficulty
      */
-    override suspend fun getSessionWords(wordLiveData: MutableLiveData<Word>, category: String, difficulty: Difficulty) {
+    override suspend fun getSessionWords(wordLiveData: MutableLiveData<Word?>, category: String, difficulty: Difficulty) {
         val curWord = wordModel.getNewSessionWords(category, difficulty)
         wordLiveData.postValue(curWord)
     }
@@ -28,7 +28,7 @@ class StandardGameStrategy(private val application: Application) : GameSessionSt
      * @param wordLiveData word return placeholder
      * @return remaining words in session
      */
-    override fun nextWord(wordLiveData: MutableLiveData<Word>): Int {
+    override fun nextWord(wordLiveData: MutableLiveData<Word?>): Int {
         val returnNum = wordModel.numSessionWords()
         val curWord = wordModel.getWord() ?: return 0
         wordLiveData.value = curWord
