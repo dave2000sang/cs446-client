@@ -23,7 +23,7 @@
     <color name="infobox_highlight2">@color/monokai_black</color>
     <color name="info_box">@color/monokai_gray</color>
     <color name="input_box">@color/monokai_gray</color>
-    <color name="light_grey">#E5E4E2</color>
+    <color name="light_grey">#ededed</color>
     <color name="continue_button_color">@color/monokai_green</color>
     <color name="submit_button_color">@color/monokai_yellow</color>
 </resources>
