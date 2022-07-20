@@ -21,8 +21,6 @@ import com.github.mikephil.charting.utils.ColorTemplate
 
 class StatisticsSelectorFragment: Fragment() {
 
-    private val viewModel: StatisticsViewModel by activityViewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
