@@ -13,9 +13,6 @@
     <string name="submit">Check</string>
     <string name="cont">Continue</string>
 
-    <!-- Game Selection Fragment -->
-    <string name="done_selection">Play</string>
-
     <!-- Main Menu Fragment -->
     <string name="playDifficulty">Play Standard</string>
     <string name="playCategory">Play Category</string>

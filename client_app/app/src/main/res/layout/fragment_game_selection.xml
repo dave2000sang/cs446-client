@@ -16,12 +16,4 @@
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/doneSelection"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:textSize="20sp"
-        android:text="@string/done_selection"/>
-
 </LinearLayout>

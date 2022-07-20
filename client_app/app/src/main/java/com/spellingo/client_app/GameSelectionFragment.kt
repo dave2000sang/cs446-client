@@ -32,7 +32,6 @@ class GameSelectionFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_game_selection, container, false)
         val choicesRecyclerView = root.findViewById<RecyclerView>(R.id.choices)
-        val doneSelectionButton = root.findViewById<MaterialButton>(R.id.doneSelection)
 
         // NavController
         navController = findNavController()
@@ -42,29 +41,11 @@ class GameSelectionFragment : Fragment() {
         viewModel.getCategories(isStandard)
         viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(choicesParam) {
             if(choicesParam == null) return
-            val selected = arrayOf("")
             val choices = choicesParam.map { choice ->
                 choice.replaceFirstChar { it.uppercase() }
             }
-            choicesRecyclerView.adapter = GameSelectionItemAdapter(this, choices, selected)
-            doneSelectionButton.setOnClickListener {
-                if (selected[0].isNotEmpty()) {
-                    val bundle = Bundle()
-                    if (isStandard) {
-                        bundle.putString("category", "standard")
-                        bundle.putString("difficulty", selected[0].uppercase())
-                    } else {
-                        bundle.putString("category", selected[0].lowercase())
-                        bundle.putString("difficulty", "OTHER")
-                    }
-                    //TODO Nathan integrate sudden death in UI
-//                    bundle.putString("suddenDeath", "SUDDEN_DEATH")
-                    findNavController().navigate(R.id.action_fragmentGameSelection_to_fragmentGameSession, bundle)
-                }
-            }
+            choicesRecyclerView.adapter = GameSelectionItemAdapter(this, choices, isStandard)
         }))
-
-        // TODO (Nathan) Rework this. Just go directly to game session on card click (no play button)
 
         return root
     }
