@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -53,26 +54,8 @@ class SessionHistoryFragment: Fragment() {
 
         viewModel.listOfSessions.observe(viewLifecycleOwner, Observer(fun(sessions) {
             if(sessions == null) return
-            // DEBUG START
-            println("DEBUG ===================== session list") // DEBUG
-            for(sess in sessions) { println(sess) }
-            for(sess in sessions.takeLast(1)) {
-                //TODO Nathan use below line to get info of a specific session
-                viewModel.getSession(sess)
-            }
-            // DEBUG END
-            //TODO Nathan display list of cards
             val recyclerView = root.findViewById<RecyclerView>(R.id.session_history_list)
             recyclerView.adapter = SessionHistoryItemAdapter(this, sessions)
-        }))
-
-        viewModel.guessLiveData.observe(viewLifecycleOwner, Observer(fun(guesses) {
-            if(guesses == null) return
-            // DEBUG START
-            println("DEBUG ===================== session guesses") // DEBUG
-            for(guess in guesses) { println(guess) }
-            // DEBUG END
-            //TODO Nathan display session guess info
         }))
 
         // Return to main menu
@@ -82,5 +65,10 @@ class SessionHistoryFragment: Fragment() {
         }
 
         return root
+    }
+
+    fun getSession(session: SessionDate): LiveData<List<Pair<String, String>>?> {
+        viewModel.getSession(session)
+        return viewModel.guessLiveData
     }
 }
