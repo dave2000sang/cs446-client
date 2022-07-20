@@ -22,19 +22,7 @@ class PostSessionFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_post_session, container, false)
 
         // List of session words with correct spelling and user spelling
-        // TODO get list of words from GameSessionViewModel
-        val dataset = mutableListOf<Pair<String, String>>()
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Oops"))
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Test"))
-        dataset.add(Pair("Test", "Test"))
-
+        val dataset = viewModel.getSessionResults()
         val recyclerView = root.findViewById<RecyclerView>(R.id.post_session_word_list)
         recyclerView.adapter = PostSessionItemAdapter(this, dataset)
 

@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.button.MaterialButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/game_selection_button"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp"
-    android:clickable="true"
-    app:cardCornerRadius="8dp">
-
-        <TextView
-            android:id="@+id/game_selection_textview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="20dp"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:background="@color/white"/>
-
-</com.google.android.material.card.MaterialCardView>
+    android:textSize="20sp"
+    app:cornerRadius="8dp"
+    android:backgroundTint="@color/monokai_yellow"
+    android:layout_margin="5dp"
+    android:padding="20dp"
+    android:gravity="start|center_vertical"/>

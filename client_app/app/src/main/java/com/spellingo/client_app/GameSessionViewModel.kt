@@ -197,7 +197,6 @@ class GameSessionViewModel(application: Application) : DynamicViewModel(applicat
 
     /**
      * Get session words and the attempted spelling
-     * TODO Nathan should use this in PostGameStatisticsFragment
      * @return list of word-attempt pairs
      */
     fun getSessionResults(): List<Pair<String, String>> {
