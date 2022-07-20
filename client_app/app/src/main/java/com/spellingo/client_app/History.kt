@@ -12,6 +12,7 @@ data class History(
     val id: String,
     val locale: Locale,
     val category: String,
+    @ColumnInfo(name = "difficulty") val difficulty: Difficulty,
     @ColumnInfo(name = "correct") val score: Int,
     @ColumnInfo(name = "total") val total: Int
 )

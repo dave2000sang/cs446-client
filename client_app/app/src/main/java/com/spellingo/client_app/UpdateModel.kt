@@ -61,7 +61,7 @@ abstract class UpdateModel(private val application: Application) {
                     throw Exception("Empty word field")
                 }
                 // Create new Word and History entries
-                wordList.add(Word(id, locale, category, definition, usage, origin, part, audio, difficulty, phonetic))
+                wordList.add(Word(id.lowercase(), locale, category, definition, usage, origin, part, audio, difficulty, phonetic))
             }
         }
         catch(e: Exception) {
@@ -86,7 +86,7 @@ abstract class UpdateModel(private val application: Application) {
         if(newWordList.isNotEmpty()) {
             wordDao.insert(*newWordList.toTypedArray())
             histDao.insert(*newWordList.map {
-                History(it.id, it.locale, it.category, 0, 0)
+                History(it.id, it.locale, it.category, difficulty, 0, 0)
             }.toTypedArray())
         }
         println(newWordList) // DEBUG
@@ -133,11 +133,14 @@ abstract class UpdateModel(private val application: Application) {
     protected abstract suspend fun purgeReusedWords()
 
     /**
-     * Fetch words from the server
+     * Template for fetching words from the server
      */
     suspend fun generateWords() {
+        // Only update words if we're on Wi-Fi
         if(canDownload()) {
+            // First evict some words from local database
             purgeReusedWords()
+            // Download new words
             downloadWords()
         }
     }

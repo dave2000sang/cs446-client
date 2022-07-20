@@ -9,7 +9,15 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.core.content.ContextCompat
 
+/**
+ * Decorator to add word usage to [InfoBox]
+ */
 class InfoBoxUsage(box: InfoBox, private val context: Context) : InfoBoxDecorator(box) {
+    /**
+     * Add usage to [box]'s spannable string
+     * @param word [Word] containing all information
+     * @return spannable string
+     */
     override fun getSpannable(word: Word): SpannableStringBuilder {
         val spannable = super.getSpannable(word)
         val usage = word.usage.replaceFirstChar { it.uppercase() }

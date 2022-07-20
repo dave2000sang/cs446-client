@@ -2,6 +2,9 @@ package com.spellingo.client_app
 
 import android.app.Application
 
+/**
+ * Model to get word categories
+ */
 class WordCategoryModel(application: Application) {
     private val wordDb = WordDatabase.getInstance(application)
 
@@ -11,7 +14,7 @@ class WordCategoryModel(application: Application) {
      */
     suspend fun getCategories(): List<String> {
         return wordDb.wordDao().getCategories().filter {
-            it != "standard" && it != "_wotd"
+            it != "standard"
         }.sorted()
     }
 }

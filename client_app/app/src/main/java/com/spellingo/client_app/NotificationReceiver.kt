@@ -11,6 +11,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
 
+/**
+ * Handle receiving notification intent from alarm
+ */
 class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -22,6 +25,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             activityIntent.putExtra("NOTIFICATION", true)
             val mainPendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, activityIntent, PendingIntent.FLAG_IMMUTABLE)
+            // Create notification
             val builder = NotificationCompat.Builder(context!!, channelId)
                 .setSmallIcon(R.drawable.icon_bee)
                 .setContentTitle("Word of the Day")
@@ -29,6 +33,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(mainPendingIntent)
                 .setAutoCancel(true)
+            // Send notification
             with(NotificationManagerCompat.from(context)) {
                 notify(0, builder.build())
             }

@@ -17,26 +17,32 @@ interface WordDao {
     suspend fun getRandomN(n: Int, locale: Locale, category: String, difficulty: Difficulty): List<Word>
 
     /**
-     * Get all words in database
-     * TODO check if this is needed anymore
+     * Count number of words in database
+     * @return number of words in cache
      */
-    @Query("SELECT * FROM word")
-    suspend fun getAllWords(): List<Word>
+    @Query("SELECT COUNT(*) FROM word")
+    suspend fun countWords(): Int
 
     /**
      * Get all words in database matching parameters
+     * @param locale locale for definition and pronunciation
+     * @param category word category
+     * @param difficulty word difficulty
+     * @return list of words matching specified parameters
      */
     @Query("SELECT * FROM word WHERE locale=:locale AND category=:category AND difficulty=:difficulty")
     suspend fun getKeyedWords(locale: Locale, category: String, difficulty: Difficulty): List<Word>
 
     /**
      * Get all categories
+     * @return list of all stored categories
      */
     @Query("SELECT DISTINCT category FROM word")
     suspend fun getCategories(): List<String>
 
     /**
      * Delete a category's words
+     * @param category word category
      */
     @Query("DELETE FROM word WHERE category=:category")
     suspend fun deleteCategory(category: String)
@@ -54,10 +60,4 @@ interface WordDao {
      */
     @Delete
     suspend fun delete(vararg words: Word)
-
-    /**
-     * Clear database
-     */
-    @Query("DELETE FROM word")
-    suspend fun clear()
 }

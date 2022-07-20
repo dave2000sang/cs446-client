@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import android.os.Handler
+import android.os.Looper
+import androidx.core.view.isVisible
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -47,6 +51,13 @@ class MainMenuFragment : Fragment() {
         }
 
         viewModel.startApp()
+
+//        statsButton.isVisible = false
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+//            statsButton.isVisible = true
+        }, 5000)
+
 
         return root
     }

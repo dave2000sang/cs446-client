@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,11 +31,15 @@ class GameSessionFragment : Fragment() {
 
     private val viewModel: GameSessionViewModel by activityViewModels()
     private var snack: Snackbar? = null
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var navController: NavController
     private val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
         // Have we just navigated to game session fragment?
         if(viewModel.previousDestination != destination.id
             && destination.id == R.id.fragment_game_session) {
+            // Reset livedata
+            viewModel.resetLiveData()
+
             // Are we doing word of the day?
             if(arguments != null && arguments!!.getBoolean("wotd")) {
                 viewModel.updateStrategy(GameStrategy.WOTD)
@@ -41,21 +47,29 @@ class GameSessionFragment : Fragment() {
             else {
                 viewModel.updateStrategy(GameStrategy.STANDARD)
             }
+            // Get selected category
             val category = if(arguments != null && arguments!!.getString("category") != null) {
                 arguments!!.getString("category")!!
             }
             else {
                 "standard"
             }
+            // Get selected difficulty
             val difficulty = if(arguments != null && arguments!!.getString("difficulty") != null) {
-                arguments!!.getString("difficulty")!!
+                Difficulty.getByName(arguments!!.getString("difficulty")!!)
             }
             else {
-                "OTHER"
+                Difficulty.OTHER
             }
-            println("DEBUG ============================== $category $difficulty")
+            // Get sudden death mode
+            val suddenDeath = if(arguments != null && arguments!!.getString("suddenDeath") != null) {
+                SuddenDeathMode.getByName(arguments!!.getString("suddenDeath")!!)
+            }
+            else {
+                SuddenDeathMode.STANDARD
+            }
             // Start the session by fetching words
-            viewModel.startSession(category, Difficulty.getByName(difficulty))
+            viewModel.startSession(category, difficulty, suddenDeath)
             // Reset submitButton
             viewModel.submitLiveData.value = getString(R.string.submit)
             viewModel.colorLiveData.value = "yellow"
@@ -75,6 +89,9 @@ class GameSessionFragment : Fragment() {
         val hintButton = root.findViewById<ImageView>(R.id.button_hint)
         val pronunciationButton = root.findViewById<ImageView>(R.id.button_pronunciation)
         val infoBox = root.findViewById<TextView>(R.id.info_box)
+
+        // Shared preferences
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         // Init snackbar
         snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
@@ -96,9 +113,8 @@ class GameSessionFragment : Fragment() {
 
         // Word information
         viewModel.wordLiveData.observe(viewLifecycleOwner, Observer(fun(word) {
-            viewModel.listOfWords.add(word)
+            if(word == null) return
             getCorrectWord = word.id
-            val infoList = mutableListOf<InfoBox>()
             // Decorators for infobox, start with part of speech and definition only
             val infoBoxBase = GameSessionInfoBox(requireContext())
             // Add usage for medium difficulty
@@ -121,10 +137,12 @@ class GameSessionFragment : Fragment() {
         }))
 
         // Submit button state
-        viewModel.submitLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.submitLiveData.observe(viewLifecycleOwner, Observer(fun(it) {
+            if(it == null) return
             submitButton.text = it
-        })
-        viewModel.colorLiveData.observe(viewLifecycleOwner, Observer {
+        }))
+        viewModel.colorLiveData.observe(viewLifecycleOwner, Observer(fun(it) {
+            if(it == null) return
             when(it) {
                 "green" -> {
                     submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_green))
@@ -151,12 +169,7 @@ class GameSessionFragment : Fragment() {
                     snack?.dismiss()
                 }
             }
-        })
-
-        //TODO move following sample code to Category Selection screen
-//        viewModel.categoryLiveData.observe(viewLifecycleOwner, Observer(fun(categories) {
-//            println(categories)
-//        }))
+        }))
 
         // Listeners
 
@@ -177,40 +190,48 @@ class GameSessionFragment : Fragment() {
         submitButton.setOnClickListener {
             // Submit button and input in non-empty
             if (submitButton.text == getString(R.string.submit) && mainWordField.text.isNotEmpty()) {
-                val result = mainWordField.text.toString().equals(getCorrectWord, true)
+                val attempt = mainWordField.text.toString().lowercase()
                 // Hide keyboard
                 val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
                 // Change to continue button
                 viewModel.submitLiveData.value = getString(R.string.cont)
                 // Correct / incorrect message
-                if (result) {
-                    viewModel.addCorrectWord(getCorrectWord)
+                if (attempt == getCorrectWord) {
                     viewModel.colorLiveData.value = "green"
                 } else {
-                    viewModel.addInCorrectWord(getCorrectWord)
                     viewModel.colorLiveData.value = "red"
                 }
-                viewModel.updateResults(getCorrectWord, result)
+                viewModel.updateResults(getCorrectWord, attempt)
             }
             // Continue button
             else if (submitButton.text == getString(R.string.cont)) {
+                val death = viewModel.colorLiveData.value == "red" && viewModel.suddenDeath != SuddenDeathMode.STANDARD
                 // Reset word field
                 mainWordField.text.clear()
-                val remainingWords = viewModel.nextWord()
                 // Change to submit button
                 viewModel.submitLiveData.value = getString(R.string.submit)
                 viewModel.colorLiveData.value = "yellow"
-                //TODO if remainingWords == 0, change submitButton into transition to stats page
-                if (remainingWords == 0) {
-                    // start post session update logic
-                    viewModel.postSessionUpdate()
-                    // Navigate to next fragment
-                    if(viewModel.showStats && viewModel.strategyChoice == GameStrategy.STANDARD) {
-                        findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
-                    }
-                    else {
-                        findNavController().navigate(R.id.gameSessionFragment_to_mainMenuFragment)
+                // Death in sudden death
+                if (death) {
+                    endSession()
+                }
+                // Continue logic
+                else {
+                    // Get next word
+                    val remainingWords = viewModel.nextWord()
+                    // change submitButton into transition to stats page
+                    if (remainingWords == 0) {
+                        when(viewModel.suddenDeath) {
+                            // End session and go to next page
+                            SuddenDeathMode.STANDARD -> endSession()
+                            // Get more words
+                            else -> viewModel.startSession(
+                                viewModel.category,
+                                viewModel.difficulty,
+                                SuddenDeathMode.SD_CONTINUE
+                            )
+                        }
                     }
                 }
             }
@@ -227,6 +248,18 @@ class GameSessionFragment : Fragment() {
         }
 
         return root
+    }
+
+    private fun endSession() {
+        // start post session update logic
+        viewModel.postSessionUpdate()
+        // Navigate to next fragment
+        if(sharedPreferences.getBoolean("show_statistics", true) && viewModel.strategyChoice == GameStrategy.STANDARD) {
+            findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
+        }
+        else {
+            findNavController().navigate(R.id.gameSessionFragment_to_mainMenuFragment)
+        }
     }
 
     override fun onDetach() {

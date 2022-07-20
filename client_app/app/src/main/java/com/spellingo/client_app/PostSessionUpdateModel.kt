@@ -7,7 +7,6 @@ import java.lang.Integer.min
 
 /**
  * Update model for quick word fetches after session
- * @param wordList list of words from the most recent session
  */
 class PostSessionUpdateModel(
     application: Application,
@@ -20,7 +19,9 @@ class PostSessionUpdateModel(
     private val retries = 20
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
-    // See UpdateModel for signature
+    /**
+     * Purge most played words in current category/difficulty
+     */
     override suspend fun purgeReusedWords() {
         val wordDao = wordDb.wordDao()
         val histDao = histDb.historyDao()
@@ -46,13 +47,15 @@ class PostSessionUpdateModel(
         numToDownload = purgeSet.size
     }
 
-    // See UpdateModel for signature
+    /**
+     * Download words of the same category/locale/difficulty
+     */
     override suspend fun downloadWords() {
         val sessionNum = sharedPreferences.getInt("number_words_per_sessions", 10)
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val wordDao = wordDb.wordDao()
-        val inCache = wordDao.getAllWords().size
+        val inCache = wordDao.countWords()
         var downloaded = 0
         // Only retry if we don't have enough words for a session
         for(retryIdx in 0 until retries) {

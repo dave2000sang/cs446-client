@@ -11,8 +11,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     // val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     // val variable_name = sharedPreferences.get_____(key_name, default_value_if_key_not_present)
 
-    private val viewModel: SettingsViewModel by activityViewModels()
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }

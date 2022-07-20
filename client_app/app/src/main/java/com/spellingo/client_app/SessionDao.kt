@@ -1,9 +1,6 @@
 package com.spellingo.client_app
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 /**
  * Data Access Object for Word in Room database
@@ -14,11 +11,12 @@ interface SessionDao {
      * Store session in database
      * @param session - session(s) to insert
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg session: Session)
 
     /**
      * Get the next available id
+     * @return next available id
      */
     @Query("SELECT IFNULL(" +
             "(SELECT id + 1 FROM session ORDER BY id DESC LIMIT 1)," +
@@ -27,34 +25,17 @@ interface SessionDao {
     suspend fun getNextId(): Int
 
     /**
-     * Get the 'n' most recent sessions stored locally
+     * Get session by id
+     * @param id session id
+     * @return specified session
      */
-    @Query("SELECT * FROM session ORDER BY id DESC LIMIT :n")
-    suspend fun getSessions(n: Int): List<Session>
+    @Query("SELECT * FROM session WHERE id=:id")
+    suspend fun getSession(id: Int): Session
 
     /**
-     * Get all sessions
+     * Get session dates and id
+     * @return list of all session identifying data as [SessionDate]'s
      */
-    @Query("SELECT * FROM session")
-    suspend fun getAllSessions(): List<Session>
-
-    /**
-     * Remove session from database using id
-     * @param id session(s) to remove
-     */
-    @Query("DELETE FROM session WHERE id = :id")
-    suspend fun deleteById(id: String)
-
-    /**
-     * Remove sessions from database
-     * @param sessions session(s) to remove
-     */
-    @Delete
-    suspend fun delete(vararg sessions: Session)
-
-    /**
-     * Clear entire database
-     */
-    @Query("DELETE FROM session")
-    suspend fun clear()
+    @Query("SELECT id, date, category, difficulty FROM session")
+    suspend fun getAllDates(): List<SessionDate>
 }

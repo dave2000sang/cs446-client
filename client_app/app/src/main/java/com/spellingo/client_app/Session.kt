@@ -12,6 +12,8 @@ data class Session(
     @PrimaryKey val id: Int,
     // For sorting sessions
     @ColumnInfo(name = "date") val date: String,
+    @ColumnInfo(name = "category") val category: String,
+    @ColumnInfo(name = "difficulty") val difficulty: Difficulty,
     // Words used in this session
     // Format as "word;word;word;word"
     @ColumnInfo(name = "sessionWords") var sessionWords: String,

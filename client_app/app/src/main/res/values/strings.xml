@@ -19,7 +19,7 @@
     <!-- Main Menu Fragment -->
     <string name="playDifficulty">Play Standard</string>
     <string name="playCategory">Play Category</string>
-    <string name="stats">Stats</string>
+    <string name="stats">Statistics</string>
     <string name="settings">Settings</string>
 
     <!-- Notification -->
@@ -39,5 +39,12 @@
         <item>uk</item>
         <item>us</item>
     </string-array>
+
+    <string-array name="statSpinnerString">
+        <item>All Words</item>
+        <item>Categories</item>
+        <item>Difficulties</item>
+    </string-array>
+
 
 </resources>
