@@ -16,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -23,6 +24,7 @@ import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.button.MaterialButton
 
 
 class SessionHistoryFragment: Fragment() {
@@ -42,7 +44,6 @@ class SessionHistoryFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_session_history, container, false)
-        val sessionList = root.findViewById<LinearLayout>(R.id.scrollLinearLayout)
 
         // NavController
         navController = findNavController()
@@ -61,6 +62,8 @@ class SessionHistoryFragment: Fragment() {
             }
             // DEBUG END
             //TODO Nathan display list of cards
+            val recyclerView = root.findViewById<RecyclerView>(R.id.session_history_list)
+            recyclerView.adapter = SessionHistoryItemAdapter(this, sessions)
         }))
 
         viewModel.guessLiveData.observe(viewLifecycleOwner, Observer(fun(guesses) {
@@ -70,36 +73,13 @@ class SessionHistoryFragment: Fragment() {
             for(guess in guesses) { println(guess) }
             // DEBUG END
             //TODO Nathan display session guess info
-            //TODO note that the livedata still exists after returning to session stats fragment,
-            //     need to hide
         }))
 
-//        val sessionExtract = HashMap<String, Boolean>()
-//
-//        sessionExtract.put("1234", false)
-//
-//        for (i in sessionExtract) {
-//            val view = inflater.inflate(R.layout.session_entry_item, null)
-//            sessionList.addView(view)
-//        }
-
-//        val view = inflater.inflate(R.layout.session_entry_item, null)
-//        val view1 = inflater.inflate(R.layout.session_entry_item, null)
-//        val view2 = inflater.inflate(R.layout.session_entry_item, null)
-//        val view3 = inflater.inflate(R.layout.session_entry_item, null)
-//        val view4 = inflater.inflate(R.layout.session_entry_item, null)
-//        val view5 = inflater.inflate(R.layout.session_entry_item, null)
-//        val view6 = inflater.inflate(R.layout.session_entry_item, null)
-//
-//
-//
-//        sessionList.addView(view)
-//        sessionList.addView(view1)
-//        sessionList.addView(view2)
-//        sessionList.addView(view3)
-//        sessionList.addView(view4)
-//        sessionList.addView(view5)
-//        sessionList.addView(view6)
+        // Return to main menu
+        val mainMenuButton = root.findViewById<MaterialButton>(R.id.session_history_to_main_menu_button)
+        mainMenuButton.setOnClickListener {
+            findNavController().navigate(R.id.action_sessionHistoryFragment_to_fragment_main_menu)
+        }
 
         return root
     }

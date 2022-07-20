@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cons"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:weightSum="1"
+    android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/sessionHistoryList"
-        android:layout_width="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/session_history_list"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#FFFFFF"
-        android:paddingHorizontal="10sp"
-        android:paddingVertical="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        android:background="@color/white"
+        android:layout_weight="0.9"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-        <LinearLayout
-            android:id="@+id/scrollLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp" />
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/session_history_to_main_menu_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/first_fragment_label"
+        android:textSize="20sp"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/monokai_yellow"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1" />
+
+</LinearLayout>
+

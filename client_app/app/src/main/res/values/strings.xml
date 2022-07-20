@@ -16,6 +16,7 @@
     <!-- Main Menu Fragment -->
     <string name="playDifficulty">Play Standard</string>
     <string name="playCategory">Play Category</string>
+    <string name="sessionHistory">History</string>
     <string name="stats">Statistics</string>
     <string name="settings">Settings</string>
 
