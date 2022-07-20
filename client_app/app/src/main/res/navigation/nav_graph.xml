@@ -12,14 +12,17 @@
         tools:layout="@layout/fragment_main_menu">
 
         <action
-            android:id="@+id/mainMenuFragment_to_categorySelectionFragment"
+            android:id="@+id/action_mainMenuFragment_to_categorySelectionFragment"
             app:destination="@id/fragment_game_selection" />
         <action
-            android:id="@+id/mainMenuFragment_to_settingsFragment"
+            android:id="@+id/action_mainMenuFragment_to_statisticsFragment"
+            app:destination="@id/statisticsFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <action
-            android:id="@+id/action_fragment_main_menu_to_statisticsSelectorFragment"
-            app:destination="@id/statisticsSelectorFragment" />
+            android:id="@+id/action_mainMenuFragment_to_SessionHistoryFragment"
+            app:destination="@id/sessionHistoryFragment" />
     </fragment>
 
     <fragment
@@ -50,30 +53,16 @@
         android:name="com.spellingo.client_app.StatisticsFragment"
         android:label="StatisticsFragment" >
         <action
-            android:id="@+id/action_statisticsFragment_to_statisticsSelectorFragment"
-            app:destination="@id/statisticsSelectorFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/statisticsSelectorFragment"
-        android:name="com.spellingo.client_app.StatisticsSelectorFragment"
-        android:label="StatisticsSelectorFragment" >
-        <action
-            android:id="@+id/action_statisticsSelectorFragment_to_fragment_main_menu"
+            android:id="@+id/action_statisticsFragment_to_fragment_main_menu"
             app:destination="@id/fragment_main_menu" />
-        <action
-            android:id="@+id/action_statisticsSelectorFragment_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
-        <action
-            android:id="@+id/action_statisticsSelectorFragment_to_sessionHistoryFragment"
-            app:destination="@id/sessionHistoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/sessionHistoryFragment"
         android:name="com.spellingo.client_app.SessionHistoryFragment"
         android:label="SessionHistoryFragment" >
         <action
-            android:id="@+id/action_sessionHistoryFragment_to_statisticsSelectorFragment"
-            app:destination="@id/statisticsSelectorFragment" />
+            android:id="@+id/action_sessionHistoryFragment_to_fragment_main_menu"
+            app:destination="@id/fragment_main_menu" />
     </fragment>
     <fragment
         android:id="@+id/postSessionFragment"

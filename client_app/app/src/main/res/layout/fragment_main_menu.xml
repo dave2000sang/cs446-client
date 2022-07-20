@@ -39,6 +39,16 @@
         android:layout_margin="5dp"/>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/sessionHistoryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sessionHistory"
+        android:textSize="20sp"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/monokai_yellow"
+        android:layout_margin="5dp"/>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/statsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import android.os.Handler
 import android.os.Looper
-import androidx.core.view.isVisible
 
 
 /**
@@ -30,24 +29,29 @@ class MainMenuFragment : Fragment() {
         playDifficultyButton.setOnClickListener {
             val bundle = Bundle()
             bundle.putBoolean("standard", true)
-            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment, bundle)
+            findNavController().navigate(R.id.action_mainMenuFragment_to_categorySelectionFragment, bundle)
         }
 
         val playCategoryButton = root.findViewById<Button>(R.id.playCategoryButton)
         playCategoryButton.setOnClickListener {
             val bundle = Bundle()
             bundle.putBoolean("standard", false)
-            findNavController().navigate(R.id.mainMenuFragment_to_categorySelectionFragment, bundle)
+            findNavController().navigate(R.id.action_mainMenuFragment_to_categorySelectionFragment, bundle)
         }
 
         val settingsButton = root.findViewById<Button>(R.id.settingsButton)
         settingsButton.setOnClickListener {
-            findNavController().navigate(R.id.mainMenuFragment_to_settingsFragment)
+            findNavController().navigate(R.id.action_mainMenuFragment_to_settingsFragment)
         }
 
         val statsButton = root.findViewById<Button>(R.id.statsButton)
         statsButton.setOnClickListener {
-            findNavController().navigate(R.id.action_fragment_main_menu_to_statisticsSelectorFragment)
+            findNavController().navigate(R.id.action_mainMenuFragment_to_statisticsFragment)
+        }
+
+        val sessionHistoryButton = root.findViewById<Button>(R.id.sessionHistoryButton)
+        sessionHistoryButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mainMenuFragment_to_SessionHistoryFragment)
         }
 
         viewModel.startApp()
