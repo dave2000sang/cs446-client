@@ -10,6 +10,22 @@
     android:background="@color/white"
     android:gravity="center">
 
+
+    <in.codeshuffle.typewriterview.TypeWriterView
+        android:id="@+id/typeWriterText"
+        android:layout_width="327dp"
+        android:layout_height="106dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.133" />
+
     <ImageView
         android:id="@+id/button_hint"
         android:layout_width="70dp"

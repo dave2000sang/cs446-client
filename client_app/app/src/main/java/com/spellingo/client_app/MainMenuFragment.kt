@@ -1,5 +1,6 @@
 package com.spellingo.client_app
 
+import `in`.codeshuffle.typewriterview.TypeWriterView
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,6 +25,10 @@ class MainMenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
+
+        val mainMenuButton = root.findViewById<TypeWriterView>(R.id.typeWriterText)
+        mainMenuButton.animateText("Spellingo!")
+        mainMenuButton.setDelay(100);
 
         val playDifficultyButton = root.findViewById<Button>(R.id.playDifficultyButton)
         playDifficultyButton.setOnClickListener {
