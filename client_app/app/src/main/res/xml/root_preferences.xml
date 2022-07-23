@@ -56,7 +56,7 @@
 
         <SwitchPreferenceCompat
             app:key="enable_wotd_mode"
-            app:title="Enable WOTD Notifications"
+            app:title="Enable Word of the Day Notifications"
             app:summary="Receive notifications to practice unique word of the day spelling"
             app:defaultValue="true"/>
     </PreferenceCategory>

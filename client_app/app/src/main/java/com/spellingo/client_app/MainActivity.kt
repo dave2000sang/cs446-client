@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun scheduleNotification() {
+    private fun scheduleNotification(set: Boolean) {
         // Create intent to send notification
         val notifyIntent = Intent(this, NotificationReceiver::class.java)
         notifyIntent.putExtra("CHANNEL_ID", CHANNEL_ID)
@@ -57,28 +58,47 @@ class MainActivity : AppCompatActivity() {
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
         // Set notification to run daily
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis(),
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
+        if(set) {
+            alarmManager.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis(),
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
+            )
+        }
+        else {
+            alarmManager.cancel(pendingIntent)
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
-
+    private fun setNotification(sharedPreferences: SharedPreferences) {
         try {
             // Notification for Word of the Day
-            createNotificationChannel()
-            scheduleNotification()
+            val wotd = sharedPreferences.getBoolean("enable_wotd_mode", true)
+            if(wotd) {
+                createNotificationChannel()
+            }
+            scheduleNotification(wotd)
         }
         catch(e: Exception) {
             System.err.println(e.toString())
             System.err.println(e.printStackTrace())
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
+
+        setNotification(sharedPreferences)
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener { spref, key ->
+            if(key == "enable_wotd_mode") {
+                setNotification(spref)
+            }
         }
     }
 

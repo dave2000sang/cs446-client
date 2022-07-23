@@ -20,8 +20,14 @@ class WordModel(application: Application) {
      * @return first word of new session
      */
     suspend fun getNewSessionWords(category: String, difficulty: Difficulty): Word {
-        val totalSessionWords = sharedPreferences.getInt("number_words_per_sessions", 10)
         val localeString = sharedPreferences.getString("locale_preferences", "us")
+        val suddenDeath = sharedPreferences.getBoolean("sudden_death_mode", false)
+        val totalSessionWords = if(suddenDeath) {
+            20
+        }
+        else {
+            sharedPreferences.getInt("number_words_per_sessions", 10)
+        }
         val locale = Locale.getByName(localeString!!)
         val listRes = wordDb.wordDao().getRandomN(totalSessionWords, locale, category, difficulty)
         listOfWords.clear()

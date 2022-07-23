@@ -19,6 +19,7 @@ import android.os.Looper
 class MainMenuFragment : Fragment() {
 
     private val viewModel: MainMenuViewModel by activityViewModels()
+    private lateinit var animatedTitle: TypeWriterView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,9 +27,13 @@ class MainMenuFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
 
-        val mainMenuButton = root.findViewById<TypeWriterView>(R.id.typeWriterText)
-        mainMenuButton.animateText("Spellingo!")
-        mainMenuButton.setDelay(100);
+        animatedTitle = root.findViewById<TypeWriterView>(R.id.typeWriterText)
+        animatedTitle.setWithMusic(false)
+        animatedTitle.setDelay(100)
+        animatedTitle.animateText("Spellingo!")
+        if(viewModel.startupLock) {
+            animatedTitle.removeAnimation()
+        }
 
         val playDifficultyButton = root.findViewById<Button>(R.id.playDifficultyButton)
         playDifficultyButton.setOnClickListener {
@@ -61,13 +66,11 @@ class MainMenuFragment : Fragment() {
 
         viewModel.startApp()
 
-//        statsButton.isVisible = false
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-//            statsButton.isVisible = true
-        }, 5000)
-
-
         return root
+    }
+
+    override fun onPause() {
+        super.onPause()
+        animatedTitle.removeAnimation()
     }
 }
