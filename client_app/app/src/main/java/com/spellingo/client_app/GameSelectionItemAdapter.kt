@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 
@@ -45,7 +46,10 @@ class GameSelectionItemAdapter(
                 bundle.putString("difficulty", "OTHER")
             }
             //TODO Nathan integrate sudden death in UI
-//            bundle.putString("suddenDeath", "SUDDEN_DEATH")
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.requireContext())
+            if(sharedPreferences.getBoolean("sudden_death_mode", false)) {
+                bundle.putString("suddenDeath", "SUDDEN_DEATH")
+            }
             context.findNavController().navigate(R.id.action_fragmentGameSelection_to_fragmentGameSession, bundle)
         }
     }
