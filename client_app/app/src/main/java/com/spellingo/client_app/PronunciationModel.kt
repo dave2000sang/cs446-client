@@ -3,6 +3,7 @@ package com.spellingo.client_app
 import android.app.Application
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,7 +32,13 @@ class PronunciationModel(private val application: Application) {
                 )
                 setDataSource(url)
                 setOnPreparedListener {
-                    it.start()
+                    val millis: Long = 300
+                    object : CountDownTimer(millis, millis) {
+                        override fun onTick(p0: Long) {}
+                        override fun onFinish() {
+                            it.start()
+                        }
+                    }.start()
                     mediaData.postValue(it)
                 }
                 prepareAsync()
