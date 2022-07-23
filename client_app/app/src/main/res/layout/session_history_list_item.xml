@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/monokai_yellow">
 
             <TextView
                 android:id="@+id/session_item_title"
@@ -28,7 +29,6 @@
                 android:paddingStart="20dp"
                 android:textSize="20sp"
                 android:textColor="@color/black"
-                android:background="@color/monokai_yellow"
                 android:gravity="center_vertical|start"/>
 
             <TextView
@@ -40,20 +40,9 @@
                 android:paddingEnd="20dp"
                 android:textSize="20sp"
                 android:textColor="@color/black"
-                android:background="@color/monokai_yellow"
                 android:gravity="center_vertical|end"/>
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/session_item_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:background="@color/light_grey"
-            android:visibility="gone"/>
 
     </LinearLayout>
 
