@@ -39,7 +39,7 @@
             app:key="sudden_death_mode"
             app:title="Sudden Death Mode Enabled"
             app:summary="A fast paced game mode to challenge your spellings"
-            app:defaultValue="true"/>
+            app:defaultValue="false"/>
 
         <ListPreference
             app:key="locale_preferences"
@@ -48,6 +48,17 @@
             app:entryValues="@array/language_locale_dev"
             app:summary="Determines the locale of words and their corresponding spelling"
             app:defaultValue="us"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="wotd_mode"
+        app:title="Word of the Day">
+
+        <SwitchPreferenceCompat
+            app:key="enable_wotd_mode"
+            app:title="Enable Word of the Day"
+            app:summary="Receive notifications to practice unique word of the day spelling"
+            app:defaultValue="true"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
