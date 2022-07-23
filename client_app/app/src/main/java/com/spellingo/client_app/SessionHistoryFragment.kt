@@ -71,4 +71,8 @@ class SessionHistoryFragment: Fragment() {
         viewModel.getSession(session)
         return viewModel.guessLiveData
     }
+
+    fun clearGuesses() {
+        viewModel.clearGuesses()
+    }
 }

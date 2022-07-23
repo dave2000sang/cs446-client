@@ -41,15 +41,20 @@ class SessionHistoryItemAdapter(
             } else {
                 holder.sessionBody.visibility = View.VISIBLE
                 val guesses = context.getSession(session)
-                guesses.observe(context.viewLifecycleOwner, Observer(fun(it) {
-                    if(it == null) return
-                    //TODO Nathan format into 2 columns, add new lines, etc.
-                    var accumulator = ""
-                    for(pair in it) {
-                        accumulator += pair.first + " " + pair.second
+                guesses.observe(context.viewLifecycleOwner, object : Observer<List<Pair<String, String>>?> {
+                    override fun onChanged(t: List<Pair<String, String>>?) {
+                        if(t == null) return
+                        if(holder.sessionBody.text.isNotEmpty()) return
+                        //TODO Nathan format into 2 columns, add new lines, etc.
+                        var accumulator = ""
+                        for(pair in t) {
+                            accumulator += pair.first + " " + pair.second
+                        }
+                        holder.sessionBody.text = accumulator
+                        guesses.removeObserver(this)
+                        context.clearGuesses()
                     }
-                    holder.sessionBody.text = accumulator
-                }))
+                })
             }
         }
     }
