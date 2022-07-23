@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -23,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
+
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -127,6 +130,10 @@ class GameSessionFragment : Fragment() {
                 Difficulty.EASY -> infoBoxWithUsageEtymology.getSpannable(word)
                 Difficulty.OTHER -> infoBoxBase.getSpannable(word)
             }
+            if(mainWordField.requestFocus()) {
+                val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(mainWordField, InputMethodManager.SHOW_IMPLICIT)
+            }
         }))
 
         // Pronunciation audio
@@ -176,7 +183,13 @@ class GameSessionFragment : Fragment() {
         // Pronunciation button to replay audio
         pronunciationButton.setOnClickListener {
             try {
-                mediaPlayer!!.start()
+                val millis: Long = 200
+                object : CountDownTimer(millis, millis) {
+                    override fun onTick(p0: Long) {}
+                    override fun onFinish() {
+                        mediaPlayer!!.start()
+                    }
+                }.start()
             }
             catch (e: Exception) {
                 Toast.makeText(requireContext(), "Internal audio player error", Toast.LENGTH_SHORT).show()
