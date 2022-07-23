@@ -56,6 +56,7 @@ dependencies {
     implementation 'com.github.Qusion:android-roundprogressbar:0.3.0'
     implementation 'com.asksira.android:dropdownview:0.9.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'in.codeshuffle:typewriterview:1.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
