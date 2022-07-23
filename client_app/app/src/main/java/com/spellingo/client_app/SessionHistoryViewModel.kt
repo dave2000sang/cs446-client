@@ -61,6 +61,14 @@ class SessionHistoryViewModel(application: Application) : DynamicViewModel(appli
     }
 
     /**
+     * Clear guess live data
+     * Pushes to [guessLiveData]
+     */
+    fun clearGuesses() {
+        _guessLiveData.value = null
+    }
+
+    /**
      * Reset LiveData
      * Pushes to [guessLiveData] and [listOfSessions]
      */
