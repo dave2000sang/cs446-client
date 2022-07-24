@@ -111,7 +111,7 @@ class GameSessionFragment : Fragment() {
 
         // Back button
         val backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            navController.navigate(R.id.fragment_main_menu)
+            navController.navigate(R.id.gameSessionFragment_to_mainMenuFragment)
         }
 
         // Show/hide hint depending on difficulty
@@ -275,10 +275,10 @@ class GameSessionFragment : Fragment() {
         viewModel.postSessionUpdate()
         // Navigate to next fragment
         if(sharedPreferences.getBoolean("show_statistics", true) && viewModel.strategyChoice == GameStrategy.STANDARD) {
-            findNavController().navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
+            navController.navigate(R.id.action_fragment_game_session_to_postGameStatisticsFragment)
         }
         else {
-            findNavController().navigate(R.id.gameSessionFragment_to_mainMenuFragment)
+            navController.navigate(R.id.gameSessionFragment_to_mainMenuFragment)
         }
     }
 

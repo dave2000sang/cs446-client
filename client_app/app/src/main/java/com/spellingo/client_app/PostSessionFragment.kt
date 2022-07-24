@@ -29,7 +29,7 @@ class PostSessionFragment : Fragment() {
 
         // Back button
         val backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigate(R.id.fragment_main_menu)
+            findNavController().navigate(R.id.action_postSessionFragment_to_fragment_main_menu)
         }
 
         // TODO Play again

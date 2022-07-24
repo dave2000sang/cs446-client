@@ -6,3 +6,7 @@ Used free icons from [flaticon](https://www.flaticon.com):
   <li>https://www.flaticon.com/free-icon/idea_831681</li>
   <li>https://www.flaticon.com/free-icon/bee_809052</li>
 </ul>
+
+3rd party libraries:
+- https://github.com/skymansandy/typewriterview
+- https://github.com/PhilJay/MPAndroidChart
