@@ -1,6 +1,12 @@
 package com.spellingo.client_app
 
 import android.app.AlertDialog
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -8,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 
@@ -32,11 +39,10 @@ class SessionHistoryItemAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val session = dataset[position]
-        var title = "Session " + session.id.toString() + "\n"
-        if (session.category == "standard") {
-            title += session.difficulty.toString().lowercase().replaceFirstChar { it.uppercase() }
+        val title = if (session.category == "standard") {
+            session.difficulty.toString().lowercase().replaceFirstChar { it.uppercase() }
         } else {
-            title += session.category.lowercase().replaceFirstChar { it.uppercase() }
+            session.category.lowercase().replaceFirstChar { it.uppercase() }
         }
         holder.sessionTitle.text = title
         holder.sessionDate.text = session.date
@@ -51,16 +57,53 @@ class SessionHistoryItemAdapter(
             guesses.observe(context.viewLifecycleOwner, object : Observer<List<Pair<String, String>>?> {
                 override fun onChanged(t: List<Pair<String, String>>?) {
                     if(t == null) return
-                    var s1 = ""
-                    var s2 = ""
+                    val spannable1 = SpannableStringBuilder()
+                    val spannable2 = SpannableStringBuilder()
+                    spannable1.append(
+                        "Word",
+                        StyleSpan(Typeface.BOLD),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    spannable2.append(
+                        "Your Guess",
+                        StyleSpan(Typeface.BOLD),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                     for(pair in t) {
-                        s1 += pair.first + "\n"
-                        s2 += pair.second + "\n"
+                        if(pair.first.isEmpty() || pair.second.isEmpty()) continue
+                        spannable1.append("\n" + pair.first)
+                        spannable2.append("\n")
+                        val relSizeSpan = RelativeSizeSpan(0.8f)
+                        if(pair.second == pair.first) {
+                            spannable2.append(
+                                "✓ ",
+                                relSizeSpan,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            spannable2.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context.requireContext(), R.color.monokai_green)),
+                                spannable2.getSpanStart(relSizeSpan),
+                                spannable2.getSpanEnd(relSizeSpan),
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        else {
+                            spannable2.append(
+                                "✕ ",
+                                relSizeSpan,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            spannable2.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context.requireContext(), R.color.monokai_red)),
+                                spannable2.getSpanStart(relSizeSpan),
+                                spannable2.getSpanEnd(relSizeSpan),
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        spannable2.append(pair.second)
                     }
-                    s1 = s1.dropLast(1) // Remove extra newline
-                    s2 = s2.dropLast(1) // Remove extra newline
-                    wordList.text = s1
-                    userInputList.text = s2
+                    wordList.text = spannable1
+                    userInputList.text = spannable2
                     guesses.removeObserver(this)
                     context.clearGuesses()
                 }
