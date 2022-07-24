@@ -8,7 +8,7 @@ import org.json.JSONObject
  * Model for fetching Word of the Day
  */
 class WordOfTheDayModel(application: Application) {
-    private val wotdCategory = "Word of the Day"
+    private val wotdCategory = "word of the day"
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private val histDb = HistoryDatabase.getInstance(application)
 

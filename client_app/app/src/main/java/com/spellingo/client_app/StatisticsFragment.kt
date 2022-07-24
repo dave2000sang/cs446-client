@@ -64,9 +64,6 @@ class StatisticsFragment: Fragment() {
         // Second spinner
         val spinner2: Spinner = root.findViewById(R.id.stats_spinner_2)
         val arrayList2 = ArrayList<String>()
-        arrayList2.add("Category / Difficulty 1")
-        arrayList2.add("Category / Difficulty 2")
-        arrayList2.add("Category / Difficulty 3")
         val statArrayAdapter2 = ArrayAdapter(this.requireActivity(), R.layout.spinner_item_2, arrayList2)
         statArrayAdapter2.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner2.adapter = statArrayAdapter2
@@ -77,24 +74,42 @@ class StatisticsFragment: Fragment() {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 if (selectedItem == "All Words") {
                     viewModel.requestGlobalStats()
-                    spinner2.visibility = View.INVISIBLE
                 } else if (selectedItem == "Categories") {
                     viewModel.requestCategoryBreakdown()
-                    spinner2.visibility = View.VISIBLE
                 } else if (selectedItem == "Difficulties") {
                     viewModel.requestDifficultyBreakdown()
-                    spinner2.visibility = View.VISIBLE
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        val categoryBreakdownString = "Category Breakdown"
+        val difficultyBreakdownString = "Difficulty Breakdown"
+
         // Second spinner on click
         spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
-                // TODO if statements for categories / difficulties here
+                when(viewModel.statisticsChartType) {
+                    StatisticsChartType.CATEGORY, StatisticsChartType.SELECTED_CATEGORY -> {
+                        if(selectedItem == categoryBreakdownString) {
+                            viewModel.requestCategoryBreakdown()
+                        }
+                        else {
+                            viewModel.requestCategoryStats(selectedItem.lowercase())
+                        }
+                    }
+                    StatisticsChartType.DIFFICULTY, StatisticsChartType.SELECTED_DIFFICULTY -> {
+                        if(selectedItem == difficultyBreakdownString) {
+                            viewModel.requestDifficultyBreakdown()
+                        }
+                        else {
+                            viewModel.requestDifficultyStats(Difficulty.getByName(selectedItem))
+                        }
+                    }
+                    else -> {}
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -103,6 +118,29 @@ class StatisticsFragment: Fragment() {
         viewModel.requestGlobalStats()
         viewModel.ratioLiveData.observe(viewLifecycleOwner, Observer(fun(ratio) {
             if(ratio == null) return
+            when(viewModel.statisticsChartType) {
+                StatisticsChartType.CATEGORY -> {
+                    statArrayAdapter2.clear()
+                    statArrayAdapter2.add(categoryBreakdownString)
+                    statArrayAdapter2.addAll(viewModel.categoryList)
+                    spinner2.visibility = View.VISIBLE
+                }
+                StatisticsChartType.DIFFICULTY -> {
+                    statArrayAdapter2.clear()
+                    statArrayAdapter2.add(difficultyBreakdownString)
+                    statArrayAdapter2.addAll(listOf(
+                        Difficulty.EASY,
+                        Difficulty.MEDIUM,
+                        Difficulty.HARD
+                    ).map { diff -> diff.toString().lowercase().replaceFirstChar { it.uppercase() } })
+                    spinner2.visibility = View.VISIBLE
+                }
+                StatisticsChartType.ALL -> {
+                    statArrayAdapter2.clear()
+                    spinner2.visibility = View.INVISIBLE
+                }
+                else -> {}
+            }
             loadPieChartData(ratio)
         }))
         return root
@@ -131,7 +169,7 @@ class StatisticsFragment: Fragment() {
         //TODO Nathan write a message like "No word statistics available" for empty list
 
         // Colors
-        var colors = arrayListOf<Int>()
+        val colors = arrayListOf<Int>()
         colors.add(resources.getColor(R.color.monokai_green))
         colors.add(resources.getColor(R.color.monokai_red))
         colors.add(resources.getColor(R.color.monokai_yellow))
