@@ -34,9 +34,9 @@ class SessionHistoryItemAdapter(
         val session = dataset[position]
         var title = "Session " + session.id.toString() + "\n"
         if (session.category == "standard") {
-            title += session.difficulty
+            title += session.difficulty.toString().lowercase().replaceFirstChar { it.uppercase() }
         } else {
-            title += session.category
+            title += session.category.lowercase().replaceFirstChar { it.uppercase() }
         }
         holder.sessionTitle.text = title
         holder.sessionDate.text = session.date
