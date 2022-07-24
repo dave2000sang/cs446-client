@@ -54,6 +54,5 @@ class PostSessionItemAdapter(
         }
         spannable.append(userSpelling)
         holder.userSpellingTextView.text = spannable
-        holder.userSpellingTextView.setBackgroundResource(R.color.monokai_white) //TODO fix color theming
     }
 }

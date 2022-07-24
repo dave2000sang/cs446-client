@@ -83,6 +83,7 @@ class MainMenuFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         animatedTitle.removeAnimation()
+        animatedTitle.setPaddingRelative(0, 0, 0, 0)
     }
 
 

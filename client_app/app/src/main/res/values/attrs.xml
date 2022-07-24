@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ds">
+        <attr name="gray_background" format="color"/>
+        <attr name="gray_foreground" format="color"/>
+        <attr name="special_highlight" format="color"/>
+    </declare-styleable>
+</resources>

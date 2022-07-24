@@ -19,9 +19,9 @@
             android:layout_height="match_parent"
             android:padding="20dp"
             android:textSize="20sp"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:layout_weight="0.5"
-            android:background="@color/monokai_yellow"/>
+            android:background="?colorPrimary"/>
 
         <TextView
             android:id="@+id/post_session_user_spelling"
@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:padding="20dp"
             android:textSize="20sp"
-            android:textColor="@color/black"
+            android:textColor="?colorOnBackground"
             android:layout_weight="0.5"/>
 
     </LinearLayout>

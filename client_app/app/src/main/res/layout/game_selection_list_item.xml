@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:textSize="20sp"
     app:cornerRadius="8dp"
-    android:backgroundTint="@color/monokai_yellow"
+    android:backgroundTint="?colorPrimary"
     android:layout_margin="5dp"
     android:padding="20dp"
     android:gravity="start|center_vertical"/>

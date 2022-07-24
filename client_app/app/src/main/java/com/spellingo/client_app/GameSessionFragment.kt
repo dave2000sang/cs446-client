@@ -260,6 +260,8 @@ class GameSessionFragment : Fragment() {
         // Get hint button
         hintButton.setOnClickListener {
             if(submitButton.text == getString(R.string.submit)) { // only show hint before submission
+                val imm = mainWordField.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(mainWordField.windowToken, 0)
                 snack?.setText("Hint: " + viewModel.getHint())
                 snack?.view?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_yellow))
                 submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.monokai_yellow))

@@ -6,11 +6,19 @@
         <item name="colorPrimaryVariant">@color/monokai_yellow</item>
         <item name="colorOnPrimary">@color/monokai_black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/monokai_black</item>
-        <item name="colorSecondaryVariant">@color/monokai_gray</item>
-        <item name="colorOnSecondary">@color/monokai_white</item>
+        <item name="colorSecondary">@color/monokai_magenta</item>
+        <item name="colorSecondaryVariant">@color/monokai_magenta</item>
+        <item name="colorOnSecondary">@color/monokai_black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondaryVariant</item>
+        <item name="android:statusBarColor">@color/monokai_black</item>
         <!-- Customize your theme here. -->
+        <item name="colorSurface">@color/monokai_black</item>
+        <item name="colorOnSurface">@color/monokai_white</item>
+        <item name="colorError">@color/monokai_red</item>
+        <item name="colorOnError">@color/monokai_black</item>
+        <item name="colorOnBackground">@color/monokai_white</item>
+        <item name="gray_foreground">@color/monokai_gray</item>
+        <item name="gray_background">@color/monokai_black</item>
+        <item name="special_highlight">?attr/colorSecondary</item>
     </style>
 </resources>

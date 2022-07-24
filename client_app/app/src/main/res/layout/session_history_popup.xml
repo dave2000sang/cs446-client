@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="?colorOnPrimary"
         android:padding="20dp"
         android:lineSpacingMultiplier="1.2"
-        android:background="@color/monokai_yellow"/>
+        android:background="?colorPrimary"/>
 
     <TextView
         android:id="@+id/session_history_popup_user_input_list"
@@ -23,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="?colorOnSurface"
         android:padding="20dp"
         android:lineSpacingMultiplier="1.2"
-        android:background="@color/white"/>
+        android:background="?colorSurface"/>
 
 </LinearLayout>
