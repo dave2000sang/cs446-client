@@ -21,7 +21,7 @@ class WordOfTheDayStrategy(application: Application) : GameSessionStrategy {
         difficulty: Difficulty
     ) {
         // Get word from server
-        val wotd = wordOfTheDayModel.getWord()
+        val wotd = wordOfTheDayModel.getWord(category)
         wordLiveData.postValue(wotd)
     }
 
@@ -43,7 +43,7 @@ class WordOfTheDayStrategy(application: Application) : GameSessionStrategy {
      */
     override suspend fun updateResults(word: String, category: String, result: Boolean) {
         // Commit to global history
-        wordOfTheDayModel.saveResult(word, result)
+        wordOfTheDayModel.saveResult(word, category, result)
     }
 
     /**

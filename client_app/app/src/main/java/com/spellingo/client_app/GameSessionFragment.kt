@@ -47,6 +47,7 @@ class GameSessionFragment : Fragment() {
             // Are we doing word of the day?
             if(arguments != null && arguments!!.getBoolean("wotd")) {
                 viewModel.updateStrategy(GameStrategy.WOTD)
+                arguments!!.putString("category", "word of the day")
             }
             else {
                 viewModel.updateStrategy(GameStrategy.STANDARD)
