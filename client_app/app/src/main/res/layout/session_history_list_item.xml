@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:weightSum="1"
             android:orientation="horizontal"
-            android:background="@color/monokai_yellow">
+            android:background="?colorPrimary">
 
             <TextView
                 android:id="@+id/session_item_title"
@@ -28,7 +28,7 @@
                 android:paddingVertical="20dp"
                 android:paddingStart="20dp"
                 android:textSize="20sp"
-                android:textColor="@color/black"
+                android:textColor="?colorOnPrimary"
                 android:gravity="center_vertical|start"/>
 
             <TextView
@@ -39,7 +39,7 @@
                 android:paddingVertical="20dp"
                 android:paddingEnd="20dp"
                 android:textSize="20sp"
-                android:textColor="@color/black"
+                android:textColor="?colorOnPrimary"
                 android:gravity="center_vertical|end"/>
 
         </LinearLayout>

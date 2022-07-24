@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.util.TypedValue
 import androidx.core.content.ContextCompat
 
 /**
@@ -21,9 +22,11 @@ class InfoBoxUsage(box: InfoBox, private val context: Context) : InfoBoxDecorato
     override fun getSpannable(word: Word): SpannableStringBuilder {
         val spannable = super.getSpannable(word)
         val usage = word.usage.replaceFirstChar { it.uppercase() }
+        val a = TypedValue()
+        context.theme.resolveAttribute(R.attr.gray_foreground, a, true)
         spannable.append(
             "\n\nUsage",
-            ForegroundColorSpan(ContextCompat.getColor(context, R.color.infobox_highlight2)),
+            ForegroundColorSpan(a.data),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         val italic = StyleSpan(Typeface.ITALIC)

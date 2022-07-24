@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 import androidx.core.content.ContextCompat
 
 /**
@@ -22,9 +23,11 @@ class GameSessionInfoBox(private val context: Context) : InfoBox() {
         val part = word.part.replaceFirstChar { it.uppercase() }
         val definition = word.definition.replaceFirstChar { it.uppercase() }
         val phonetic = word.phonetic
+        val a = TypedValue()
+        context.theme.resolveAttribute(R.attr.special_highlight, a, true)
         spannable.append(
             part,
-            ForegroundColorSpan(ContextCompat.getColor(context, R.color.infobox_highlight1)),
+            ForegroundColorSpan(a.data),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         spannable.append("\n$phonetic")

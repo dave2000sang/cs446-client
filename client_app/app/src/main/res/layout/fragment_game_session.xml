@@ -7,8 +7,7 @@
     android:orientation="vertical"
     android:weightSum="1"
     android:padding="20dp"
-    tools:context=".GameSessionFragment"
-    android:background="@color/white">
+    tools:context=".GameSessionFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,10 +24,10 @@
             android:layout_weight="0.8"
             android:inputType="textNoSuggestions|textVisiblePassword"
             android:hint="@string/input"
-            android:textColorHint="@color/dark_grey"
+            android:textColorHint="?gray_foreground"
             android:textSize="20sp"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="?colorOnBackground"
             android:background="@drawable/input_box"/>
 
         <ImageView
@@ -73,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.8"
-        android:textColor="@color/black"
+        android:textColor="?colorOnBackground"
         android:layout_margin="10dp"
         android:padding="10dp"
         android:textSize="24sp"

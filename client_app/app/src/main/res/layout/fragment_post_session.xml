@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
     android:weightSum="1"
     android:orientation="vertical">
 
@@ -11,7 +10,6 @@
         android:id="@+id/post_session_word_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/white"
         android:layout_weight="0.9"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
@@ -22,7 +20,7 @@
         android:text="@string/first_fragment_label"
         android:textSize="20sp"
         app:cornerRadius="8dp"
-        android:backgroundTint="@color/monokai_yellow"
+        android:backgroundTint="?colorPrimary"
         android:layout_margin="10dp"
         android:layout_weight="0.1" />
 

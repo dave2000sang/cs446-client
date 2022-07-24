@@ -7,14 +7,13 @@
     android:orientation="vertical"
     android:weightSum="1"
     tools:context=".MainMenuFragment"
-    android:background="@color/white"
     android:gravity="center">
 
     <in.codeshuffle.typewriterview.TypeWriterView
         android:id="@+id/typeWriterText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="?colorOnBackground"
         android:textSize="60sp"
         android:layout_margin="5dp" />
 
@@ -33,7 +32,7 @@
         android:text="@string/playDifficulty"
         android:textSize="20sp"
         app:cornerRadius="8dp"
-        android:backgroundTint="@color/monokai_yellow"
+        android:backgroundTint="?colorPrimary"
         android:layout_margin="5dp"/>
 
     <com.google.android.material.button.MaterialButton
@@ -43,7 +42,7 @@
         android:text="@string/playCategory"
         android:textSize="20sp"
         app:cornerRadius="8dp"
-        android:backgroundTint="@color/monokai_yellow"
+        android:backgroundTint="?colorPrimary"
         android:layout_margin="5dp"/>
 
     <com.google.android.material.button.MaterialButton
@@ -53,7 +52,7 @@
         android:text="@string/sessionHistory"
         android:textSize="20sp"
         app:cornerRadius="8dp"
-        android:backgroundTint="@color/monokai_yellow"
+        android:backgroundTint="?colorPrimary"
         android:layout_margin="5dp"/>
 
     <com.google.android.material.button.MaterialButton
@@ -63,7 +62,7 @@
         android:text="@string/stats"
         android:textSize="20sp"
         app:cornerRadius="8dp"
-        android:backgroundTint="@color/monokai_yellow"
+        android:backgroundTint="?colorPrimary"
         android:layout_margin="5dp"/>
 
     <com.google.android.material.button.MaterialButton
@@ -73,7 +72,7 @@
         android:text="@string/settings"
         android:textSize="20sp"
         app:cornerRadius="8dp"
-        android:backgroundTint="@color/monokai_yellow"
+        android:backgroundTint="?colorPrimary"
         android:layout_margin="5dp"/>
 
 </LinearLayout>
