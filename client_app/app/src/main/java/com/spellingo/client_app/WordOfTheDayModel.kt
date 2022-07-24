@@ -8,15 +8,15 @@ import org.json.JSONObject
  * Model for fetching Word of the Day
  */
 class WordOfTheDayModel(application: Application) {
-    private val wotdCategory = "word of the day"
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private val histDb = HistoryDatabase.getInstance(application)
 
     /**
      * Get Word of the Day from server
+     * @param category word category
      * @return word of the day
      */
-    suspend fun getWord(): Word {
+    suspend fun getWord(category: String): Word {
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val response = HttpRequest().getWotd()
@@ -36,18 +36,19 @@ class WordOfTheDayModel(application: Application) {
         {
             throw Exception("Empty word field")
         }
-        return Word(id, locale, wotdCategory, definition, usage, origin, part, audio, Difficulty.OTHER, phonetic)
+        return Word(id, locale, category, definition, usage, origin, part, audio, Difficulty.OTHER, phonetic)
     }
 
     /**
      * Save result in history database
      * @param word new word to enter
+     * @param category word category
      * @param result true if and only if the word was spelled correctly
      */
-    suspend fun saveResult(word: String, result: Boolean) {
+    suspend fun saveResult(word: String, category: String, result: Boolean) {
         val localeString = sharedPreferences.getString("locale_preferences", "us")
         val locale = Locale.getByName(localeString!!)
         val successInt = if(result) 1 else 0
-        histDb.historyDao().insert(History(word, locale, wotdCategory, Difficulty.OTHER, successInt, 1))
+        histDb.historyDao().insert(History(word, locale, category, Difficulty.OTHER, successInt, 1))
     }
 }
