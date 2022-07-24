@@ -16,8 +16,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="60sp"
-        android:layout_margin="5dp"
-        android:paddingStart="40dp"/>
+        android:layout_margin="5dp" />
 
     <ImageView
         android:id="@+id/button_hint"

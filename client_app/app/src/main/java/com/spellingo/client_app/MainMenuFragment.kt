@@ -2,15 +2,16 @@ package com.spellingo.client_app
 
 import `in`.codeshuffle.typewriterview.TypeWriterView
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import android.os.Handler
-import android.os.Looper
+import kotlin.math.roundToInt
 
 
 /**
@@ -33,6 +34,11 @@ class MainMenuFragment : Fragment() {
         animatedTitle.animateText("Spellingo!")
         if(viewModel.startupLock) {
             animatedTitle.removeAnimation()
+            animatedTitle.setPaddingRelative(0, 0, 0, 0)
+        }
+        else {
+            val pad = 40 * (requireContext().resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+            animatedTitle.setPaddingRelative(pad.roundToInt(), 0, 0, 0)
         }
 
         val playDifficultyButton = root.findViewById<Button>(R.id.playDifficultyButton)
@@ -64,6 +70,11 @@ class MainMenuFragment : Fragment() {
             findNavController().navigate(R.id.action_mainMenuFragment_to_SessionHistoryFragment)
         }
 
+        // Back button
+        val backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
+
         viewModel.startApp()
 
         return root
@@ -73,4 +84,6 @@ class MainMenuFragment : Fragment() {
         super.onPause()
         animatedTitle.removeAnimation()
     }
+
+
 }
