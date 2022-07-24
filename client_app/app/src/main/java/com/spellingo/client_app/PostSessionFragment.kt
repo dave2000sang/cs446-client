@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +26,11 @@ class PostSessionFragment : Fragment() {
         val dataset = viewModel.getSessionResults()
         val recyclerView = root.findViewById<RecyclerView>(R.id.post_session_word_list)
         recyclerView.adapter = PostSessionItemAdapter(this, dataset)
+
+        // Back button
+        val backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.fragment_main_menu)
+        }
 
         // TODO Play again
 

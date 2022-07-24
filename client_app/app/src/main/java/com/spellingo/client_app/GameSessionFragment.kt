@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
@@ -106,6 +107,11 @@ class GameSessionFragment : Fragment() {
         // Mutable fields and observers
         var getCorrectWord = ""
         var mediaPlayer: MediaPlayer? = null
+
+        // Back button
+        val backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            navController.navigate(R.id.fragment_main_menu)
+        }
 
         // Show/hide hint depending on difficulty
         hintButton.visibility = when(viewModel.difficulty) {
