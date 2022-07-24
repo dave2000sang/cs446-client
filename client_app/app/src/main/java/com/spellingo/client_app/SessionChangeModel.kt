@@ -1,6 +1,7 @@
 package com.spellingo.client_app
 
 import android.app.Application
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -12,6 +13,7 @@ class SessionChangeModel(application: Application) {
     private var currentId = 0
     private var currentSession: Session? = null
     private val _listOfWords = mutableListOf<Pair<String, String>>()
+    private val dateFormat = SimpleDateFormat("MMM d yyyy")
 
     /**
      * List of session words played so far
@@ -29,9 +31,10 @@ class SessionChangeModel(application: Application) {
         _listOfWords.clear()
         correct = 0
         currentId = sessionDb.sessionDao().getNextId()
+        val date = Date()
         currentSession = Session(
             currentId,
-            Date().toString(),
+            dateFormat.format(date),
             category,
             difficulty,
             "",

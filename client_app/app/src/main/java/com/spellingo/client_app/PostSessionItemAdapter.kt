@@ -1,5 +1,9 @@
 package com.spellingo.client_app
 
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,11 +33,27 @@ class PostSessionItemAdapter(
         val correctSpelling = dataset[position].first
         val userSpelling = dataset[position].second
         holder.correctSpellingTextView.text = correctSpelling
-        holder.userSpellingTextView.text = userSpelling
-        if (correctSpelling == userSpelling) {
-            holder.userSpellingTextView.setBackgroundResource(R.color.monokai_green)
-        } else {
-            holder.userSpellingTextView.setBackgroundResource(R.color.monokai_red)
+        if(userSpelling.isEmpty()) {
+            holder.userSpellingTextView.text = ""
+            return
         }
+        val spannable = SpannableStringBuilder()
+        if(correctSpelling == userSpelling) {
+            spannable.append(
+                "✓ ",
+                ForegroundColorSpan(ContextCompat.getColor(context.requireContext(), R.color.monokai_green)),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+        else {
+            spannable.append(
+                "✕ ",
+                ForegroundColorSpan(ContextCompat.getColor(context.requireContext(), R.color.monokai_red)),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+        spannable.append(userSpelling)
+        holder.userSpellingTextView.text = spannable
+        holder.userSpellingTextView.setBackgroundResource(R.color.monokai_white) //TODO fix color theming
     }
 }
