@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         notifyIntent.putExtra("CHANNEL_ID", CHANNEL_ID)
 
         // Check if the alarm is already set to display notification daily
-        if(PendingIntent.getBroadcast(this, REQUEST_CODE, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null) {
+        if(PendingIntent.getBroadcast(this, REQUEST_CODE, notifyIntent, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE) != null) {
             println("DEBUG Alarm already set")
             return
         }
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             this,
             REQUEST_CODE,
             notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
