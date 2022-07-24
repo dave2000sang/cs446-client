@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:orientation="horizontal"
-    android:background="@color/monokai_yellow">
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/session_history_popup_word_list"
@@ -15,7 +14,8 @@
         android:textSize="20sp"
         android:textColor="@color/black"
         android:padding="20dp"
-        android:lineSpacingMultiplier="1.2"/>
+        android:lineSpacingMultiplier="1.2"
+        android:background="@color/monokai_yellow"/>
 
     <TextView
         android:id="@+id/session_history_popup_user_input_list"
@@ -25,6 +25,7 @@
         android:textSize="20sp"
         android:textColor="@color/black"
         android:padding="20dp"
-        android:lineSpacingMultiplier="1.2"/>
+        android:lineSpacingMultiplier="1.2"
+        android:background="@color/white"/>
 
 </LinearLayout>
