@@ -11,6 +11,7 @@ import android.widget.Button
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import kotlin.math.roundToInt
 
 
@@ -27,6 +28,8 @@ class MainMenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_menu, container, false)
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         animatedTitle = root.findViewById<TypeWriterView>(R.id.typeWriterText)
         animatedTitle.setWithMusic(false)
@@ -73,6 +76,15 @@ class MainMenuFragment : Fragment() {
         // Back button
         val backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             requireActivity().finish()
+        }
+
+        if(sharedPreferences.getBoolean("show_statistics", true)) {
+            statsButton.visibility = View.VISIBLE
+            sessionHistoryButton.visibility = View.VISIBLE
+        }
+        else {
+            statsButton.visibility = View.GONE
+            sessionHistoryButton.visibility = View.GONE
         }
 
         viewModel.startApp()

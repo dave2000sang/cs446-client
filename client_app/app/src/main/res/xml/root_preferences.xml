@@ -19,7 +19,8 @@
 
         <SwitchPreferenceCompat
             app:key="show_statistics"
-            app:title="Show statistics at the end of a game session"
+            app:title="Gameplay Statistics"
+            app:summary="Show statistics at the end of a game session"
             app:defaultValue="true"/>
     </PreferenceCategory>
 
@@ -37,13 +38,13 @@
 
         <SwitchPreferenceCompat
             app:key="sudden_death_mode"
-            app:title="Sudden Death Mode Enabled"
+            app:title="Sudden Death Mode"
             app:summary="A fast paced game mode to challenge your spellings"
             app:defaultValue="false"/>
 
         <ListPreference
             app:key="locale_preferences"
-            app:title="Locale Preference"
+            app:title="Locale"
             app:entries="@array/language_locale"
             app:entryValues="@array/language_locale_dev"
             app:summary="Determines the locale of words and their corresponding spelling"
@@ -56,7 +57,7 @@
 
         <SwitchPreferenceCompat
             app:key="enable_wotd_mode"
-            app:title="Enable Word of the Day Notifications"
+            app:title="Word of the Day Notifications"
             app:summary="Receive notifications to practice unique word of the day spelling"
             app:defaultValue="true"/>
     </PreferenceCategory>
