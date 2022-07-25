@@ -48,7 +48,6 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
             downloaded += tryFetchWords(limit, locale, category, difficulty)
             if(inCache + downloaded >= minCache) break
         }
-        println("DEBUG downloadWords $downloaded") // DEBUG
         return downloaded
     }
 
@@ -79,7 +78,6 @@ class InitialUpdateModel(application: Application) : UpdateModel(application) {
             }.toTypedArray()
             // Remove most played words from cache
             wordDao.delete(*wordArray)
-            println("DEBUG purge " + wordArray.toList()) // DEBUG
         }
     }
 

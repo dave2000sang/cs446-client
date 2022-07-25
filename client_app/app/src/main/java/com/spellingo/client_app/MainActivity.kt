@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
 
         // Check if the alarm is already set to display notification daily
         if(PendingIntent.getBroadcast(this, REQUEST_CODE, notifyIntent, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE) != null) {
-            println("DEBUG Alarm already set")
             return
         }
 

@@ -20,5 +20,6 @@
         <item name="gray_foreground">@color/monokai_gray</item>
         <item name="gray_background">@color/monokai_black</item>
         <item name="special_highlight">?attr/colorSecondary</item>
+        <item name="primary_text">?attr/colorOnBackground</item>
     </style>
 </resources>

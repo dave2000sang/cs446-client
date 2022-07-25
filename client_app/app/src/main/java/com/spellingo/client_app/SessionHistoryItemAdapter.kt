@@ -40,7 +40,7 @@ class SessionHistoryItemAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val session = dataset[position]
         val title = if (session.category == "standard") {
-            session.difficulty.toString().lowercase().replaceFirstChar { it.uppercase() }
+            "Standard (" + session.difficulty.toString().lowercase().replaceFirstChar { it.uppercase() } + ")"
         } else {
             session.category.lowercase().replaceFirstChar { it.uppercase() }
         }

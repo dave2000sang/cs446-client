@@ -4,5 +4,6 @@
         <attr name="gray_background" format="color"/>
         <attr name="gray_foreground" format="color"/>
         <attr name="special_highlight" format="color"/>
+        <attr name="primary_text" format="color"/>
     </declare-styleable>
 </resources>

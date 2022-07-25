@@ -178,9 +178,8 @@ class StatisticsFragment: Fragment() {
         legend.textSize = 16f
 
         // Set legend text color
-        // TODO dynamically set black or white
         val typedValue = TypedValue()
-        requireActivity().theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true)
+        requireActivity().theme.resolveAttribute(R.attr.primary_text, typedValue, true)
         legend.textColor = typedValue.data
     }
 
