@@ -1,13 +1,16 @@
 package com.spellingo.client_app
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -18,12 +21,15 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.button.MaterialButton
+import org.w3c.dom.Text
 
 
 class StatisticsFragment: Fragment() {
 
     private val viewModel: StatisticsViewModel by activityViewModels()
     private lateinit var pieChart: PieChart
+    private lateinit var noStats: TextView
     private lateinit var barList: ArrayList<BarEntry>
     private lateinit var barDataSet: BarDataSet
     private lateinit var barData: BarData
@@ -42,10 +48,17 @@ class StatisticsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_stats, container, false)
+        noStats = root.findViewById<TextView>(R.id.no_stats_text)
 
-        // NavController
+            // NavController
         navController = findNavController()
         navController.addOnDestinationChangedListener(navListener)
+
+        // Return to main menu
+        val mainMenuButton = root.findViewById<MaterialButton>(R.id.stats_to_main_menu_button)
+        mainMenuButton.setOnClickListener {
+            navController.navigate(R.id.action_statisticsFragment_to_fragment_main_menu)
+        }
 
         // Initialize and draw pie chart here
         pieChart = root.findViewById(R.id.pie_chart)
@@ -84,8 +97,8 @@ class StatisticsFragment: Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        val categoryBreakdownString = "Category Breakdown"
-        val difficultyBreakdownString = "Difficulty Breakdown"
+        val categoryBreakdownString = "Breakdown"
+        val difficultyBreakdownString = "Breakdown"
 
         // Second spinner on click
         spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -158,15 +171,30 @@ class StatisticsFragment: Fragment() {
         val legend: Legend = pieChart.legend
         legend.isEnabled = true
         legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         legend.orientation = Legend.LegendOrientation.VERTICAL
         legend.setDrawInside(false)
+        legend.form = Legend.LegendForm.CIRCLE
         legend.textSize = 16f
+
+        // Set legend text color
+        // TODO dynamically set black or white
+        val typedValue = TypedValue()
+        requireActivity().theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true)
+        legend.textColor = typedValue.data
     }
 
     private fun loadPieChartData (ratio: List<Pair<String, Int>>) {
+        // If chart is empty, show no stats yet msg
+        if (ratio.isEmpty()) {
+            pieChart.visibility = View.GONE
+            noStats.visibility = View.VISIBLE
+        } else {
+            pieChart.visibility = View.VISIBLE
+            noStats.visibility = View.GONE
+        }
+
         val dataEntry = ratio.map { PieEntry(it.second.toFloat(), it.first) }
-        //TODO Nathan write a message like "No word statistics available" for empty list
 
         // Colors
         val colors = arrayListOf<Int>()
