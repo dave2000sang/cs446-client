@@ -38,11 +38,14 @@
         <item>us</item>
     </string-array>
 
+    <!-- Stats -->
     <string-array name="statSpinnerString">
         <item>All Words</item>
         <item>Categories</item>
         <item>Difficulties</item>
     </string-array>
+
+    <string name="no_stats">No records yet!</string>
 
 
 </resources>
