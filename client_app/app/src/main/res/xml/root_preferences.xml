@@ -34,7 +34,7 @@
             app:defaultValue="10"
             app:showSeekBarValue="true"
             app:min="5"
-            android:max="50"/>
+            android:max="20"/>
 
         <SwitchPreferenceCompat
             app:key="sudden_death_mode"

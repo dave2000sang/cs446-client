@@ -27,7 +27,6 @@ class SessionChangeModel(application: Application) {
      * @param difficulty difficulty for current session's words
      */
     suspend fun getNewSession(category: String, difficulty: Difficulty) {
-        println("DEBUG Fetching new session") // DEBUG
         _listOfWords.clear()
         correct = 0
         currentId = sessionDb.sessionDao().getNextId()
@@ -58,8 +57,6 @@ class SessionChangeModel(application: Application) {
         _listOfWords.add(Pair(word, attempt))
         currentSession!!.sessionWords += ";$word"
         currentSession!!.sessionGuess += ";$attempt"
-        println("DEBUG Added $word as $result") //DEBUG
-        println("DEBUG session currently " + currentSession?.sessionWords + " " + currentSession?.sessionGuess)
         sessionDb.sessionDao().insert(currentSession!!.copy(
             sessionWords = currentSession!!.sessionWords.substring(1),
             sessionGuess = currentSession!!.sessionGuess.substring(1)

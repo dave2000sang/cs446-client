@@ -34,7 +34,6 @@ class SessionHistoryViewModel(application: Application) : DynamicViewModel(appli
         viewModelScope.launch {
             try {
                 val sessions = sessionStatsModel.getSessionDates()
-                println("DEBUG number of sessions: ${sessions.size}") // DEBUG
                 _listOfSessions.postValue(sessions)
             } catch (e: Exception) {
                 System.err.println(e.toString())

@@ -89,7 +89,6 @@ abstract class UpdateModel(private val application: Application) {
                 History(it.id, it.locale, it.category, difficulty, 0, 0)
             }.toTypedArray())
         }
-        println(newWordList) // DEBUG
 
         return newWordList.size
     }

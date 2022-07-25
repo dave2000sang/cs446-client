@@ -111,6 +111,7 @@ class GameSessionFragment : Fragment() {
 
         // Back button
         val backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            snack?.takeIf{it.isShown}?.dismiss()
             navController.navigate(R.id.gameSessionFragment_to_mainMenuFragment)
         }
 

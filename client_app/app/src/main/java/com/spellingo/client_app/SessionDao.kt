@@ -36,6 +36,6 @@ interface SessionDao {
      * Get session dates and id
      * @return list of all session identifying data as [SessionDate]'s
      */
-    @Query("SELECT id, date, category, difficulty FROM session")
+    @Query("SELECT id, date, category, difficulty FROM session ORDER BY id DESC")
     suspend fun getAllDates(): List<SessionDate>
 }
