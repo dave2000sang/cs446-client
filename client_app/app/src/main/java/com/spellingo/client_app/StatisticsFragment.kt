@@ -136,6 +136,8 @@ class StatisticsFragment: Fragment() {
                     statArrayAdapter2.clear()
                     statArrayAdapter2.add(categoryBreakdownString)
                     statArrayAdapter2.addAll(viewModel.categoryList)
+                    statArrayAdapter2.notifyDataSetChanged()
+                    spinner2.setSelection(0)
                     spinner2.visibility = View.VISIBLE
                 }
                 StatisticsChartType.DIFFICULTY -> {
@@ -146,6 +148,8 @@ class StatisticsFragment: Fragment() {
                         Difficulty.MEDIUM,
                         Difficulty.HARD
                     ).map { diff -> diff.toString().lowercase().replaceFirstChar { it.uppercase() } })
+                    statArrayAdapter2.notifyDataSetChanged()
+                    spinner2.setSelection(0)
                     spinner2.visibility = View.VISIBLE
                 }
                 StatisticsChartType.ALL -> {
