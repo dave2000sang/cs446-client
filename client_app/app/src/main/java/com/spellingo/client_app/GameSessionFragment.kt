@@ -100,6 +100,7 @@ class GameSessionFragment : Fragment() {
 
         // Init snackbar
         snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "This is a snack.", Snackbar.LENGTH_INDEFINITE)
+        snack?.setTextColor(ContextCompat.getColor(requireContext(), R.color.monokai_black))
 
         // NavController
         navController = findNavController()
